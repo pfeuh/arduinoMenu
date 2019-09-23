@@ -34,73 +34,122 @@ byte stack[MENU_DISPLAY_NB_ROWS - 1];
 byte stackPtr;
 #define stackInit()      stackPtr=0
 #define stackPush(value) stack[stackPtr++]=value
-#define stackPop()       stack[stackPtr--]=value
-#define stackEnd()       stackPtr!=255
-#define stackSize()      stackPtr
-#define stackGetCell(index) stack[value]
+#define stackPop()       stack[--stackPtr]=value
+#define stackEnd()       (stackPtr!=255)
+#define stackSize()      (stackPtr)
+#define stackGetCell(index) (stack[value])
+
+long int userValue = 0;
 
 // menu driven variables
-byte ChannelIn;
-byte ChannelOut;
-byte ProgramNumber;
-byte Arpeggiator;
-byte ClockIn;
-byte ClockOut;
-byte KeyClick;
-byte AudioBeat;
-byte SysEx;
-int  Transposition;
-byte Groove;
-byte GateMode;
-byte LastStep;
-byte CcNum;
-byte Test1;
-byte Test2;
-byte Test3;
-byte AppVersion;
+byte ChannelIn = 1;
+byte ChannelOut = 1;
+byte ProgramNumber = 0;
+byte Arpeggiator = 0;
+byte ClockIn = 0;
+byte ClockOut = 0;
+byte KeyClick = 0;
+byte AudioBeat = 0;
+byte SysEx = 1;
+int  Transposition = 0;
+byte Groove = 2;
+byte GateMode = 1;
+byte LastStep = 15;
+byte CcNum = 20;
+byte Test1 = 10;
+byte Test2 = 20;
+byte Test3 = 30;
+byte AppVersion = 101;
 
-void clearSerial()
+void clearDisplay()
 {
-    // doesn't work on arduino IDE
-    // but works fine with https://sites.google.com/site/terminalbpp/
-    Serial.write(27);
-    Serial.print("[2J");
-    Serial.write(27);
-    Serial.print("[H");
-    Serial.write('\n');
+    Serial.print("\033[2J\n");
+}
+
+void browsingSequencer(char car)
+{
+    switch(car)
+    {
+        case 'u': // up
+            browser.gotoPrevious();
+            break;
+        case 'd': // down
+            browser.gotoNext();
+            break;
+        case 'r': // right (entering a submenu)
+            browser.gotoChild();
+            break;
+        case 'l': // left (leaving a submenu)
+            browser.gotoParent();
+            break;
+        default:
+            break;
+    }
+}
+
+void editingSequencer(char car)
+{
+    switch(car)
+    {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            userValue = userValue * 10 + car - '0';
+            Serial.write(car);
+            break;
+        case '/':
+            browser.setState(browserStateBrowsing);
+            break;
+        default:
+            break;
+    }
 }
 
 void sequencer()
 {
     if(Serial.available())
-        switch(Serial.read())
+    {
+        byte car = Serial.read();
+
+        switch(browser.getState())
         {
-            case 'u': // up
-                browser.gotoPrevious();
+            case browserStateBrowsing:
+                browsingSequencer(car);
                 break;
-            case 'd': // down
-                browser.gotoNext();
+            case browserStateEditing:
+                editingSequencer(car);
                 break;
-            case 'r': // right (entering a submenu)
-                browser.gotoChild();
+            case browserStatePrefunction:
+                //~ browsingSequencer(car);
                 break;
-            case 'l': // left (leaving a submenu)
-                browser.gotoParent();
+            case browserStatepostfunction:
+                //~ browsingSequencer(car);
                 break;
-            default:
+            case browserStateUser:
+                //~ browsingSequencer(car);
                 break;
         }
+    }
 }
 
 void printTitle(byte index)
 {
-    //~ Serial.println(F("--------------------"));
-    clearSerial();
+    clearDisplay();
     index = browser.getParent(index);
     if(index != MENU_BROWSER_NO_ENTRY)
-        Serial.println(browser.getLabel(index));
+    {
+        Serial.print(browser.getLabel(index));
+        Serial.write('\n');
+    }
     else
-        Serial.println(F(" ---*** MENU ***--- "));        
+        Serial.print(F(" ---*** MENU ***--- \n"));        
 }
 
 void printEntriesList(byte index)
@@ -148,7 +197,7 @@ void printEntriesList(byte index)
             }
             else
             {
-                // this is not
+                // this entry is not selected
                 Serial.write(' ');
                 Serial.print(browser.getLabel(current_entry_index));
                 Serial.flush();
@@ -168,18 +217,33 @@ void printEntriesList(byte index)
     }
 }
 
-void refreshVariableScreen()
+void refreshEditor()
 {
     byte index = browser.getCurrentEntry();
     printTitle(index);
     Serial.write('<');
-    Serial.print(browser.getLabel(current_entry_index));
+    Serial.print(browser.getLabel(index));
     Serial.write('>');
     Serial.write('\n');
-    Serial.print(F("Enter new value:"));
+    Serial.print(F("variable "));
+    Serial.print(browser.getVariableIndex(index));
+    Serial.write('\n');
 }
 
-void refreshMenu()
+void refreshLauncher()
+{
+    byte index = browser.getCurrentEntry();
+    printTitle(index);
+    Serial.write('<');
+    Serial.print(browser.getLabel(index));
+    Serial.write('>');
+    Serial.write('\n');
+    Serial.print(F("variable "));
+    Serial.print(browser.getVariableIndex(index));
+    Serial.write('\n');
+}
+
+void refreshBrowser()
 {
     byte index = browser.getCurrentEntry();
     printTitle(index);
@@ -195,8 +259,12 @@ void setup()
     Serial.println(F("Compilation : " __DATE__ " " __TIME__));
 
     browser.begin();
-    browser.setRefreshCallback(&refreshMenu);
-    refreshMenu();
+    browser.setRefreshCallback(&refreshBrowser);
+    browser.setEditCallback(&refreshEditor);
+    browser.setEditCallback(&refreshLauncher);
+    browser.setState(browserStateBrowsing);
+    
+    //~ refreshBrowser();
 }
 
 void loop()

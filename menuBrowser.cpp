@@ -47,6 +47,8 @@ void MENU_BROWSER::begin()
 {
     currentEntry = 0;
     refreshCallback = NULL;
+    editCallback = NULL;
+    state = browserStateBrowsing;
 }
 
 byte MENU_BROWSER::getCurrentEntry()
@@ -94,10 +96,10 @@ void MENU_BROWSER::gotoChild()
             gotoEntry(getChild(currentEntry));
             break;
         case menuTypeVariable:
-            Serial.println(F("Variable called!"));
+            setState(browserStateEditing);
             break;
         case menuTypeFunction:
-            Serial.println(F("Function called!"));
+            setState(browserStatePrefunction);
             break;
     }
 }
@@ -131,3 +133,70 @@ void MENU_BROWSER::setRefreshCallback(void (*callback)())
 {
     refreshCallback = callback;
 }
+
+void MENU_BROWSER::setEditCallback(void (*callback)())
+{
+    editCallback = callback;
+}
+
+void MENU_BROWSER::setExecCallback(void (*callback)())
+{
+    execCallback = callback;
+}
+
+menuBrowserState MENU_BROWSER::getState()
+{
+    return state;
+}
+
+void MENU_BROWSER::setState(menuBrowserState _state)
+{
+    state = _state;
+    switch(state)
+    {
+        case browserStateBrowsing:
+            if(refreshCallback)
+                refreshCallback();
+            break;
+        case browserStateEditing:
+            if(editCallback)
+                editCallback();
+            break;
+        case browserStatePrefunction:
+            if(editCallback)
+                editCallback();
+            break;
+        case browserStatepostfunction:
+            break;
+        case browserStateUser:
+            break;
+
+    }
+}
+
+byte MENU_BROWSER::getVariableIndex(byte index)
+{
+    byte var_index = MENU_BROWSER_NO_ENTRY;
+    for(byte x = 0; x < MENU_BROWSER_NB_ENTRIES; x++)
+    {
+        if(getEntryType(x) == menuTypeVariable)
+            var_index++;
+        if(x == index)
+            break;
+    }
+    return var_index;
+}
+
+byte MENU_BROWSER::getFunctionIndex(byte index)
+{
+    byte func_index = MENU_BROWSER_NO_ENTRY;
+    for(byte x = 0; x < MENU_BROWSER_NB_ENTRIES; x++)
+    {
+        if(getEntryType(x) == menuTypeFunction)
+            func_index++;
+        if(x == index)
+            break;
+    }
+    return func_index;
+}
+

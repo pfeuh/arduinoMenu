@@ -25,7 +25,16 @@
 #define MENU_BROWSER_VERSION "1.00"
 
 #define MENU_BROWSER_NO_ENTRY 0xff
-enum menuOptionType {menuTypeMenu=1, menuTypeVariable=2, menuTypeFunction=3};
+enum menuOptionType {
+    menuTypeMenu=1,
+    menuTypeVariable=2,
+    menuTypeFunction=3};
+enum menuBrowserState {
+    browserStateBrowsing=1,
+    browserStateEditing=2,
+    browserStatePrefunction=3,
+    browserStatepostfunction=4,
+    browserStateUser=5};
 typedef void (*MENU_BROWSER_FUNCTION_PTR)(void);
 #define MENU_BROWSER_MAX_LABEL_LEN 17
 
@@ -48,11 +57,20 @@ class MENU_BROWSER
         void valid();
         void abort();
         void setRefreshCallback(void (*callback)());
+        void setEditCallback(void (*callback)());
+        void setExecCallback(void (*callback)());
+        menuBrowserState getState();
+        void setState(menuBrowserState _state);
+        byte getVariableIndex(byte index);
+        byte getFunctionIndex(byte index);
 
     private:
+        menuBrowserState state;
         byte currentEntry;
         void gotoEntry(byte entry);
         void (*refreshCallback)();
+        void (*editCallback)();
+        void (*execCallback)();
         char buffer[MENU_BROWSER_MAX_LABEL_LEN+1];
 
 };
