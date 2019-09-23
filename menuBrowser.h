@@ -39,11 +39,7 @@ class MENU_BROWSER
         byte getChild(byte index);
         byte getNext(byte index);
         byte getPrevious(byte index);
-        byte getBrotherPosition(byte index);
-        byte getNbBrothers(byte index);
-        byte getFirstBrother(byte index);
-        byte getBrotherByPosition(byte index, byte position);
-        byte getNbEntries();
+        byte getEntryType(byte index);
         const char* getLabel(byte index);
         void gotoChild();
         void gotoParent();

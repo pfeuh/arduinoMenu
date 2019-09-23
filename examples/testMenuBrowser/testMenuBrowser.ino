@@ -39,6 +39,37 @@ byte stackPtr;
 #define stackSize()      stackPtr
 #define stackGetCell(index) stack[value]
 
+// menu driven variables
+byte ChannelIn;
+byte ChannelOut;
+byte ProgramNumber;
+byte Arpeggiator;
+byte ClockIn;
+byte ClockOut;
+byte KeyClick;
+byte AudioBeat;
+byte SysEx;
+int  Transposition;
+byte Groove;
+byte GateMode;
+byte LastStep;
+byte CcNum;
+byte Test1;
+byte Test2;
+byte Test3;
+byte AppVersion;
+
+void clearSerial()
+{
+    // doesn't work on arduino IDE
+    // but works fine with https://sites.google.com/site/terminalbpp/
+    Serial.write(27);
+    Serial.print("[2J");
+    Serial.write(27);
+    Serial.print("[H");
+    Serial.write('\n');
+}
+
 void sequencer()
 {
     if(Serial.available())
@@ -63,7 +94,8 @@ void sequencer()
 
 void printTitle(byte index)
 {
-    Serial.println(F("--------------------"));
+    //~ Serial.println(F("--------------------"));
+    clearSerial();
     index = browser.getParent(index);
     if(index != MENU_BROWSER_NO_ENTRY)
         Serial.println(browser.getLabel(index));
@@ -97,7 +129,7 @@ void printEntriesList(byte index)
             }
             else if(row_num == MENU_DISPLAY_NB_DISPLAYED_ITEMS)
             {
-                if(browser.getPrevious(current_entry_index) != MENU_BROWSER_NO_ENTRY)
+                if(browser.getNext(current_entry_index) != MENU_BROWSER_NO_ENTRY)
                     Serial.write('d');
                 else
                     Serial.write(' ');
@@ -136,6 +168,17 @@ void printEntriesList(byte index)
     }
 }
 
+void refreshVariableScreen()
+{
+    byte index = browser.getCurrentEntry();
+    printTitle(index);
+    Serial.write('<');
+    Serial.print(browser.getLabel(current_entry_index));
+    Serial.write('>');
+    Serial.write('\n');
+    Serial.print(F("Enter new value:"));
+}
+
 void refreshMenu()
 {
     byte index = browser.getCurrentEntry();
@@ -151,15 +194,6 @@ void setup()
     Serial.println(F("Test of menuBrowser v" MENU_BROWSER_VERSION));
     Serial.println(F("Compilation : " __DATE__ " " __TIME__));
 
-    //~ for(byte index = 0; index < browser.getNbEntries(); index++)
-    //~ {
-        //~ Serial.print(browser.getLabel(index));
-        //~ Serial.write(' ');
-        //~ Serial.print(browser.getBrotherPosition(index));
-        //~ Serial.write(' ');
-        //~ Serial.println(browser.getNbBrothers(index));
-    //~ }
-    
     browser.begin();
     browser.setRefreshCallback(&refreshMenu);
     refreshMenu();

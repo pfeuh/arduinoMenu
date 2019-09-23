@@ -208,7 +208,7 @@ if __name__ == "__main__":
     outFname = None
     userName = None
     mailAddress = None
-    createEmptyFunction = 0
+    createEmptyFunction = False
     for index, value in enumerate(sys.argv):
         if value == "-i":
             inFname = sys.argv[index+1]
@@ -219,7 +219,7 @@ if __name__ == "__main__":
         elif value == "-m":
             mailAddress = sys.argv[index+1]
         elif value == "-c":
-            createEmptyFunction = eval(sys.argv[index+1])
+            createEmptyFunction = True
 
     sys.stdout.write("Current path        = %s\n"%os.path.dirname(os.path.abspath(__file__)))
     sys.stdout.write("inFname             = %s\n"%str(inFname))
@@ -232,7 +232,7 @@ if __name__ == "__main__":
     statValue = 0
 
     menu = menuParser.PARSER_MENU(inFname)
-    makeMenuDataFile(menu, outFname, userName, mailAddress, include_empty_functions=False)
+    makeMenuDataFile(menu, outFname, userName, mailAddress, createEmptyFunction)
     
     stop = time.time()
     sys.stdout.write("Job done in %.3f second(s)!\n"%(stop-start))

@@ -68,6 +68,78 @@ extern void testIndLeds();
 extern void testBeeper();
 extern void displayVersions();
 
+void dumpAll()
+{
+}
+
+void loadAll()
+{
+}
+
+void saveAll()
+{
+}
+
+void dumpGlobal()
+{
+}
+
+void loadGlobal()
+{
+}
+
+void saveGlobal()
+{
+}
+
+void initSeq()
+{
+}
+
+void swapSeq()
+{
+}
+
+void copySeq()
+{
+}
+
+void loadFactory()
+{
+}
+
+void dumpSeq()
+{
+}
+
+void loadSeq()
+{
+}
+
+void saveSeq()
+{
+}
+
+void factorySettings()
+{
+}
+
+void testStepLeds()
+{
+}
+
+void testIndLeds()
+{
+}
+
+void testBeeper()
+{
+}
+
+void displayVersions()
+{
+}
+
 // edit & display functions of variables suppposed ready to execute
 extern void editChannelIn();
 extern void displayChannelIn();
@@ -105,6 +177,150 @@ extern void editTest3();
 extern void displayTest3();
 extern void editAppVersion();
 extern void displayAppVersion();
+
+extern void editChannelIn()
+{
+}
+
+extern void displayChannelIn()
+{
+}
+
+extern void editChannelOut()
+{
+}
+
+extern void displayChannelOut()
+{
+}
+
+extern void editProgramNumber()
+{
+}
+
+extern void displayProgramNumber()
+{
+}
+
+extern void editArpeggiator()
+{
+}
+
+extern void displayArpeggiator()
+{
+}
+
+extern void editClockIn()
+{
+}
+
+extern void displayClockIn()
+{
+}
+
+extern void editClockOut()
+{
+}
+
+extern void displayClockOut()
+{
+}
+
+extern void editKeyClick()
+{
+}
+
+extern void displayKeyClick()
+{
+}
+
+extern void editAudioBeat()
+{
+}
+
+extern void displayAudioBeat()
+{
+}
+
+extern void editSysEx()
+{
+}
+
+extern void displaySysEx()
+{
+}
+
+extern void editTransposition()
+{
+}
+
+extern void displayTransposition()
+{
+}
+
+extern void editGroove()
+{
+}
+
+extern void displayGroove()
+{
+}
+
+extern void editGateMode()
+{
+}
+
+extern void displayGateMode()
+{
+}
+
+extern void editLastStep()
+{
+}
+
+extern void displayLastStep()
+{
+}
+
+extern void editCcNum()
+{
+}
+
+extern void displayCcNum()
+{
+}
+
+extern void editTest1()
+{
+}
+
+extern void displayTest1()
+{
+}
+
+extern void editTest2()
+{
+}
+
+extern void displayTest2()
+{
+}
+
+extern void editTest3()
+{
+}
+
+extern void displayTest3()
+{
+}
+
+extern void editAppVersion()
+{
+}
+
+extern void displayAppVersion()
+{
+}
 
 const byte parentTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
