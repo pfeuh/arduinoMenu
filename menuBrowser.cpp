@@ -74,6 +74,55 @@ byte MENU_BROWSER::getPrevious(byte index)
     return pgm_read_byte(previousTable + index);
 }
 
+byte MENU_BROWSER::getBrotherPosition(byte index)
+{
+    byte position = 0;
+    
+    index = getPrevious(index);
+    while(index != MENU_BROWSER_NO_ENTRY)
+    {
+        position++;
+        index = getPrevious(index);
+    }
+    return position;
+}
+
+byte MENU_BROWSER::getNbBrothers(byte index)
+{
+    byte nb_brothers = getBrotherPosition(index) + 1;
+    
+    while(getNext(index) != MENU_BROWSER_NO_ENTRY)
+    {
+        nb_brothers++;
+        index = getNext(index);
+    }
+    return nb_brothers;
+}
+
+byte MENU_BROWSER::getFirstBrother(byte index)
+{
+    while(getPrevious(index) != MENU_BROWSER_NO_ENTRY)
+    {
+        index = getNext(index);
+    }
+    return index;
+}
+
+byte MENU_BROWSER::getBrotherByPosition(byte index, byte position)
+{
+    byte entry = getFirstBrother(index);
+    
+    while(position--)
+        entry = getNext(entry);
+    
+    return entry;
+}
+
+byte MENU_BROWSER::getNbEntries()
+{
+    return MENU_BROWSER_NB_ENTRIES;
+}
+
 const char* MENU_BROWSER::getLabel(byte index)
 {
     // got from https://www.arduino.cc/reference/en/language/variables/utilities/progmem/

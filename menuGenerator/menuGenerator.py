@@ -27,6 +27,9 @@ import os
 sys.stdout.write(sys.version + "\n")
 
 NO_ENTRY = "MENU_BROWSER_NO_ENTRY"
+NB_ENTRIES = "MENU_BROWSER_NB_ENTRIES"
+NB_VARIABLES = "MENU_BROWSER_NB_VARIABLES"
+NB_FUNCTIONS = "MENU_BROWSER_NB_FUNCTIONS"
 ITEM_TYPE_TABLE = {"menu":"menuTypeMenu", "variable":"menuTypeVariable", "function":"menuTypeFunction"}
 HEADER_PATTERN_NAME = "headerPattern.txt"
 SIZE_OF_FUNCTION_POINTER = 2
@@ -85,7 +88,7 @@ def getVariablesCode(menu):
     return text
 
 def getFamilyTable(menu, hook, label):
-    text = "const byte %sTable[%u] PROGMEM = \n{\n"%(label, len(menu.getObjects()))
+    text = "const byte %sTable[%s] PROGMEM = \n{\n"%(label, NB_ENTRIES)
     for item in menu.getObjects():
         text += "   /* %03u */ %s,\n"%(item.getIndex(), formatIndex(hook(item)))
     text += "};\n\n"
@@ -113,7 +116,7 @@ def getLabelTableCode(menu):
         text += '/* %3u */ const char %s[] PROGMEM = "%s";\n'%(item.getIndex(), label, item.getLabel())
         total += len(item.getLabel()) + 1
         labels.append(label)
-    text += "\nconst char *const labelsTable[] PROGMEM =\n{\n"
+    text += "\nconst char *const labelsTable[%s] PROGMEM =\n{\n"%NB_ENTRIES
     addStatLine("labels", total)
     for index, label in enumerate(labels):
         text += "    /* %3u */ %s,\n"%(index, label)
@@ -182,6 +185,10 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, include_empty_functio
     text += "#endif\n\n"
     
     start_of_text = getHeader(fname, user_name, mail_address)
+    start_of_text +=  "#define MENU_BROWSER_NB_ENTRIES %u\n"%len(menu.getObjects())
+    start_of_text +=  "#define MENU_BROWSER_NB_VARIABLES %u\n"%len(menu.getVariables())
+    start_of_text +=  "#define MENU_BROWSER_NB_FUNCTIONS %u\n\n"%len(menu.getFunctions())
+    
     start_of_text +=  statText
     start_of_text +=  "// ----------------------------------\n"
     start_of_text +=  "// TOTAL                        %05u\n\n"%statValue

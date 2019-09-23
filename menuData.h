@@ -29,7 +29,11 @@
 
 #include <Arduino.h>
 
-#define MENU_VERSION "1.00"
+#define MENU_GENERATOR_PY_VERSION "1.00"
+
+#define MENU_BROWSER_NB_ENTRIES 40
+#define MENU_BROWSER_NB_VARIABLES 18
+#define MENU_BROWSER_NB_FUNCTIONS 18
 
 // Table of parent              00040
 // Table of child               00040
@@ -102,7 +106,7 @@ extern void displayTest3();
 extern void editAppVersion();
 extern void displayAppVersion();
 
-const byte parentTable[40] PROGMEM = 
+const byte parentTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
    /* 000 */ MENU_BROWSER_NO_ENTRY,
    /* 001 */ 0,
@@ -146,7 +150,7 @@ const byte parentTable[40] PROGMEM =
    /* 039 */ 35,
 };
 
-const byte childTable[40] PROGMEM = 
+const byte childTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
    /* 000 */ 1,
    /* 001 */ MENU_BROWSER_NO_ENTRY,
@@ -190,7 +194,7 @@ const byte childTable[40] PROGMEM =
    /* 039 */ MENU_BROWSER_NO_ENTRY,
 };
 
-const byte nextTable[40] PROGMEM = 
+const byte nextTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
    /* 000 */ 17,
    /* 001 */ 2,
@@ -234,7 +238,7 @@ const byte nextTable[40] PROGMEM =
    /* 039 */ MENU_BROWSER_NO_ENTRY,
 };
 
-const byte previousTable[40] PROGMEM = 
+const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
    /* 000 */ MENU_BROWSER_NO_ENTRY,
    /* 001 */ MENU_BROWSER_NO_ENTRY,
@@ -319,7 +323,7 @@ const byte previousTable[40] PROGMEM =
 /*  38 */ const char labelTest3[] PROGMEM = "test 3";
 /*  39 */ const char labelAppVersion[] PROGMEM = "Version number";
 
-const char *const labelsTable[] PROGMEM =
+const char *const labelsTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
 {
     /*   0 */ labelGlobalEdit,
     /*   1 */ labelChannelIn,

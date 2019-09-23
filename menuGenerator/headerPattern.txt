@@ -29,5 +29,5 @@
 
 #include <Arduino.h>
 
-#define MENU_VERSION "1.00"
+#define MENU_GENERATOR_PY_VERSION "1.00"
 
