@@ -1,0 +1,22 @@
+<menuGenerator.py>
+
+make a config file to memorize last sketch, flag create_empy_functions,
+username and usermail
+
+fix the xml location to the sketch folder and the xmlname (menuTree)
+
+add a function to add all modules (.cpp and .h) to the sketch folder
+
+nice to have: something to check the xmlfile
+
+<arduinoMenu>
+
+continue to work on missing functions (clear, gotoXY, userPrint) of menuDislay
+
+implement the real path in title instead of just parent's label
+
+implement a real joystick and a 4x20 lcd.
+
+<documentation>
+
+add a word on camelcase
