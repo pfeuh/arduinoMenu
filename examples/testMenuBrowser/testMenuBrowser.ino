@@ -54,7 +54,8 @@ byte test2 = 20;
 byte test3 = 30;
 byte appVersion = 101;
 
-// this "include" binds the menu and the shared functions
+// this include binds the menu and the
+// functions used by arduinoMenu
 #include "sharedFunctions.h"
 
 void setup()
@@ -72,7 +73,7 @@ void loop()
 {
     menu.sequencer();
 
-        // let's blink status led
+    // let's blink status led
     if(millis() & 0x200)
         digitalWrite(LED_BUILTIN, 0);
     else
