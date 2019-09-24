@@ -7,7 +7,7 @@
 	    <variable cname="arpeggiator" label="Arpeggiator" />
         <variable cname="clockIn" label="Midi clock in" />
         <variable cname="clockOut" label="Midi clock out" />
-        <variable cname="keyClick" label="Keyboard" />
+        <variable cname="keyClick" label="Keyboard echo" />
         <variable cname="audioBeat" label="Metronome" />
         <variable cname="sysEx" label="systemExclusive" />
         <variable cname="transposition" label="Transposition" />
@@ -19,7 +19,7 @@
         <function cname="saveGlobal" label="Save global par." />
     </menu>
     <menu cname="sequenceEdit" label="SEQUENCE EDIT">
-	    <variable cname="Groove" label="Groove" />
+	    <variable cname="groove" label="Groove" />
 	    <variable cname="gateMode" label="Gate duration" />
 	    <variable cname="lastStep" label="Last step" />
 	    <variable cname="ccNum" label="Ctrl chg number" />

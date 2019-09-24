@@ -39,14 +39,13 @@
 // Table of child               00040
 // Table of next                00040
 // Table of previous            00040
-// Table of labels              00512
+// Table of labels              00517
 // Table of pointers to labels  00080
 // Table of function callbacks  00080
 // Table of edit callbacks      00080
-// Table of display callbacks   00080
 // Table of types               00040
 // ----------------------------------
-// TOTAL                        01032
+// TOTAL                        00957
 
 // functions suppposed ready to execute
 extern void dumpAll();
@@ -68,259 +67,25 @@ extern void testIndLeds();
 extern void testBeeper();
 extern void displayVersions();
 
-void dumpAll()
-{
-}
-
-void loadAll()
-{
-}
-
-void saveAll()
-{
-}
-
-void dumpGlobal()
-{
-}
-
-void loadGlobal()
-{
-}
-
-void saveGlobal()
-{
-}
-
-void initSeq()
-{
-}
-
-void swapSeq()
-{
-}
-
-void copySeq()
-{
-}
-
-void loadFactory()
-{
-}
-
-void dumpSeq()
-{
-}
-
-void loadSeq()
-{
-}
-
-void saveSeq()
-{
-}
-
-void factorySettings()
-{
-}
-
-void testStepLeds()
-{
-}
-
-void testIndLeds()
-{
-}
-
-void testBeeper()
-{
-}
-
-void displayVersions()
-{
-}
-
 // edit & display functions of variables suppposed ready to execute
-extern void editChannelIn();
-extern void displayChannelIn();
-extern void editChannelOut();
-extern void displayChannelOut();
-extern void editProgramNumber();
-extern void displayProgramNumber();
-extern void editArpeggiator();
-extern void displayArpeggiator();
-extern void editClockIn();
-extern void displayClockIn();
-extern void editClockOut();
-extern void displayClockOut();
-extern void editKeyClick();
-extern void displayKeyClick();
-extern void editAudioBeat();
-extern void displayAudioBeat();
-extern void editSysEx();
-extern void displaySysEx();
-extern void editTransposition();
-extern void displayTransposition();
-extern void editGroove();
-extern void displayGroove();
-extern void editGateMode();
-extern void displayGateMode();
-extern void editLastStep();
-extern void displayLastStep();
-extern void editCcNum();
-extern void displayCcNum();
-extern void editTest1();
-extern void displayTest1();
-extern void editTest2();
-extern void displayTest2();
-extern void editTest3();
-extern void displayTest3();
-extern void editAppVersion();
-extern void displayAppVersion();
-
-extern void editChannelIn()
-{
-}
-
-extern void displayChannelIn()
-{
-}
-
-extern void editChannelOut()
-{
-}
-
-extern void displayChannelOut()
-{
-}
-
-extern void editProgramNumber()
-{
-}
-
-extern void displayProgramNumber()
-{
-}
-
-extern void editArpeggiator()
-{
-}
-
-extern void displayArpeggiator()
-{
-}
-
-extern void editClockIn()
-{
-}
-
-extern void displayClockIn()
-{
-}
-
-extern void editClockOut()
-{
-}
-
-extern void displayClockOut()
-{
-}
-
-extern void editKeyClick()
-{
-}
-
-extern void displayKeyClick()
-{
-}
-
-extern void editAudioBeat()
-{
-}
-
-extern void displayAudioBeat()
-{
-}
-
-extern void editSysEx()
-{
-}
-
-extern void displaySysEx()
-{
-}
-
-extern void editTransposition()
-{
-}
-
-extern void displayTransposition()
-{
-}
-
-extern void editGroove()
-{
-}
-
-extern void displayGroove()
-{
-}
-
-extern void editGateMode()
-{
-}
-
-extern void displayGateMode()
-{
-}
-
-extern void editLastStep()
-{
-}
-
-extern void displayLastStep()
-{
-}
-
-extern void editCcNum()
-{
-}
-
-extern void displayCcNum()
-{
-}
-
-extern void editTest1()
-{
-}
-
-extern void displayTest1()
-{
-}
-
-extern void editTest2()
-{
-}
-
-extern void displayTest2()
-{
-}
-
-extern void editTest3()
-{
-}
-
-extern void displayTest3()
-{
-}
-
-extern void editAppVersion()
-{
-}
-
-extern void displayAppVersion()
-{
-}
+extern void editChannelIn(bool direction);
+extern void editChannelOut(bool direction);
+extern void editProgramNumber(bool direction);
+extern void editArpeggiator(bool direction);
+extern void editClockIn(bool direction);
+extern void editClockOut(bool direction);
+extern void editKeyClick(bool direction);
+extern void editAudioBeat(bool direction);
+extern void editSysEx(bool direction);
+extern void editTransposition(bool direction);
+extern void editGroove(bool direction);
+extern void editGateMode(bool direction);
+extern void editLastStep(bool direction);
+extern void editCcNum(bool direction);
+extern void editTest1(bool direction);
+extern void editTest2(bool direction);
+extern void editTest3(bool direction);
+extern void editAppVersion(bool direction);
 
 const byte parentTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
@@ -505,7 +270,7 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
 /*   4 */ const char labelArpeggiator[] PROGMEM = "Arpeggiator";
 /*   5 */ const char labelClockIn[] PROGMEM = "Midi clock in";
 /*   6 */ const char labelClockOut[] PROGMEM = "Midi clock out";
-/*   7 */ const char labelKeyClick[] PROGMEM = "Keyboard";
+/*   7 */ const char labelKeyClick[] PROGMEM = "Keyboard echo";
 /*   8 */ const char labelAudioBeat[] PROGMEM = "Metronome";
 /*   9 */ const char labelSysEx[] PROGMEM = "systemExclusive";
 /*  10 */ const char labelTransposition[] PROGMEM = "Transposition";
@@ -605,7 +370,7 @@ const PROGMEM MENU_BROWSER_FUNCTION_PTR execFunctionsTable[18] =
     /*  34  17 */ &displayVersions,
 };
 
-const PROGMEM MENU_BROWSER_FUNCTION_PTR editFunctionsTable[18] = 
+const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[18] = 
 {
     /*   1   0 */ &editChannelIn,
     /*   2   1 */ &editChannelOut,
@@ -625,28 +390,6 @@ const PROGMEM MENU_BROWSER_FUNCTION_PTR editFunctionsTable[18] =
     /*  37  15 */ &editTest2,
     /*  38  16 */ &editTest3,
     /*  39  17 */ &editAppVersion,
-};
-
-const PROGMEM MENU_BROWSER_FUNCTION_PTR displayFunctionsTable[18] = 
-{
-    /*   1   0 */ &displayChannelIn,
-    /*   2   1 */ &displayChannelOut,
-    /*   3   2 */ &displayProgramNumber,
-    /*   4   3 */ &displayArpeggiator,
-    /*   5   4 */ &displayClockIn,
-    /*   6   5 */ &displayClockOut,
-    /*   7   6 */ &displayKeyClick,
-    /*   8   7 */ &displayAudioBeat,
-    /*   9   8 */ &displaySysEx,
-    /*  10   9 */ &displayTransposition,
-    /*  18  10 */ &displayGroove,
-    /*  19  11 */ &displayGateMode,
-    /*  20  12 */ &displayLastStep,
-    /*  21  13 */ &displayCcNum,
-    /*  36  14 */ &displayTest1,
-    /*  37  15 */ &displayTest2,
-    /*  38  16 */ &displayTest3,
-    /*  39  17 */ &displayAppVersion,
 };
 
 const enum menuOptionType itemTypeTable[40] PROGMEM = 

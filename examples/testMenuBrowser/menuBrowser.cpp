@@ -43,14 +43,6 @@ MENU_BROWSER::MENU_BROWSER()
 {
 }
 
-void MENU_BROWSER::begin()
-{
-    currentEntry = 0;
-    refreshCallback = NULL;
-    editCallback = NULL;
-    state = browserStateBrowsing;
-}
-
 byte MENU_BROWSER::getCurrentEntry()
 {
     return currentEntry;
@@ -139,9 +131,14 @@ void MENU_BROWSER::setEditCallback(void (*callback)())
     editCallback = callback;
 }
 
-void MENU_BROWSER::setExecCallback(void (*callback)())
+void MENU_BROWSER::setPreFunctionCallback(void (*callback)())
 {
-    execCallback = callback;
+    preFunctionCallback = callback;
+}
+
+void MENU_BROWSER::setPostFunctionCallback(void (*callback)())
+{
+    postFunctionCallback = callback;
 }
 
 menuBrowserState MENU_BROWSER::getState()
@@ -163,12 +160,16 @@ void MENU_BROWSER::setState(menuBrowserState _state)
                 editCallback();
             break;
         case browserStatePrefunction:
-            if(editCallback)
-                editCallback();
+            if(preFunctionCallback)
+                preFunctionCallback();
             break;
-        case browserStatepostfunction:
+        case browserStatePostfunction:
+            getFunction(getCurrentEntry())();
+            if(postFunctionCallback)
+                postFunctionCallback();
             break;
         case browserStateUser:
+        default:
             break;
 
     }
@@ -187,6 +188,12 @@ byte MENU_BROWSER::getVariableIndex(byte index)
     return var_index;
 }
 
+MENU_BROWSER_EDIT_PTR MENU_BROWSER::getVariableEditFunction(byte index)
+{
+    byte var_index = getVariableIndex(index);
+    return pgm_read_word(editFunctionsTable + var_index);
+}
+
 byte MENU_BROWSER::getFunctionIndex(byte index)
 {
     byte func_index = MENU_BROWSER_NO_ENTRY;
@@ -198,5 +205,11 @@ byte MENU_BROWSER::getFunctionIndex(byte index)
             break;
     }
     return func_index;
+}
+
+MENU_BROWSER_FUNCTION_PTR MENU_BROWSER::getFunction(byte index)
+{
+    byte func_index = getFunctionIndex(index);
+    return pgm_read_word(execFunctionsTable + func_index);
 }
 

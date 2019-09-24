@@ -33,16 +33,19 @@ enum menuBrowserState {
     browserStateBrowsing=1,
     browserStateEditing=2,
     browserStatePrefunction=3,
-    browserStatepostfunction=4,
+    browserStatePostfunction=4,
     browserStateUser=5};
 typedef void (*MENU_BROWSER_FUNCTION_PTR)(void);
+typedef void (*MENU_BROWSER_EDIT_PTR)(bool direction);
 #define MENU_BROWSER_MAX_LABEL_LEN 17
+#define MENU_BROWSER_DATA_INCREASE 0
+#define MENU_BROWSER_DATA_DECREASE 1
+#define MENU_BROWSER_DATA_JUST_DISPLAY 2
 
 class MENU_BROWSER
 {
     public:
         MENU_BROWSER();
-        void begin();
         byte getCurrentEntry();
         byte getParent(byte index);
         byte getChild(byte index);
@@ -58,19 +61,23 @@ class MENU_BROWSER
         void abort();
         void setRefreshCallback(void (*callback)());
         void setEditCallback(void (*callback)());
-        void setExecCallback(void (*callback)());
+        void setPreFunctionCallback(void (*callback)());
+        void setPostFunctionCallback(void (*callback)());
         menuBrowserState getState();
         void setState(menuBrowserState _state);
         byte getVariableIndex(byte index);
+        MENU_BROWSER_EDIT_PTR getVariableEditFunction(byte index);
+        MENU_BROWSER_FUNCTION_PTR getFunction(byte index);
         byte getFunctionIndex(byte index);
 
     private:
-        menuBrowserState state;
-        byte currentEntry;
+        menuBrowserState state = browserStateBrowsing;
+        byte currentEntry = 0;
         void gotoEntry(byte entry);
-        void (*refreshCallback)();
-        void (*editCallback)();
-        void (*execCallback)();
+        void (*refreshCallback)() = NULL;
+        void (*editCallback)() = NULL;
+        void (*preFunctionCallback)() = NULL;
+        void (*postFunctionCallback)() = NULL;
         char buffer[MENU_BROWSER_MAX_LABEL_LEN+1];
 
 };

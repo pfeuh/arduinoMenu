@@ -1,8 +1,8 @@
-#ifndef arduinoMenuBrowser_h
-#define arduinoMenuBrowser_h
+#ifndef menuInput_h
+#define menuInput_h
 
 /*
- * file : arduinoMenuBrowser.h
+ * file : menuInput.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail>
  * All rights reserved.
  * 
@@ -21,31 +21,27 @@
  */
 
 #include <Arduino.h>
-#include <matrixKeyboard.h>
-#include <lcd20x4iic.h>
-#include <incrementalEncoder.h>
+
+#define MENU_INPUT_VERSION "1.00"
 #include "menuBrowser.h"
 
-#define ARDUINO_MENU_VERSION "1.00"
-
-typedef void (*ARDUINO_MENU_type_callback)(byte bt_num);
-
-class ARDUINO_MENU
+class MENU_INPUT
 {
     public:
-        ARDUINO_MENU();
-        //~ void begin(Arduino* _keyboard, LCD_20X4_IIC* _lcd, INCREMENTAL_ENCODER* _encoder, MENU_BROWSER* menu);
-        void begin();
+        MENU_INPUT();
+        byte available();
+        byte read();
+        void addBrowser(MENU_BROWSER* _browser);
+        void browsingSequencer(char car);
+        void editingSequencer(char car);
+        void preFunctionSequencer(char car);
+        void postFunctionSequencer(char car);
         void sequencer();
-        void refresh();
 
     private:
-        //~ MATRIX_KEYBOARD* keyboard;
-        //~ LCD_20X4_IIC* lcd;
-        //~ INCREMENTAL_ENCODER* encoder;
-        //~ MENU* menu;
+        MENU_BROWSER* browser;
 
-    };
+};
 
 #endif
 

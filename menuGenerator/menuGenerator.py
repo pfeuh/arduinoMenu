@@ -34,6 +34,8 @@ ITEM_TYPE_TABLE = {"menu":"menuTypeMenu", "variable":"menuTypeVariable", "functi
 HEADER_PATTERN_NAME = "headerPattern.txt"
 SIZE_OF_FUNCTION_POINTER = 2
 SIZE_OF_CHAR_POINTER = 2
+FUNCTION_PTR = "MENU_BROWSER_FUNCTION_PTR"
+EDIT_PTR = "MENU_BROWSER_EDIT_PTR"
 
 def pascalize(text):
     return text[0].upper() + text[1:]
@@ -75,16 +77,21 @@ def getFunctionsCode(menu):
 def getDeclareVariablesCode(menu):
     text = "// edit & display functions of variables suppposed ready to execute\n"
     for variable in menu.getVariables():
-        text += "extern void edit%s();\n"%(pascalize(variable.getCname()))
-        text += "extern void display%s();\n"%(pascalize(variable.getCname()))
+        text += "extern void edit%s(bool direction);\n"%(pascalize(variable.getCname()))
     text += LF
     return text
 
 def getVariablesCode(menu):
     text = EMPTY
     for variable in menu.getVariables():
-        text += "extern void edit%s()\n{\n}\n\n"%(pascalize(variable.getCname()))
-        text += "extern void display%s()\n{\n}\n\n"%(pascalize(variable.getCname()))
+        text += "void edit%s(bool direction)\n{\n"%(pascalize(variable.getCname()))
+        text += "    if(direction == MENU_BROWSER_DATA_INCREASE)\n"
+        text += "        %s +=1;\n"%(variable.getCname())
+        text += "    else\n"
+        text += "        %s -=1;\n"%(variable.getCname())
+        text += "    Serial.print(%s);\n"%(variable.getCname())
+        text += "    Serial.write('\\n');\n"
+        text += "}\n\n"
     return text
 
 def getFamilyTable(menu, hook, label):
@@ -124,8 +131,8 @@ def getLabelTableCode(menu):
     addStatLine("pointers to labels", len(menu.getObjects()) * SIZE_OF_CHAR_POINTER)
     return text
 
-def getCallbackTable(objects, table_prefix, function_prefix):
-    text = "const PROGMEM MENU_BROWSER_FUNCTION_PTR %sFunctionsTable[%s] = \n{\n"%(table_prefix, len(objects))
+def getCallbackTable(objects, table_prefix, function_prefix, ptr_type):
+    text = "const PROGMEM %s %sFunctionsTable[%s] = \n{\n"%(ptr_type, table_prefix, len(objects))
     for index, item in enumerate(objects):
         if function_prefix == EMPTY:
             fname = item.getCname()
@@ -139,13 +146,10 @@ def getCallbackTable(objects, table_prefix, function_prefix):
     return text
 
 def getFunctionsTableCode(menu):
-    return getCallbackTable(menu.getFunctions(), "exec", EMPTY)
+    return getCallbackTable(menu.getFunctions(), "exec", EMPTY, FUNCTION_PTR)
 
 def getEditFunctionsTableCode(menu):
-    return getCallbackTable(menu.getVariables(), "edit", "edit")
-
-def getDisplayFunctionsTableCode(menu):
-    return getCallbackTable(menu.getVariables(), "display", "display")
+    return getCallbackTable(menu.getVariables(), "edit", "edit", EDIT_PTR)
 
 def getHeader(fname, user_name, mail_address):
     with open(HEADER_PATTERN_NAME) as fp:
@@ -168,11 +172,7 @@ def getHeader(fname, user_name, mail_address):
 
 def makeMenuDataFile(menu, fname, user_name, mail_address, include_empty_functions=False):
     text   = getDeclareFunctionsCode(menu)
-    if include_empty_functions:
-        text += getFunctionsCode(menu)
     text += getDeclareVariablesCode(menu)
-    if include_empty_functions:
-        text += getVariablesCode(menu)
     text += getParentTableCode(menu)
     text += getChildTableCode(menu)
     text += getNextTableCode(menu)
@@ -180,7 +180,6 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, include_empty_functio
     text += getLabelTableCode(menu)
     text += getFunctionsTableCode(menu)
     text += getEditFunctionsTableCode(menu)
-    text += getDisplayFunctionsTableCode(menu)
     text += getItemTypeTable(menu)
     text += "#endif\n\n"
     
@@ -198,6 +197,11 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, include_empty_functio
             fp.write(start_of_text + text)
     else:
         sys.stdout.write(start_of_text + text)
+        
+    if include_empty_functions:
+        text  = getFunctionsCode(menu)
+        text += getVariablesCode(menu)
+        sys.stdout.write(text)
 
 if __name__ == "__main__":
     

@@ -19,7 +19,6 @@
 
 
 #include "arduinoMenu.h"
-#include "menuBrowser.h"
 
 /*******************/
 /* Private methods */
@@ -33,30 +32,25 @@ ARDUINO_MENU::ARDUINO_MENU()
 {
 }
 
-//~ void ARDUINO_MENU::begin(MATRIX_KEYBOARD* _keyboard, LCD_20X4_IIC* _lcd, INCREMENTAL_ENCODER* _encoder, MENU* _menu)
-void ARDUINO_MENU::begin()
+void ARDUINO_MENU::begin(MENU_BROWSER* _browser, MENU_DISPLAY* _display, MENU_INPUT* _input)
 {
-    //~ keyboard = _keyboard;
-    //~ lcd = _lcd;
-    //~ encoder = _encoder;
-    //~ menu = _menu;
+    browser = _browser;
+    display = _display;
+    input   = _input;
     
-    //~ lcd->begin();
-    //~ lcd->setBacklight(1);
-    //~ lcd->clear();
-    
-    //~ keyboard->begin();
+    input->addBrowser(browser);
+    display->addBrowser(browser);
+
+    browser->setRefreshCallback(MENU_DISPLAY_refreshBrowserScreen);
+    browser->setEditCallback(MENU_DISPLAY_showEditVariableScreen);
+    browser->setPreFunctionCallback(MENU_DISPLAY_showPreFunctionScreen);
+    browser->setPostFunctionCallback(MENU_DISPLAY_showPostFunctionScreen);
+
+    browser->setState(browserStateBrowsing);
 }
 
 void ARDUINO_MENU::sequencer()
 {
-    //~ keyboard->sequencer();
-    //~ encoder->sequencer();
+    input->sequencer();
 }
 
-void ARDUINO_MENU::refresh()
-{
-    //~ lcd->clear();
-    //~ lcd->home();
-    //~ lcd->print(menu->getLabel(menu->getCurrentEntry()));
-}
