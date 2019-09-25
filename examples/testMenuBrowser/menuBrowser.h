@@ -35,7 +35,7 @@ enum menuBrowserState {
     browserStatePrefunction=3,
     browserStatePostfunction=4,
     browserStateUser=5};
-typedef void (*MENU_BROWSER_FUNCTION_PTR)(void);
+typedef byte (*MENU_BROWSER_FUNCTION_PTR)(void);
 typedef void (*MENU_BROWSER_EDIT_PTR)(byte direction);
 #define MENU_BROWSER_MAX_LABEL_LEN 17
 #define MENU_BROWSER_DATA_INCREASE 0
@@ -62,7 +62,7 @@ class MENU_BROWSER
         void setRefreshCallback(void (*callback)());
         void setEditCallback(void (*callback)());
         void setPreFunctionCallback(void (*callback)());
-        void setPostFunctionCallback(void (*callback)());
+        void setPostFunctionCallback(void (*callback)(byte err_num));
         menuBrowserState getState();
         void setState(menuBrowserState _state);
         byte getVariableIndex(byte index);
@@ -77,7 +77,7 @@ class MENU_BROWSER
         void (*refreshCallback)() = NULL;
         void (*editCallback)() = NULL;
         void (*preFunctionCallback)() = NULL;
-        void (*postFunctionCallback)() = NULL;
+        void (*postFunctionCallback)(byte err_num) = NULL;
         char buffer[MENU_BROWSER_MAX_LABEL_LEN+1];
 
 };

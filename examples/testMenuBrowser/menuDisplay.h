@@ -37,7 +37,7 @@ class MENU_DISPLAY
         void refreshBrowserScreen();
         void showEditVariableScreen();
         void showPreFunctionScreen();
-        void showPostFunctionScreen();
+        void showPostFunctionScreen(byte err_num);
         void printVariable(char* str_var);
         void print(char* text);
 
@@ -55,7 +55,7 @@ extern MENU_DISPLAY* MENU_DISPLAY_SINGLETON;
 extern void MENU_DISPLAY_refreshBrowserScreen();
 extern void MENU_DISPLAY_showEditVariableScreen();
 extern void MENU_DISPLAY_showPreFunctionScreen();
-extern void MENU_DISPLAY_showPostFunctionScreen();
+extern void MENU_DISPLAY_showPostFunctionScreen(byte err_num);
 
 #endif
 

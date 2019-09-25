@@ -1,9 +1,8 @@
+
+bug on function type, don't know if it's menuGenerator or arduinoBrowser
+
+
 <menuGenerator.py>
-
-make a config file to memorize last sketch, flag create_empy_functions,
-username and usermail
-
-fix the xml location to the sketch folder and the xmlname (menuTree)
 
 add a function to add all modules (.cpp and .h) to the sketch folder
 

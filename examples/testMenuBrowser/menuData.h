@@ -30,11 +30,11 @@
 #include <Arduino.h>
 
 #define MENU_GENERATOR_PY_VERSION "1.00"
-#define MENU_GENERATOR_TIME_STAMP "2019/09/25 14:11:14"
+#define MENU_GENERATOR_TIME_STAMP "2019/09/25 17:13:17"
 
 #define MENU_BROWSER_NB_ENTRIES 40
-#define MENU_BROWSER_NB_VARIABLES 18
-#define MENU_BROWSER_NB_FUNCTIONS 18
+#define MENU_BROWSER_NB_VARIABLES 15
+#define MENU_BROWSER_NB_FUNCTIONS 21
 
 // Table of parent              00040
 // Table of child               00040
@@ -49,24 +49,27 @@
 // TOTAL                        00956
 
 // functions suppposed ready to execute
-extern void dumpAll();
-extern void loadAll();
-extern void saveAll();
-extern void dumpGlobal();
-extern void loadGlobal();
-extern void saveGlobal();
-extern void initSeq();
-extern void swapSeq();
-extern void copySeq();
-extern void loadFactory();
-extern void dumpSeq();
-extern void loadSeq();
-extern void saveSeq();
-extern void factorySettings();
-extern void testStepLeds();
-extern void testIndLeds();
-extern void testBeeper();
-extern void displayVersions();
+extern byte dumpAll();
+extern byte loadAll();
+extern byte saveAll();
+extern byte dumpGlobal();
+extern byte loadGlobal();
+extern byte saveGlobal();
+extern byte initSeq();
+extern byte swapSeq();
+extern byte copySeq();
+extern byte loadFactory();
+extern byte dumpSeq();
+extern byte loadSeq();
+extern byte saveSeq();
+extern byte factorySettings();
+extern byte testStepLeds();
+extern byte testIndLeds();
+extern byte testBeeper();
+extern byte displayVersions();
+extern byte test1();
+extern byte test2();
+extern byte test3();
 
 // edit & display functions of variables suppposed ready to execute
 extern void editChannelIn(byte direction);
@@ -83,9 +86,6 @@ extern void editGroove(byte direction);
 extern void editGateMode(byte direction);
 extern void editLastStep(byte direction);
 extern void editCcNum(byte direction);
-extern void editTest1(byte direction);
-extern void editTest2(byte direction);
-extern void editTest3(byte direction);
 extern void editAppVersion(byte direction);
 
 const byte parentTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
@@ -349,7 +349,7 @@ const char *const labelsTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
     /*  39 */ labelAppVersion,
 };
 
-const PROGMEM MENU_BROWSER_FUNCTION_PTR execFunctionsTable[18] = 
+const PROGMEM MENU_BROWSER_FUNCTION_PTR execFunctionsTable[21] = 
 {
     /*  11   0 */ &dumpAll,
     /*  12   1 */ &loadAll,
@@ -369,9 +369,12 @@ const PROGMEM MENU_BROWSER_FUNCTION_PTR execFunctionsTable[18] =
     /*  32  15 */ &testIndLeds,
     /*  33  16 */ &testBeeper,
     /*  34  17 */ &displayVersions,
+    /*  36  18 */ &test1,
+    /*  37  19 */ &test2,
+    /*  38  20 */ &test3,
 };
 
-const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[18] = 
+const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[15] = 
 {
     /*   1   0 */ &editChannelIn,
     /*   2   1 */ &editChannelOut,
@@ -387,10 +390,7 @@ const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[18] =
     /*  19  11 */ &editGateMode,
     /*  20  12 */ &editLastStep,
     /*  21  13 */ &editCcNum,
-    /*  36  14 */ &editTest1,
-    /*  37  15 */ &editTest2,
-    /*  38  16 */ &editTest3,
-    /*  39  17 */ &editAppVersion,
+    /*  39  14 */ &editAppVersion,
 };
 
 const enum menuOptionType itemTypeTable[40] PROGMEM = 
@@ -431,9 +431,9 @@ const enum menuOptionType itemTypeTable[40] PROGMEM =
    /* 033 */ menuTypeFunction,
    /* 034 */ menuTypeFunction,
    /* 035 */ menuTypeMenu,
-   /* 036 */ menuTypeVariable,
-   /* 037 */ menuTypeVariable,
-   /* 038 */ menuTypeVariable,
+   /* 036 */ menuTypeFunction,
+   /* 037 */ menuTypeFunction,
+   /* 038 */ menuTypeFunction,
    /* 039 */ menuTypeVariable,
 };
 

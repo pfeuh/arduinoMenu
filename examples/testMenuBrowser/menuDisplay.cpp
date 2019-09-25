@@ -38,13 +38,12 @@ void MENU_DISPLAY_showEditVariableScreen()
 
 void MENU_DISPLAY_showPreFunctionScreen()
 {
-    Serial.print(F("MENU_DISPLAY_showPreFunctionScreen\n"));
     MENU_DISPLAY_SINGLETON->showPreFunctionScreen();
 }
 
-void MENU_DISPLAY_showPostFunctionScreen()
+void MENU_DISPLAY_showPostFunctionScreen(byte err_num)
 {
-    MENU_DISPLAY_SINGLETON->showPostFunctionScreen();
+    MENU_DISPLAY_SINGLETON->showPostFunctionScreen(err_num);
 }
 
 /*******************/
@@ -178,13 +177,19 @@ void MENU_DISPLAY::showPreFunctionScreen()
     Serial.write('\n');
 }
 
-void MENU_DISPLAY::showPostFunctionScreen()
+void MENU_DISPLAY::showPostFunctionScreen(byte err_num)
 {
     byte index = browser->getCurrentEntry();
     printTitle(index);
     printObjectLabel(index);
     Serial.write('\n');
-    Serial.print(F("Function executed\n"));
+    if(err_num)
+    {
+        Serial.print(F("Error #"));
+        Serial.print(err_num);
+    }
+    else
+        Serial.print(F("Function executed"));
     Serial.write('\n');
 }
 

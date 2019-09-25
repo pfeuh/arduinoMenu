@@ -49,9 +49,9 @@ byte groove = 2;
 byte gateMode = 1;
 byte lastStep = 15;
 byte ccNum = 20;
-byte test1 = 10;
-byte test2 = 20;
-byte test3 = 30;
+//~ byte test1 = 10;
+//~ byte test2 = 20;
+//~ byte test3 = 30;
 byte appVersion = 101;
 
 char printBuffer[MENU_DISPLAY_NB_COLS];
@@ -60,9 +60,6 @@ byte sp;
 
 char* integer2str(signed long int value, bool is_signed)
 {
-    Serial.print(value);
-    Serial.print(F(" -> "));
-
     bool is_negative = false;
     sp = 0;
 

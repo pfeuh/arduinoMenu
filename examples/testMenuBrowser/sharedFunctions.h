@@ -85,7 +85,7 @@ void editTransposition(byte direction)
         transposition +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         transposition -=1;
-    menu.printVariable(integer2str(transposition, true));
+    menu.printVariable(integer2str(transposition, false));
 }
 
 void editGroove(byte direction)
@@ -124,33 +124,6 @@ void editCcNum(byte direction)
     menu.printVariable(integer2str(ccNum, false));
 }
 
-void editTest1(byte direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        test1 +=1;
-    else if(direction == MENU_BROWSER_DATA_DECREASE)
-        test1 -=1;
-    menu.printVariable(integer2str(test1, false));
-}
-
-void editTest2(byte direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        test2 +=1;
-    else if(direction == MENU_BROWSER_DATA_DECREASE)
-        test2 -=1;
-    menu.printVariable(integer2str(test2, false));
-}
-
-void editTest3(byte direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        test3 +=1;
-    else if(direction == MENU_BROWSER_DATA_DECREASE)
-        test3 -=1;
-    menu.printVariable(integer2str(test3, false));
-}
-
 void editAppVersion(byte direction)
 {
     if(direction == MENU_BROWSER_DATA_INCREASE)
@@ -160,75 +133,108 @@ void editAppVersion(byte direction)
     menu.printVariable(integer2str(appVersion, false));
 }
 
-void dumpAll()
+byte dumpAll()
 {
+    return 0;
 }
 
-void loadAll()
+byte loadAll()
 {
+    return 0;
 }
 
-void saveAll()
+byte saveAll()
 {
+    return 0;
 }
 
-void dumpGlobal()
+byte dumpGlobal()
 {
+    return 0;
 }
 
-void loadGlobal()
+byte loadGlobal()
 {
+    return 0;
 }
 
-void saveGlobal()
+byte saveGlobal()
 {
+    return 0;
 }
 
-void initSeq()
+byte initSeq()
 {
+    return 0;
 }
 
-void swapSeq()
+byte swapSeq()
 {
+    return 0;
 }
 
-void copySeq()
+byte copySeq()
 {
+    return 0;
 }
 
-void loadFactory()
+byte loadFactory()
 {
+    return 0;
 }
 
-void dumpSeq()
+byte dumpSeq()
 {
+    return 0;
 }
 
-void loadSeq()
+byte loadSeq()
 {
+    return 0;
 }
 
-void saveSeq()
+byte saveSeq()
 {
+    return 0;
 }
 
-void factorySettings()
+byte factorySettings()
 {
+    return 0;
 }
 
-void testStepLeds()
+byte testStepLeds()
 {
+    return 0;
 }
 
-void testIndLeds()
+byte testIndLeds()
 {
+    return 0;
 }
 
-void testBeeper()
+byte testBeeper()
 {
+    return 0;
 }
 
-void displayVersions()
+byte displayVersions()
 {
+    return 0;
+}
+
+byte test1()
+{
+    return 1;
+}
+
+byte test2()
+{
+    return 2;
+}
+
+byte test3()
+{
+    return 3;
 }
 

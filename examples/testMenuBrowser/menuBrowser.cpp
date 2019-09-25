@@ -136,7 +136,7 @@ void MENU_BROWSER::setPreFunctionCallback(void (*callback)())
     preFunctionCallback = callback;
 }
 
-void MENU_BROWSER::setPostFunctionCallback(void (*callback)())
+void MENU_BROWSER::setPostFunctionCallback(void (*callback)(byte err_num))
 {
     postFunctionCallback = callback;
 }
@@ -148,6 +148,7 @@ menuBrowserState MENU_BROWSER::getState()
 
 void MENU_BROWSER::setState(menuBrowserState _state)
 {
+    byte err_num;
     state = _state;
     switch(state)
     {
@@ -164,11 +165,13 @@ void MENU_BROWSER::setState(menuBrowserState _state)
                 preFunctionCallback();
             break;
         case browserStatePostfunction:
-            getFunction(getCurrentEntry())();
-            if(postFunctionCallback)
-                postFunctionCallback();
+            err_num = getFunction(getCurrentEntry())();
+                if(postFunctionCallback)
+                    postFunctionCallback(err_num);
+            else
             break;
         case browserStateUser:
+            break;
         default:
             break;
 

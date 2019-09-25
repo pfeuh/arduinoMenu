@@ -65,14 +65,19 @@ def getItemTypeTable(menu):
 def getDeclareFunctionsCode(menu):
     text = "// functions suppposed ready to execute\n"
     for function in menu.getFunctions():
-        text += "extern void %s();\n"%(function.getCname())
+        text += "extern byte %s();\n"%(function.getCname())
     text += LF
     return text
 
-def getFunctionsCode(menu):
+def getFunctionsCode(menu, fname):
     text = EMPTY
+    with open(fname) as fp:
+        pattern = fp.read(-1)
     for function in menu.getFunctions():
-        text += "void %s()\n{\n}\n\n"%(function.getCname())
+        funcname = function.getCname()
+        current_pattern = pattern[:]
+        current_pattern = current_pattern.replace("#funcname#", funcname)
+        text += current_pattern
     return text
 
 def getDeclareVariablesCode(menu):
@@ -82,9 +87,9 @@ def getDeclareVariablesCode(menu):
     text += LF
     return text
 
-def getVariablesCode(menu, function_template):
+def getVariablesCode(menu, fname):
     text = EMPTY
-    with open(function_template) as fp:
+    with open(fname) as fp:
         pattern = fp.read(-1)
     for variable in menu.getVariables():
         varname = variable.getCname()
@@ -177,7 +182,7 @@ def getHeader(fname, user_name, mail_address):
     
     return  text
 
-def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_template, empty_functions_fname=None):
+def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_template, function_template, empty_functions_fname=None):
     text   = getDeclareFunctionsCode(menu)
     text += getDeclareVariablesCode(menu)
     text += getParentTableCode(menu)
@@ -207,7 +212,7 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_templat
         
     if empty_functions_fname != None:
         text  = getVariablesCode(menu, edit_function_template)
-        text += getFunctionsCode(menu)
+        text += getFunctionsCode(menu, function_template)
         with open(empty_functions_fname, "w") as fp:
             fp.write(text)
 
@@ -224,6 +229,7 @@ def getParams():
     userMail = None
     emptyFunctionsFname = None
     templateEditFname = "./defaultTEF.txt"
+    templateFname = "./defaultTF.txt"
     
     with open(conf_name) as fp:
         lines = [line.strip() for line in fp.readlines()]
@@ -242,6 +248,8 @@ def getParams():
             userMail = line[len("-mail "):]
         elif line.startswith("-tef "):
             templateEditFname = line[len("-tef "):].replace("\\", "/")
+        elif line.startswith("-tf "):
+            templateFname = line[len("-tf "):].replace("\\", "/")
             
     if projectPath == None:
         raise Exception("The project path is missing!\n")
@@ -254,6 +262,9 @@ def getParams():
     if templateEditFname != None:
         if not os.path.isfile(templateEditFname):
             raise Exception("%s not found!\n"%str(templateEditFname))
+    if templateFname != None:
+        if not os.path.isfile(templateFname):
+            raise Exception("%s not found!\n"%str(templateFname))
     
     menuDataFname = os.path.join(projectPath, "menuData.h").replace("\\", "/")
     if create_empty_function:
@@ -265,23 +276,24 @@ def getParams():
     if create_empty_function:
         sys.stdout.write("emptyFunctionsFname %s\n"%str(emptyFunctionsFname))
     sys.stdout.write("templateEditFname   %s\n"%str(templateEditFname))
+    sys.stdout.write("templateFname       %s\n"%str(templateFname))
     sys.stdout.write("userName            %s\n"%str(userName))
     sys.stdout.write("userMail            %s\n"%str(userMail))
     
-    return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname
+    return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname, templateFname
 
 if __name__ == "__main__":
     
     import time
     start = time.time()
     
-    projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname = getParams()
+    projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname, templateFname = getParams()
 
     statText = EMPTY
     statValue = 0
     menu = menuParser.PARSER_MENU(xmlFname)
     
-    makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, emptyFunctionsFname)
+    makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, templateFname, emptyFunctionsFname)
     
     stop = time.time()
     sys.stdout.write("Job done in %.3f second(s)!\n"%(stop-start))
