@@ -161,9 +161,11 @@ void MENU_DISPLAY::showEditVariableScreen()
     byte index = browser->getCurrentEntry();
     printTitle(index);
     printObjectLabel(index);
-    Serial.print(F("variable "));
+    Serial.print(F("edit variable "));
     Serial.print(browser->getVariableIndex(index));
     Serial.write('\n');
+    browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_JUST_DISPLAY);
+    //~ Serial.write('\n');
 }
 
 void MENU_DISPLAY::showPreFunctionScreen()

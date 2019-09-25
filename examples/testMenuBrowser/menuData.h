@@ -3,7 +3,7 @@
 
 /*
  * file : menuData.h
- * Copyright (c) Pfeuh <ze.pfeuh@gmail.com>
+ * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@
 #include <Arduino.h>
 
 #define MENU_GENERATOR_PY_VERSION "1.00"
+#define MENU_GENERATOR_TIME_STAMP "2019/09/25 14:11:14"
 
 #define MENU_BROWSER_NB_ENTRIES 40
 #define MENU_BROWSER_NB_VARIABLES 18
@@ -39,13 +40,13 @@
 // Table of child               00040
 // Table of next                00040
 // Table of previous            00040
-// Table of labels              00517
+// Table of labels              00516
 // Table of pointers to labels  00080
 // Table of function callbacks  00080
 // Table of edit callbacks      00080
 // Table of types               00040
 // ----------------------------------
-// TOTAL                        00957
+// TOTAL                        00956
 
 // functions suppposed ready to execute
 extern void dumpAll();
@@ -68,24 +69,24 @@ extern void testBeeper();
 extern void displayVersions();
 
 // edit & display functions of variables suppposed ready to execute
-extern void editChannelIn(bool direction);
-extern void editChannelOut(bool direction);
-extern void editProgramNumber(bool direction);
-extern void editArpeggiator(bool direction);
-extern void editClockIn(bool direction);
-extern void editClockOut(bool direction);
-extern void editKeyClick(bool direction);
-extern void editAudioBeat(bool direction);
-extern void editSysEx(bool direction);
-extern void editTransposition(bool direction);
-extern void editGroove(bool direction);
-extern void editGateMode(bool direction);
-extern void editLastStep(bool direction);
-extern void editCcNum(bool direction);
-extern void editTest1(bool direction);
-extern void editTest2(bool direction);
-extern void editTest3(bool direction);
-extern void editAppVersion(bool direction);
+extern void editChannelIn(byte direction);
+extern void editChannelOut(byte direction);
+extern void editProgramNumber(byte direction);
+extern void editArpeggiator(byte direction);
+extern void editClockIn(byte direction);
+extern void editClockOut(byte direction);
+extern void editKeyClick(byte direction);
+extern void editAudioBeat(byte direction);
+extern void editSysEx(byte direction);
+extern void editTransposition(byte direction);
+extern void editGroove(byte direction);
+extern void editGateMode(byte direction);
+extern void editLastStep(byte direction);
+extern void editCcNum(byte direction);
+extern void editTest1(byte direction);
+extern void editTest2(byte direction);
+extern void editTest3(byte direction);
+extern void editAppVersion(byte direction);
 
 const byte parentTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
@@ -263,7 +264,7 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 039 */ 38,
 };
 
-/*   0 */ const char labelGlobalEdit[] PROGMEM = "GLOBAL  EDIT";
+/*   0 */ const char labelGlobalEdit[] PROGMEM = "GLOBAL EDIT";
 /*   1 */ const char labelChannelIn[] PROGMEM = "Input channel";
 /*   2 */ const char labelChannelOut[] PROGMEM = "Output channel";
 /*   3 */ const char labelProgramNumber[] PROGMEM = "Program number";

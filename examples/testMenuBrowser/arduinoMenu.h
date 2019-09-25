@@ -33,6 +33,7 @@ class ARDUINO_MENU
         ARDUINO_MENU();
         void begin(MENU_BROWSER* _browser, MENU_DISPLAY* _display, MENU_INPUT* _input);
         void sequencer();
+        void printVariable(char* str_var);
 
     private:
         MENU_BROWSER* browser;

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menuTree>
+    <menu cname="globalEdit" label="GLOBAL EDIT">
+	    <variable cname="channelIn" label="Input channel" />
+	    <variable cname="channelOut" label="Output channel" />
+	    <variable cname="programNumber" label="Program number" />
+	    <variable cname="arpeggiator" label="Arpeggiator" />
+        <variable cname="clockIn" label="Midi clock in" />
+        <variable cname="clockOut" label="Midi clock out" />
+        <variable cname="keyClick" label="Keyboard echo" />
+        <variable cname="audioBeat" label="Metronome" />
+        <variable cname="sysEx" label="systemExclusive" />
+        <variable cname="transposition" label="Transposition" />
+        <function cname="dumpAll" label="Dump all" />
+        <function cname="loadAll" label="Load all" />
+        <function cname="saveAll" label="Save all" />
+        <function cname="dumpGlobal" label="Dump global par." />
+        <function cname="loadGlobal" label="Load global par." />
+        <function cname="saveGlobal" label="Save global par." />
+    </menu>
+    <menu cname="sequenceEdit" label="SEQUENCE EDIT">
+	    <variable cname="groove" label="Groove" />
+	    <variable cname="gateMode" label="Gate duration" />
+	    <variable cname="lastStep" label="Last step" />
+	    <variable cname="ccNum" label="Ctrl chg number" />
+        <function cname="initSeq" label="initialize seq." />
+        <function cname="swapSeq" label="Swap sequences" />
+        <function cname="copySeq" label="copy sequence" />
+        <function cname="loadFactory" label="Load factory seq" />
+        <function cname="dumpSeq" label="Dump sequence" />
+        <function cname="loadSeq" label="Load sequence" />
+        <function cname="saveSeq" label="Save sequence" />
+    </menu>
+    <menu cname="maintenance" label="MAINTENANCE">
+        <function cname="factorySettings" label="Factory settings" />
+        <function cname="testStepLeds" label="Test step leds" />
+        <function cname="testIndLeds" label="Test ind. leds" />
+        <function cname="testBeeper" label="Test Beeper" />
+        <function cname="displayVersions" label="Versions" />
+        <menu cname="submenu" label="TESTS">
+            <variable cname="test1" label="test 1" />
+            <variable cname="test2" label="test 2" />
+            <variable cname="test3" label="test 3" />
+            <variable cname="appVersion" label="Version number" />
+        </menu>
+    </menu>
+</menuTree>

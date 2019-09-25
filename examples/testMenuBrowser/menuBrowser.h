@@ -36,7 +36,7 @@ enum menuBrowserState {
     browserStatePostfunction=4,
     browserStateUser=5};
 typedef void (*MENU_BROWSER_FUNCTION_PTR)(void);
-typedef void (*MENU_BROWSER_EDIT_PTR)(bool direction);
+typedef void (*MENU_BROWSER_EDIT_PTR)(byte direction);
 #define MENU_BROWSER_MAX_LABEL_LEN 17
 #define MENU_BROWSER_DATA_INCREASE 0
 #define MENU_BROWSER_DATA_DECREASE 1

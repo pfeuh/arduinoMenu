@@ -24,6 +24,7 @@ import menuParser
 from menuParser import EMPTY, LF
 import sys
 import os
+
 sys.stdout.write(sys.version + "\n")
 
 NO_ENTRY = "MENU_BROWSER_NO_ENTRY"
@@ -77,21 +78,21 @@ def getFunctionsCode(menu):
 def getDeclareVariablesCode(menu):
     text = "// edit & display functions of variables suppposed ready to execute\n"
     for variable in menu.getVariables():
-        text += "extern void edit%s(bool direction);\n"%(pascalize(variable.getCname()))
+        text += "extern void edit%s(byte direction);\n"%(pascalize(variable.getCname()))
     text += LF
     return text
 
-def getVariablesCode(menu):
+def getVariablesCode(menu, function_template):
     text = EMPTY
+    with open(function_template) as fp:
+        pattern = fp.read(-1)
     for variable in menu.getVariables():
-        text += "void edit%s(bool direction)\n{\n"%(pascalize(variable.getCname()))
-        text += "    if(direction == MENU_BROWSER_DATA_INCREASE)\n"
-        text += "        %s +=1;\n"%(variable.getCname())
-        text += "    else\n"
-        text += "        %s -=1;\n"%(variable.getCname())
-        text += "    Serial.print(%s);\n"%(variable.getCname())
-        text += "    Serial.write('\\n');\n"
-        text += "}\n\n"
+        varname = variable.getCname()
+        funcname = "edit" + pascalize(varname)
+        current_pattern = pattern[:]
+        current_pattern = current_pattern.replace("#funcname#", funcname)
+        current_pattern = current_pattern.replace("#varname#", varname)
+        text += current_pattern
     return text
 
 def getFamilyTable(menu, hook, label):
@@ -151,6 +152,10 @@ def getFunctionsTableCode(menu):
 def getEditFunctionsTableCode(menu):
     return getCallbackTable(menu.getVariables(), "edit", "edit", EDIT_PTR)
 
+def getTimestamp():
+    now = time.localtime()
+    return '"%04u/%02u/%02u %02u:%02u:%02u"'%(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
+
 def getHeader(fname, user_name, mail_address):
     with open(HEADER_PATTERN_NAME) as fp:
         text = fp.read(-1)
@@ -168,9 +173,11 @@ def getHeader(fname, user_name, mail_address):
     if word == None:
         word = ""
     text = text.replace("#mail#", "<%s>"%word)
+    text = text.replace("#timestamp#", "%s"%getTimestamp())
+    
     return  text
 
-def makeMenuDataFile(menu, fname, user_name, mail_address, include_empty_functions=False):
+def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_template, empty_functions_fname=None):
     text   = getDeclareFunctionsCode(menu)
     text += getDeclareVariablesCode(menu)
     text += getParentTableCode(menu)
@@ -198,46 +205,83 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, include_empty_functio
     else:
         sys.stdout.write(start_of_text + text)
         
-    if include_empty_functions:
-        text  = getFunctionsCode(menu)
-        text += getVariablesCode(menu)
-        sys.stdout.write(text)
+    if empty_functions_fname != None:
+        text  = getVariablesCode(menu, edit_function_template)
+        text += getFunctionsCode(menu)
+        with open(empty_functions_fname, "w") as fp:
+            fp.write(text)
+
+def getParams():
+    conf_name = os.path.splitext(sys.argv[0])[0] + ".cfg"
+    if len(sys.argv) > 1:
+        conf_name = sys.argv[1]
+    sys.stdout.write("configuration file %s\n"%conf_name)
+    
+    projectPath = None
+    xmlFname = None
+    create_empty_function = False
+    userName = None
+    userMail = None
+    emptyFunctionsFname = None
+    templateEditFname = "./defaultTEF.txt"
+    
+    with open(conf_name) as fp:
+        lines = [line.strip() for line in fp.readlines()]
+    for line in lines:
+        if line .startswith("#"):
+            continue
+        elif line.startswith("-prj "):
+            projectPath = line[len("-prj "):]
+        elif line.startswith("-xml "):
+            xmlFname = line[len("-xml "):]
+        elif line == "-csf":
+            create_empty_function = True
+        elif line.startswith("-user "):
+            userName = line[len("-user "):]
+        elif line.startswith("-mail "):
+            userMail = line[len("-mail "):]
+        elif line.startswith("-tef "):
+            templateEditFname = line[len("-tef "):].replace("\\", "/")
+            
+    if projectPath == None:
+        raise Exception("The project path is missing!\n")
+    elif xmlFname == None:
+        xmlFname = os.path.join(projectPath, "menuTree.xml")
+    projectPath = projectPath.replace("\\", "/")
+    xmlFname = xmlFname.replace("\\", "/")
+    if not os.path.exists(xmlFname):
+        raise Exception("%s not found!\n"%str(xmlFname))
+    if templateEditFname != None:
+        if not os.path.isfile(templateEditFname):
+            raise Exception("%s not found!\n"%str(templateEditFname))
+    
+    menuDataFname = os.path.join(projectPath, "menuData.h").replace("\\", "/")
+    if create_empty_function:
+        emptyFunctionsFname = os.path.join(projectPath, "sharedFunctions.h").replace("\\", "/")
+    
+    sys.stdout.write("projectPath         %s\n"%str(projectPath))
+    sys.stdout.write("xmlFname            %s\n"%str(xmlFname))
+    sys.stdout.write("menuDataFname       %s\n"%str(menuDataFname))
+    if create_empty_function:
+        sys.stdout.write("emptyFunctionsFname %s\n"%str(emptyFunctionsFname))
+    sys.stdout.write("templateEditFname   %s\n"%str(templateEditFname))
+    sys.stdout.write("userName            %s\n"%str(userName))
+    sys.stdout.write("userMail            %s\n"%str(userMail))
+    
+    return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname
 
 if __name__ == "__main__":
     
     import time
     start = time.time()
     
-    inFname = None
-    outFname = None
-    userName = None
-    mailAddress = None
-    createEmptyFunction = False
-    for index, value in enumerate(sys.argv):
-        if value == "-i":
-            inFname = sys.argv[index+1]
-        elif value == "-o":
-            outFname = sys.argv[index+1]
-        elif value == "-u":
-            userName = sys.argv[index+1]
-        elif value == "-m":
-            mailAddress = sys.argv[index+1]
-        elif value == "-c":
-            createEmptyFunction = True
-
-    sys.stdout.write("Current path        = %s\n"%os.path.dirname(os.path.abspath(__file__)))
-    sys.stdout.write("inFname             = %s\n"%str(inFname))
-    sys.stdout.write("outFname            = %s\n"%str(outFname))
-    sys.stdout.write("userName            = %s\n"%str(userName))
-    sys.stdout.write("mailAddress         = %s\n"%str(mailAddress))
-    sys.stdout.write("createEmptyFunction = %s\n"%str(createEmptyFunction))
+    projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname = getParams()
 
     statText = EMPTY
     statValue = 0
-
-    menu = menuParser.PARSER_MENU(inFname)
-    makeMenuDataFile(menu, outFname, userName, mailAddress, createEmptyFunction)
+    menu = menuParser.PARSER_MENU(xmlFname)
+    
+    makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, emptyFunctionsFname)
     
     stop = time.time()
     sys.stdout.write("Job done in %.3f second(s)!\n"%(stop-start))
-    

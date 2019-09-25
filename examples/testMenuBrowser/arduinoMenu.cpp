@@ -54,3 +54,7 @@ void ARDUINO_MENU::sequencer()
     input->sequencer();
 }
 
+void ARDUINO_MENU::printVariable(char* str_var)
+{
+    display->printVariable(str_var);
+}

@@ -1,3 +1,165 @@
+void editChannelIn(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        channelIn +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        channelIn -=1;
+    menu.printVariable(integer2str(channelIn, false));
+}
+
+void editChannelOut(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        channelOut +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        channelOut -=1;
+    menu.printVariable(integer2str(channelOut, false));
+}
+
+void editProgramNumber(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        programNumber +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        programNumber -=1;
+    menu.printVariable(integer2str(programNumber, false));
+}
+
+void editArpeggiator(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        arpeggiator +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        arpeggiator -=1;
+    menu.printVariable(integer2str(arpeggiator, false));
+}
+
+void editClockIn(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        clockIn +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        clockIn -=1;
+    menu.printVariable(integer2str(clockIn, false));
+}
+
+void editClockOut(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        clockOut +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        clockOut -=1;
+    menu.printVariable(integer2str(clockOut, false));
+}
+
+void editKeyClick(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        keyClick +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        keyClick -=1;
+    menu.printVariable(integer2str(keyClick, false));
+}
+
+void editAudioBeat(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        audioBeat +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        audioBeat -=1;
+    menu.printVariable(integer2str(audioBeat, false));
+}
+
+void editSysEx(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        sysEx +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        sysEx -=1;
+    menu.printVariable(integer2str(sysEx, false));
+}
+
+void editTransposition(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        transposition +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        transposition -=1;
+    menu.printVariable(integer2str(transposition, true));
+}
+
+void editGroove(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        groove +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        groove -=1;
+    menu.printVariable(integer2str(groove, false));
+}
+
+void editGateMode(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        gateMode +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        gateMode -=1;
+    menu.printVariable(integer2str(gateMode, false));
+}
+
+void editLastStep(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        lastStep +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        lastStep -=1;
+    menu.printVariable(integer2str(lastStep, false));
+}
+
+void editCcNum(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        ccNum +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        ccNum -=1;
+    menu.printVariable(integer2str(ccNum, false));
+}
+
+void editTest1(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        test1 +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        test1 -=1;
+    menu.printVariable(integer2str(test1, false));
+}
+
+void editTest2(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        test2 +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        test2 -=1;
+    menu.printVariable(integer2str(test2, false));
+}
+
+void editTest3(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        test3 +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        test3 -=1;
+    menu.printVariable(integer2str(test3, false));
+}
+
+void editAppVersion(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        appVersion +=1;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        appVersion -=1;
+    menu.printVariable(integer2str(appVersion, false));
+}
+
 void dumpAll()
 {
 }
@@ -68,185 +230,5 @@ void testBeeper()
 
 void displayVersions()
 {
-}
-
-void editChannelIn(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        channelIn +=1;
-    else
-        channelIn -=1;
-    Serial.print(channelIn);
-    Serial.write('\n');
-}
-
-void editChannelOut(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        channelOut +=1;
-    else
-        channelOut -=1;
-    Serial.print(channelOut);
-    Serial.write('\n');
-}
-
-void editProgramNumber(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        programNumber +=1;
-    else
-        programNumber -=1;
-    Serial.print(programNumber);
-    Serial.write('\n');
-}
-
-void editArpeggiator(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        arpeggiator +=1;
-    else
-        arpeggiator -=1;
-    Serial.print(arpeggiator);
-    Serial.write('\n');
-}
-
-void editClockIn(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        clockIn +=1;
-    else
-        clockIn -=1;
-    Serial.print(clockIn);
-    Serial.write('\n');
-}
-
-void editClockOut(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        clockOut +=1;
-    else
-        clockOut -=1;
-    Serial.print(clockOut);
-    Serial.write('\n');
-}
-
-void editKeyClick(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        keyClick +=1;
-    else
-        keyClick -=1;
-    Serial.print(keyClick);
-    Serial.write('\n');
-}
-
-void editAudioBeat(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        audioBeat +=1;
-    else
-        audioBeat -=1;
-    Serial.print(audioBeat);
-    Serial.write('\n');
-}
-
-void editSysEx(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        sysEx +=1;
-    else
-        sysEx -=1;
-    Serial.print(sysEx);
-    Serial.write('\n');
-}
-
-void editTransposition(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        transposition +=1;
-    else
-        transposition -=1;
-    Serial.print(transposition);
-    Serial.write('\n');
-}
-
-void editGroove(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        groove +=1;
-    else
-        groove -=1;
-    Serial.print(groove);
-    Serial.write('\n');
-}
-
-void editGateMode(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        gateMode +=1;
-    else
-        gateMode -=1;
-    Serial.print(gateMode);
-    Serial.write('\n');
-}
-
-void editLastStep(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        lastStep +=1;
-    else
-        lastStep -=1;
-    Serial.print(lastStep);
-    Serial.write('\n');
-}
-
-void editCcNum(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        ccNum +=1;
-    else
-        ccNum -=1;
-    Serial.print(ccNum);
-    Serial.write('\n');
-}
-
-void editTest1(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        test1 +=1;
-    else
-        test1 -=1;
-    Serial.print(test1);
-    Serial.write('\n');
-}
-
-void editTest2(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        test2 +=1;
-    else
-        test2 -=1;
-    Serial.print(test2);
-    Serial.write('\n');
-}
-
-void editTest3(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        test3 +=1;
-    else
-        test3 -=1;
-    Serial.print(test3);
-    Serial.write('\n');
-}
-
-void editAppVersion(bool direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        appVersion +=1;
-    else
-        appVersion -=1;
-    Serial.print(appVersion);
-    Serial.write('\n');
 }
 
