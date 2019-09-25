@@ -245,7 +245,5 @@ class PARSER_MENU():
 if __name__ == "__main__":
 
     menu_fname = "menus/yass.xml"
-    menu_c_fname = "utest/browser.c"
-
     parsed_menu =PARSER_MENU(menu_fname)
-    print parsed_menu.tostring()
+    sys.stdout.write(parsed_menu.tostring())

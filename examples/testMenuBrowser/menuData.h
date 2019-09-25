@@ -4,6 +4,7 @@
 /*
  * file : menuData.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
+ * creation date : 2019/09/25 19:17:38
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -27,15 +28,6 @@
 /*         by the next generation!           */
 /*********************************************/
 
-#include <Arduino.h>
-
-#define MENU_GENERATOR_PY_VERSION "1.00"
-#define MENU_GENERATOR_TIME_STAMP "2019/09/25 17:13:17"
-
-#define MENU_BROWSER_NB_ENTRIES 40
-#define MENU_BROWSER_NB_VARIABLES 15
-#define MENU_BROWSER_NB_FUNCTIONS 21
-
 // Table of parent              00040
 // Table of child               00040
 // Table of next                00040
@@ -47,6 +39,12 @@
 // Table of types               00040
 // ----------------------------------
 // TOTAL                        00956
+
+#include <Arduino.h>
+
+#define MENU_BROWSER_NB_ENTRIES 40
+#define MENU_BROWSER_NB_VARIABLES 15
+#define MENU_BROWSER_NB_FUNCTIONS 21
 
 // functions suppposed ready to execute
 extern byte dumpAll();

@@ -21,7 +21,7 @@
 # 
 
 import menuParser
-from menuParser import EMPTY, LF
+from menuParser import EMPTY, LF, SPACE, PATH_SEP
 import sys
 import os
 
@@ -33,6 +33,7 @@ NB_VARIABLES = "MENU_BROWSER_NB_VARIABLES"
 NB_FUNCTIONS = "MENU_BROWSER_NB_FUNCTIONS"
 ITEM_TYPE_TABLE = {"menu":"menuTypeMenu", "variable":"menuTypeVariable", "function":"menuTypeFunction"}
 HEADER_PATTERN_NAME = "headerPattern.txt"
+SPLASH_PATTERN_NAME = "splashPattern.txt"
 SIZE_OF_FUNCTION_POINTER = 2
 SIZE_OF_CHAR_POINTER = 2
 FUNCTION_PTR = "MENU_BROWSER_FUNCTION_PTR"
@@ -159,15 +160,32 @@ def getEditFunctionsTableCode(menu):
 
 def getTimestamp():
     now = time.localtime()
-    return '"%04u/%02u/%02u %02u:%02u:%02u"'%(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
+    return "%04u/%02u/%02u %02u:%02u:%02u"%(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
+
+def getSplash(fname, user_name, mail_address):
+    with open(SPLASH_PATTERN_NAME) as fp:
+        text = fp.read(-1)
+
+    text = text.replace("#fname#", os.path.basename(fname))
+    
+    word = user_name
+    if word == None:
+        word = "unknown"
+    text = text.replace("#user#", word)
+    
+    word = mail_address
+    if word == None:
+        word = ""
+    text = text.replace("#mail#", "<%s>"%word)
+    text = text.replace("#timestamp#", "%s"%getTimestamp())
+    
+    return  text
 
 def getHeader(fname, user_name, mail_address):
     with open(HEADER_PATTERN_NAME) as fp:
         text = fp.read(-1)
-    if fname == None:
-        word = "stdout"
-    else:
-        word = os.path.splitext(os.path.basename(fname))[0]
+    
+    word = os.path.splitext(os.path.basename(fname))[0]
     text = text.replace("#fname#", word)
     
     word = user_name
@@ -182,8 +200,42 @@ def getHeader(fname, user_name, mail_address):
     
     return  text
 
-def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_template, function_template, empty_functions_fname=None):
-    text   = getDeclareFunctionsCode(menu)
+def getLevel(item):
+    return len(item.getPath().split(PATH_SEP)) - 1
+
+def getMaxLabelSize(menu):
+    sizes = []
+    for index, item in enumerate(menu.getObjects()):
+        label = "%s%s\n"%(SPACE * (getLevel(item) * 4), item.getLabel())
+        sizes.append(len(label))
+    return max(sizes)
+
+def getLabels(menu):
+    size = getMaxLabelSize(menu)
+    text = EMPTY
+    text += "IDX LABEL                   PARENT   CHILD    NEXT    PREVIOUS\n"
+    text += "--------------------------------------------------------------\n"
+    for index, item in enumerate(menu.getObjects()):
+        level = len(item.getPath().split(PATH_SEP)) - 1
+        label = "%s%s"%(SPACE * (level * 4), item.getLabel())
+        while len(label) < size:
+            label += SPACE
+        parent = item.formatIndex(item.getParent())
+        child = item.formatIndex(item.getChild())
+        next = item.formatIndex(item.getNext())
+        previous = item.formatIndex(item.getPrevious())
+        text += "%3u %s %-08s %-08s %-08s %-08s\n"%(index, label, parent, child, next, previous)
+    return text
+
+def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_template, function_template, debug_fname, empty_functions_fname=None):
+    global statText, statValue
+    statText = EMPTY
+    statValue = 0
+    # file menuData.h
+    text  =  "#define MENU_BROWSER_NB_ENTRIES %u\n"%len(menu.getObjects())
+    text +=  "#define MENU_BROWSER_NB_VARIABLES %u\n"%len(menu.getVariables())
+    text +=  "#define MENU_BROWSER_NB_FUNCTIONS %u\n\n"%len(menu.getFunctions())
+    text += getDeclareFunctionsCode(menu)
     text += getDeclareVariablesCode(menu)
     text += getParentTableCode(menu)
     text += getChildTableCode(menu)
@@ -193,27 +245,29 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_templat
     text += getFunctionsTableCode(menu)
     text += getEditFunctionsTableCode(menu)
     text += getItemTypeTable(menu)
-    text += "#endif\n\n"
     
-    start_of_text = getHeader(fname, user_name, mail_address)
-    start_of_text +=  "#define MENU_BROWSER_NB_ENTRIES %u\n"%len(menu.getObjects())
-    start_of_text +=  "#define MENU_BROWSER_NB_VARIABLES %u\n"%len(menu.getVariables())
-    start_of_text +=  "#define MENU_BROWSER_NB_FUNCTIONS %u\n\n"%len(menu.getFunctions())
-    
-    start_of_text +=  statText
-    start_of_text +=  "// ----------------------------------\n"
-    start_of_text +=  "// TOTAL                        %05u\n\n"%statValue
+    body = getHeader(fname, user_name, mail_address)
+    body = body.replace("#body#", text)
+    body = body.replace("#splash#", getSplash(fname, user_name, mail_address))
+    statText +=  "// ----------------------------------\n"
+    statText +=  "// TOTAL                        %05u\n\n"%statValue
+    body = body.replace("#stats#", statText)
+    with open(fname, "w") as fp:
+        fp.write(body)
 
-    if fname != None:
-        with open(fname, "w") as fp:
-            fp.write(start_of_text + text)
-    else:
-        sys.stdout.write(start_of_text + text)
-        
+    # file emptyFunctions.h
     if empty_functions_fname != None:
-        text  = getVariablesCode(menu, edit_function_template)
+        text = getSplash(empty_functions_fname, user_name, mail_address)
+        text += getVariablesCode(menu, edit_function_template)
         text += getFunctionsCode(menu, function_template)
         with open(empty_functions_fname, "w") as fp:
+            fp.write(text)
+
+    # file menuDebug.txt
+    if debug_fname:
+        text  = getSplash(debug_fname, user_name, mail_address)
+        text += getLabels(menu)
+        with open(debug_fname, "w") as fp:
             fp.write(text)
 
 def getParams():
@@ -230,6 +284,8 @@ def getParams():
     emptyFunctionsFname = None
     templateEditFname = "./defaultTEF.txt"
     templateFname = "./defaultTF.txt"
+    debug_flag = False
+    debugFname = None
     
     with open(conf_name) as fp:
         lines = [line.strip() for line in fp.readlines()]
@@ -250,6 +306,8 @@ def getParams():
             templateEditFname = line[len("-tef "):].replace("\\", "/")
         elif line.startswith("-tf "):
             templateFname = line[len("-tf "):].replace("\\", "/")
+        elif line == "-d":
+            debug_flag = True
             
     if projectPath == None:
         raise Exception("The project path is missing!\n")
@@ -269,31 +327,36 @@ def getParams():
     menuDataFname = os.path.join(projectPath, "menuData.h").replace("\\", "/")
     if create_empty_function:
         emptyFunctionsFname = os.path.join(projectPath, "sharedFunctions.h").replace("\\", "/")
+    if debug_flag:
+        debugFname = os.path.join(projectPath, "menuDebug.txt").replace("\\", "/")
+    
     
     sys.stdout.write("projectPath         %s\n"%str(projectPath))
     sys.stdout.write("xmlFname            %s\n"%str(xmlFname))
     sys.stdout.write("menuDataFname       %s\n"%str(menuDataFname))
     if create_empty_function:
         sys.stdout.write("emptyFunctionsFname %s\n"%str(emptyFunctionsFname))
+    if debug_flag:
+        sys.stdout.write("debugFname          %s\n"%str(debugFname))
     sys.stdout.write("templateEditFname   %s\n"%str(templateEditFname))
     sys.stdout.write("templateFname       %s\n"%str(templateFname))
     sys.stdout.write("userName            %s\n"%str(userName))
     sys.stdout.write("userMail            %s\n"%str(userMail))
     
-    return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname, templateFname
+    return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname, templateFname, debugFname
 
 if __name__ == "__main__":
     
     import time
     start = time.time()
     
-    projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname, templateFname = getParams()
+    projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname, templateFname, debugFname = getParams()
 
     statText = EMPTY
     statValue = 0
     menu = menuParser.PARSER_MENU(xmlFname)
     
-    makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, templateFname, emptyFunctionsFname)
+    makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, templateFname, debugFname, emptyFunctionsFname)
     
     stop = time.time()
     sys.stdout.write("Job done in %.3f second(s)!\n"%(stop-start))
