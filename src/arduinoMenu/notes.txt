@@ -1,5 +1,5 @@
 
-bug on function type, don't know if it's menuGenerator or arduinoBrowser
+bug on user print data types, as always...
 
 
 <menuGenerator.py>

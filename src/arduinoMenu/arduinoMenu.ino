@@ -22,15 +22,6 @@
 
 #include "arduinoMenu.h"
 
-// browser object creation
-MENU_BROWSER browser = MENU_BROWSER();
-
-// browser object creation
-MENU_DISPLAY display = MENU_DISPLAY();
-
-// browser object creation
-MENU_INPUT input = MENU_INPUT();
-
 // menu containing browser, display and input objects
 ARDUINO_MENU menu = ARDUINO_MENU();
 
@@ -107,7 +98,8 @@ void setup()
     Serial.println(F("Test of menuBrowser v" MENU_BROWSER_VERSION));
     Serial.println(F("Compilation : " __DATE__ " " __TIME__));
 
-    menu.begin(&browser, &display, &input);
+    //~ menu.begin(&browser, &display, &input);
+    menu.begin();
 }
 
 void loop()

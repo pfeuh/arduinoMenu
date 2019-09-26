@@ -31,9 +31,15 @@ class ARDUINO_MENU
 {
     public:
         ARDUINO_MENU();
-        void begin(MENU_BROWSER* _browser, MENU_DISPLAY* _display, MENU_INPUT* _input);
+        //~ void begin(MENU_BROWSER* _browser, MENU_DISPLAY* _display, MENU_INPUT* _input);
+        void begin();
         void sequencer();
         void printVariable(char* str_var);
+        void write(char car);
+        void print(char* text);
+        void gotoXY(byte x, byte y);
+        void clearScreen();
+        void setState(menuBrowserState _state);
 
     private:
         MENU_BROWSER* browser;

@@ -20,6 +20,15 @@
 
 #include "arduinoMenu.h"
 
+// browser object creation
+MENU_BROWSER menuBrowser = MENU_BROWSER();
+
+// display object creation
+MENU_DISPLAY menuDisplay = MENU_DISPLAY();
+
+// input object creation
+MENU_INPUT menuInput = MENU_INPUT();
+
 /*******************/
 /* Private methods */
 /*******************/
@@ -32,11 +41,12 @@ ARDUINO_MENU::ARDUINO_MENU()
 {
 }
 
-void ARDUINO_MENU::begin(MENU_BROWSER* _browser, MENU_DISPLAY* _display, MENU_INPUT* _input)
+//~ void ARDUINO_MENU::begin(MENU_BROWSER* _browser, MENU_DISPLAY* _display, MENU_INPUT* _input)
+void ARDUINO_MENU::begin()
 {
-    browser = _browser;
-    display = _display;
-    input   = _input;
+    browser = &menuBrowser;
+    display = &menuDisplay;
+    input   = &menuInput;
     
     input->addBrowser(browser);
     display->addBrowser(browser);
@@ -58,3 +68,29 @@ void ARDUINO_MENU::printVariable(char* str_var)
 {
     display->printVariable(str_var);
 }
+
+void ARDUINO_MENU::write(char car)
+{
+    display->write(car);
+}
+
+void ARDUINO_MENU::print(char* text)
+{
+    display->print(text);
+}
+
+void ARDUINO_MENU::gotoXY(byte x, byte y)
+{
+    display->gotoXY(x, y);
+}
+
+void ARDUINO_MENU::clearScreen()
+{
+    display->clearScreen();
+}
+
+void ARDUINO_MENU::setState(menuBrowserState _state)
+{
+    browser->setState(_state);
+}
+

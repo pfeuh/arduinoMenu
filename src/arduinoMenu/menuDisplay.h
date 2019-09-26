@@ -39,7 +39,10 @@ class MENU_DISPLAY
         void showPreFunctionScreen();
         void showPostFunctionScreen(byte err_num);
         void printVariable(char* str_var);
+        void write(char car);
         void print(char* text);
+        void gotoXY(byte x, byte y);
+        void clearScreen();
 
     private:
         MENU_BROWSER* browser;

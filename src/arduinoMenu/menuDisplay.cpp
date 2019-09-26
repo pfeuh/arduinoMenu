@@ -204,3 +204,22 @@ void MENU_DISPLAY::print(char* text)
     Serial.print(text);
 }
 
+void MENU_DISPLAY::write(char car)
+{
+    Serial.write(car);
+}
+
+void MENU_DISPLAY::gotoXY(byte x, byte y)
+{
+    Serial.print(F("goto("));
+    Serial.print(x);
+    Serial.write(':');
+    Serial.print(y);
+    Serial.write(')');
+}
+
+void MENU_DISPLAY::clearScreen()
+{
+    Serial.print(F("clearScreen\n\n\n\n\n\n\n\n\n\n"));
+}
+
