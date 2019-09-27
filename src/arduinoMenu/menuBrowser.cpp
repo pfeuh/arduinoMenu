@@ -80,6 +80,12 @@ const char* MENU_BROWSER::getLabel(byte index)
     return buffer;
 }
 
+const char* MENU_BROWSER::getRootLabel()
+{
+    strcpy_P(buffer, MENU_BROWSER_ROOT_LABEL);
+    return buffer;
+}
+
 void MENU_BROWSER::gotoChild()
 {
     switch(getEntryType(currentEntry))

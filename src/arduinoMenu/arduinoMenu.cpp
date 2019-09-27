@@ -56,6 +56,8 @@ void ARDUINO_MENU::begin()
     browser->setPreFunctionCallback(MENU_DISPLAY_showPreFunctionScreen);
     browser->setPostFunctionCallback(MENU_DISPLAY_showPostFunctionScreen);
 
+    display->begin();
+    
     browser->setState(browserStateBrowsing);
 }
 

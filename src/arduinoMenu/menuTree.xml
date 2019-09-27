@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menuTree>
+    <rootTitle label="TEST MENU UNIT TESTS"/>
     <menu cname="globalEdit" label="GLOBAL EDIT">
 	    <variable cname="channelIn" label="Input channel" />
 	    <variable cname="channelOut" label="Output channel" />

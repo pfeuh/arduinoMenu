@@ -1,7 +1,7 @@
 /*
  * file : sharedFunctions.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/26 09:26:21
+ * creation date : 2019/09/27 08:51:16
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -162,13 +162,6 @@ void editAppVersion(byte direction)
 
 byte dumpAll()
 {
-    menu.setState(browserStateUser);
-    menu.clearScreen();
-    menu.write('P');
-    menu.write('F');
-    menu.print((const char*)F("Hello World!"));
-    menu.gotoXY(39, 45);
-    while(1);
     return 0;
 }
 
@@ -269,6 +262,6 @@ byte test2()
 
 byte test3()
 {
-    return 234;
+    return 0;
 }
 

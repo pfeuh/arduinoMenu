@@ -37,11 +37,14 @@ enum menuBrowserState {
     browserStateUser=5};
 typedef byte (*MENU_BROWSER_FUNCTION_PTR)(void);
 typedef void (*MENU_BROWSER_EDIT_PTR)(byte direction);
-#define MENU_BROWSER_MAX_LABEL_LEN 17
+//~ #define MENU_BROWSER_MAX_LABEL_LEN 17
 #define MENU_BROWSER_DATA_INCREASE 0
 #define MENU_BROWSER_DATA_DECREASE 1
 #define MENU_BROWSER_DATA_JUST_DISPLAY 2
 
+// lcd width = 20, let's add string terminator '\0'
+#define MENU_BROWSER_BUFFER_SIZE 21
+    
 class MENU_BROWSER
 {
     public:
@@ -53,6 +56,7 @@ class MENU_BROWSER
         byte getPrevious(byte index);
         byte getEntryType(byte index);
         const char* getLabel(byte index);
+        const char* getRootLabel();
         void gotoChild();
         void gotoParent();
         void gotoNext();
@@ -78,7 +82,7 @@ class MENU_BROWSER
         void (*editCallback)() = NULL;
         void (*preFunctionCallback)() = NULL;
         void (*postFunctionCallback)(byte err_num) = NULL;
-        char buffer[MENU_BROWSER_MAX_LABEL_LEN+1];
+        char buffer[MENU_BROWSER_BUFFER_SIZE];
 
 };
 

@@ -28,11 +28,16 @@
 #define MENU_DISPLAY_NB_ROWS 4
 #define MENU_DISPLAY_NB_DISPLAYED_ITEMS (MENU_DISPLAY_NB_ROWS - 1)
 #define MENU_DISPLAY_NB_COLS 20
+#define MENU_DISPLAY_LAST_COL (MENU_DISPLAY_NB_COLS - 1)
+
+#define MENU_DISPLAY_CHAR_CR '\r'
+#define MENU_DISPLAY_CHAR_LF '\n'
 
 class MENU_DISPLAY
 {
     public:
         MENU_DISPLAY();
+        void begin();
         void addBrowser(MENU_BROWSER* _browser);
         void refreshBrowserScreen();
         void showEditVariableScreen();
@@ -40,16 +45,38 @@ class MENU_DISPLAY
         void showPostFunctionScreen(byte err_num);
         void printVariable(char* str_var);
         void write(char car);
-        void print(char* text);
         void gotoXY(byte x, byte y);
         void clearScreen();
+        void setBlinking(bool flag);
 
+        void print(const char* str_ptr);
+        void println(const char* str_ptr);
+        void print(const __FlashStringHelper* str_ptr);
+        void println(const __FlashStringHelper* str_ptr);
+    
+    
+        void print(char value, byte base);
+        void println(char value, byte base);
+        void print(byte value, byte base);
+        void println(byte value, byte base);
+    
+        void print(int value, byte base);
+        void println(int value, byte base);
+        void print(long value, byte base);
+        void println(long value, byte base);
+        void print(unsigned long value, byte base);
+        void println(unsigned long value, byte base);
+    
     private:
         MENU_BROWSER* browser;
+        byte x;
+        byte y;
 
         void printTitle(byte index);
         void printObjectLabel(byte index);
         void printEntriesList(byte index);
+        char getHexNibble(byte nibble);
+        void printInteger(signed long int value, bool is_signed, byte base);
 
 };
 

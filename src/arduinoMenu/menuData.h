@@ -4,7 +4,7 @@
 /*
  * file : menuData.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/26 09:26:21
+ * creation date : 2019/09/27 08:51:16
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@
 /*         by the next generation!           */
 /*********************************************/
 
+// Table of %s root's title     00021
 // Table of parent              00040
 // Table of child               00040
 // Table of next                00040
@@ -38,13 +39,15 @@
 // Table of edit callbacks      00080
 // Table of types               00040
 // ----------------------------------
-// TOTAL                        00956
+// TOTAL                        00977
 
 #include <Arduino.h>
 
 #define MENU_BROWSER_NB_ENTRIES 40
 #define MENU_BROWSER_NB_VARIABLES 15
 #define MENU_BROWSER_NB_FUNCTIONS 21
+
+const char MENU_BROWSER_ROOT_LABEL[21] PROGMEM = "TEST MENU UNIT TESTS";
 
 // functions suppposed ready to execute
 extern byte dumpAll();

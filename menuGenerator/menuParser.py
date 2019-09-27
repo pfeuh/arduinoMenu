@@ -23,16 +23,16 @@
 import xml.etree.ElementTree as ET
 import sys
 
-
 EMPTY = ""
 PATH_SEP = "/"
 SPACE = " "
 LF = "\n"
 
-TAG_MENU_TREE = "menuTree"
-TAG_MENU      = "menu"
-TAG_VARIABLE  = "variable"
-TAG_FUNCTION  = "function"
+TAG_ROOT_TITLE = "rootTitle"
+TAG_MENU_TREE  = "menuTree"
+TAG_MENU       = "menu"
+TAG_VARIABLE   = "variable"
+TAG_FUNCTION   = "function"
 
 ATTRIBUTE_CNAME     = "cname"
 ATTRIBUTE_LABEL     = "label"
@@ -141,8 +141,13 @@ class PARSER_MENU():
         self.__parseFile(root)
         if len(self.__objects) > 255:
             raise Exception("Too much entries (%u): 255 max!"%len(self.__objects))
+        if self.__rootLabel == None:
+            self.__rootLabel = " ---*** MENU ***---"
         self.populateFamily()
         
+    def getRootLabel(self):
+        return self.__rootLabel
+
     def __getParentPath(self, path):
         return PATH_SEP.join(path.split(PATH_SEP)[:-1])
         
@@ -190,11 +195,15 @@ class PARSER_MENU():
                 label = element.get(ATTRIBUTE_LABEL)
                 temp_obj = MENU_ITEM(tag, cname, label, path)
                 self.__objects.append(temp_obj)
-        
+            elif tag == TAG_ROOT_TITLE:
+                self.__rootLabel = element.get(ATTRIBUTE_LABEL)
+            else:
+                raise Exception('Unexpected element "%s" found!\n'%tag)
+            
         for child in element:
             self.__parseFile(child)
             
-        if element.tag != "menuTree":
+        if not element.tag in[TAG_MENU_TREE, TAG_ROOT_TITLE]:
             self.popPath()
         return
 
@@ -244,6 +253,7 @@ class PARSER_MENU():
 
 if __name__ == "__main__":
 
-    menu_fname = "menus/yass.xml"
-    parsed_menu =PARSER_MENU(menu_fname)
+    menu_fname = "../src/arduinoMenu/menuTree.xml"
+    parsed_menu = PARSER_MENU(menu_fname)
+    sys.stdout.write(parsed_menu.getRootLabel() + '\n')
     sys.stdout.write(parsed_menu.tostring())

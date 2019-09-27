@@ -38,6 +38,7 @@ SIZE_OF_FUNCTION_POINTER = 2
 SIZE_OF_CHAR_POINTER = 2
 FUNCTION_PTR = "MENU_BROWSER_FUNCTION_PTR"
 EDIT_PTR = "MENU_BROWSER_EDIT_PTR"
+ROOT_LABEL = "MENU_BROWSER_ROOT_LABEL"
 
 def pascalize(text):
     return text[0].upper() + text[1:]
@@ -88,6 +89,12 @@ def getDeclareVariablesCode(menu):
     text += LF
     return text
 
+def getRootLabelCode(menu):
+    title_len = len(menu.getRootLabel()) + 1
+    text = 'const char %s[%s] PROGMEM = "%s";\n\n'%(ROOT_LABEL, title_len, menu.getRootLabel())
+    addStatLine("%s root's title", title_len)
+    return text
+    
 def getVariablesCode(menu, fname):
     text = EMPTY
     with open(fname) as fp:
@@ -235,6 +242,7 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_templat
     text  =  "#define MENU_BROWSER_NB_ENTRIES %u\n"%len(menu.getObjects())
     text +=  "#define MENU_BROWSER_NB_VARIABLES %u\n"%len(menu.getVariables())
     text +=  "#define MENU_BROWSER_NB_FUNCTIONS %u\n\n"%len(menu.getFunctions())
+    text += getRootLabelCode(menu)
     text += getDeclareFunctionsCode(menu)
     text += getDeclareVariablesCode(menu)
     text += getParentTableCode(menu)
