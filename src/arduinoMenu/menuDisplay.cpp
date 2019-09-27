@@ -21,21 +21,23 @@
 
 #include "LiquidCrystal_I2C.h"
 
-LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 20 chars and 4 lines display
+LiquidCrystal_I2C lcd(0x27, MENU_DISPLAY_NB_COLS, MENU_DISPLAY_NB_ROWS);  // set the LCD address to 0x27 for a 20 chars and 4 lines display
 
-const char PROGMEM MENU_DISPLAY_HEX_LUT[] = "0123456789ABCDEF";
+// lookup table for digits from base 2 to 16
+const char PROGMEM MENU_DISPLAY_hexLut[] = "0123456789ABCDEF";
 
-//~ #define LCD_20X4_IIC_NB_CUSTOM_CHARS 8
-#define LCD_20X4_IIC_SECOND_LINE_OFFSET 0x40
-//~ #define LCD_20X4_IIC_CHARS_PER_ROW 0x14
-
+// lookup table of lines' first character location
+#define MENU_DISPLAY_SECOND_LINE_OFFSET 0x40
 const byte LCD_20X4_IIC_lineOffset[] PROGMEM =
 {
     0x00,
-    LCD_20X4_IIC_SECOND_LINE_OFFSET,
+    MENU_DISPLAY_SECOND_LINE_OFFSET,
     MENU_DISPLAY_NB_COLS,
-    LCD_20X4_IIC_SECOND_LINE_OFFSET + MENU_DISPLAY_NB_COLS
+    MENU_DISPLAY_SECOND_LINE_OFFSET + MENU_DISPLAY_NB_COLS
 };
+
+// custom characters
+#define MENU_DISPLAY_CHAR_HEIGHT 8
 
 /****************************************/
 /* using static functions as workaround */
@@ -70,6 +72,8 @@ void MENU_DISPLAY_showPostFunctionScreen(byte err_num)
 
 void MENU_DISPLAY::printTitle(byte index)
 {
+    clearScreen();
+    
     index = browser->getParent(index);
     if(index != MENU_BROWSER_NO_ENTRY)
         print(browser->getLabel(index));
@@ -110,14 +114,14 @@ void MENU_DISPLAY::printEntriesList(byte index)
             if(row_num == 1)
             {
                 if(browser->getPrevious(current_entry_index) != MENU_BROWSER_NO_ENTRY)
-                    write('u');
+                    write(MENU_DISPLAY_CHAR_ARROW_UP);
                 else
                     write(' ');
             }
             else if(row_num == MENU_DISPLAY_NB_DISPLAYED_ITEMS)
             {
                 if(browser->getNext(current_entry_index) != MENU_BROWSER_NO_ENTRY)
-                    write('d');
+                    write(MENU_DISPLAY_CHAR_ARROW_DOWN);
                 else
                     write(' ');
             }
@@ -129,7 +133,7 @@ void MENU_DISPLAY::printEntriesList(byte index)
             {
                 // this is the selected entry
                 write('<');
-                lcd.print(browser->getLabel(current_entry_index));
+                print(browser->getLabel(current_entry_index));
                 write('>');
             }
             else
@@ -154,7 +158,7 @@ void MENU_DISPLAY::printEntriesList(byte index)
 
 char MENU_DISPLAY::getHexNibble(byte nibble)
 {
-    return pgm_read_byte(MENU_DISPLAY_HEX_LUT + nibble);
+    return pgm_read_byte(MENU_DISPLAY_hexLut + nibble);
 }
 
 void MENU_DISPLAY::printInteger(signed long int value, bool is_signed, byte base)
@@ -190,14 +194,9 @@ void MENU_DISPLAY::printInteger(signed long int value, bool is_signed, byte base
     // let's pop digits from the stack
     while(sp)
     {
-        //~ lcd.write(pgm_read_byte(STD_DISPLAY_HEX_LUT + stack[--sp])); 
         write(getHexNibble(stack[--sp]));
-        //~ lcd.print(stack[--sp]);
-        //~ write(' ');
     }
-    //~ write('\n');    
 }
-
 
 /******************/
 /* Public methods */
@@ -210,10 +209,16 @@ MENU_DISPLAY::MENU_DISPLAY()
 
 void MENU_DISPLAY::begin()
 {
+    // TODO: pass these 16 bytes in ROM
+    byte glypheArrowUp[] = {B00000,B00100,B01110,B11111,B00100,B00100,B00000,B00000};
+    byte glypheArrowDown[] = {B00000,B00000,B00100,B00100,B11111,B01110,B00100,B00000};
+    
     lcd.init();
     lcd.backlight();
     lcd.clear();
     lcd.display();
+    lcd.createChar(MENU_DISPLAY_CHAR_ARROW_UP, glypheArrowUp);
+    lcd.createChar(MENU_DISPLAY_CHAR_ARROW_DOWN, glypheArrowDown);
 }
 
 void MENU_DISPLAY::addBrowser(MENU_BROWSER* _browser)
@@ -233,11 +238,8 @@ void MENU_DISPLAY::showEditVariableScreen()
     byte index = browser->getCurrentEntry();
     printTitle(index);
     printObjectLabel(index);
-    lcd.print(F("edit variable "));
-    lcd.print(browser->getVariableIndex(index));
-    lcd.write('\n');
+    print(F("edit variable\n"));
     browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_JUST_DISPLAY);
-    //~ lcd.write('\n');
 }
 
 void MENU_DISPLAY::showPreFunctionScreen()
@@ -268,8 +270,10 @@ void MENU_DISPLAY::showPostFunctionScreen(byte err_num)
 
 void MENU_DISPLAY::printVariable(char* str_var)
 {
-    lcd.print(str_var);
-    lcd.write('\n');
+    gotoXY(0, 3);
+    print(F("                    "));
+    gotoXY(0, 3);
+    print(str_var);
 }
 
 void MENU_DISPLAY::write(char car)
@@ -277,8 +281,8 @@ void MENU_DISPLAY::write(char car)
     switch(car)
     {
         case MENU_DISPLAY_CHAR_CR:
-            gotoXY(0, y);
             Serial.println(F("CR"));
+            gotoXY(0, y);
             break;
         case MENU_DISPLAY_CHAR_LF:
             Serial.println(F("LF"));
@@ -287,28 +291,39 @@ void MENU_DISPLAY::write(char car)
         default:
             if(x <= MENU_DISPLAY_LAST_COL)
             {
+                Serial.write(car);
                 lcd.write(car);
                 x++;
+            }
+            else
+            {
+                Serial.write('(');
                 Serial.write(car);
+                Serial.write(')');
             }
     }
 }
 
-void MENU_DISPLAY::gotoXY(byte x, byte y)
+void MENU_DISPLAY::gotoXY(byte _x, byte _y)
 {
-    lcd.command(LCD_SETDDRAMADDR | (x + pgm_read_byte(LCD_20X4_IIC_lineOffset + y)));
+    lcd.command(LCD_SETDDRAMADDR | (_x + pgm_read_byte(LCD_20X4_IIC_lineOffset + _y)));
+    x = _x;
+    y = _y;
 }
 
 void MENU_DISPLAY::clearScreen()
 {
-    lcd.print(F("clearScreen\n\n\n\n\n\n\n\n\n\n"));
+    lcd.clear();
+    lcd.home();
+    x = 0;
+    y = 0;
 }
 
 void MENU_DISPLAY::setBlinking(bool flag)
 {
-    lcd.print(F("setBlinking("));
-    lcd.print(flag);
-    lcd.write(')');
+    Serial.print(F("setBlinking("));
+    Serial.print(flag);
+    Serial.print(F(")\n"));
 }
 
 void MENU_DISPLAY::print(const char* str_ptr)

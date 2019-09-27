@@ -1,7 +1,7 @@
 /*
  * file : menuDebug.txt
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/27 08:51:16
+ * creation date : 2019/09/27 11:10:19
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 IDX LABEL                   PARENT   CHILD    NEXT    PREVIOUS
 --------------------------------------------------------------
-  0     GLOBAL EDIT             ---      1        17       ---     
+  0     GLOBAL CONFIG.          ---      1        17       ---     
   1         Input channel       0        ---      2        ---     
   2         Output channel      0        ---      3        1       
   3         Program number      0        ---      4        2       
@@ -44,7 +44,7 @@ IDX LABEL                   PARENT   CHILD    NEXT    PREVIOUS
  14         Dump global par.    0        ---      15       13      
  15         Load global par.    0        ---      16       14      
  16         Save global par.    0        ---      ---      15      
- 17     SEQUENCE EDIT           ---      18       29       0       
+ 17     SEQUENCE CONFIG.        ---      18       29       0       
  18         Groove              17       ---      19       ---     
  19         Gate duration       17       ---      20       18      
  20         Last step           17       ---      21       19      

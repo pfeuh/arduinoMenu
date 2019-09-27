@@ -4,7 +4,7 @@
 /*
  * file : menuData.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/27 08:51:16
+ * creation date : 2019/09/27 11:10:19
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -33,13 +33,13 @@
 // Table of child               00040
 // Table of next                00040
 // Table of previous            00040
-// Table of labels              00516
+// Table of labels              00522
 // Table of pointers to labels  00080
 // Table of function callbacks  00080
 // Table of edit callbacks      00080
 // Table of types               00040
 // ----------------------------------
-// TOTAL                        00977
+// TOTAL                        00983
 
 #include <Arduino.h>
 
@@ -49,7 +49,7 @@
 
 const char MENU_BROWSER_ROOT_LABEL[21] PROGMEM = "TEST MENU UNIT TESTS";
 
-// functions suppposed ready to execute
+// functions
 extern byte dumpAll();
 extern byte loadAll();
 extern byte saveAll();
@@ -72,7 +72,7 @@ extern byte test1();
 extern byte test2();
 extern byte test3();
 
-// edit & display functions of variables suppposed ready to execute
+// edit/display variables' functions
 extern void editChannelIn(byte direction);
 extern void editChannelOut(byte direction);
 extern void editProgramNumber(byte direction);
@@ -265,7 +265,7 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 039 */ 38,
 };
 
-/*   0 */ const char labelGlobalEdit[] PROGMEM = "GLOBAL EDIT";
+/*   0 */ const char labelGlobalEdit[] PROGMEM = "GLOBAL CONFIG.";
 /*   1 */ const char labelChannelIn[] PROGMEM = "Input channel";
 /*   2 */ const char labelChannelOut[] PROGMEM = "Output channel";
 /*   3 */ const char labelProgramNumber[] PROGMEM = "Program number";
@@ -282,7 +282,7 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
 /*  14 */ const char labelDumpGlobal[] PROGMEM = "Dump global par.";
 /*  15 */ const char labelLoadGlobal[] PROGMEM = "Load global par.";
 /*  16 */ const char labelSaveGlobal[] PROGMEM = "Save global par.";
-/*  17 */ const char labelSequenceEdit[] PROGMEM = "SEQUENCE EDIT";
+/*  17 */ const char labelSequenceEdit[] PROGMEM = "SEQUENCE CONFIG.";
 /*  18 */ const char labelGroove[] PROGMEM = "Groove";
 /*  19 */ const char labelGateMode[] PROGMEM = "Gate duration";
 /*  20 */ const char labelLastStep[] PROGMEM = "Last step";

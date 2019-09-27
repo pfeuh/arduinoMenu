@@ -65,7 +65,7 @@ def getItemTypeTable(menu):
     return text
 
 def getDeclareFunctionsCode(menu):
-    text = "// functions suppposed ready to execute\n"
+    text = "// functions\n"
     for function in menu.getFunctions():
         text += "extern byte %s();\n"%(function.getCname())
     text += LF
@@ -83,7 +83,7 @@ def getFunctionsCode(menu, fname):
     return text
 
 def getDeclareVariablesCode(menu):
-    text = "// edit & display functions of variables suppposed ready to execute\n"
+    text = "// edit/display variables' functions\n"
     for variable in menu.getVariables():
         text += "extern void edit%s(byte direction);\n"%(pascalize(variable.getCname()))
     text += LF

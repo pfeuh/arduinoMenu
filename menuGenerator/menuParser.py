@@ -50,7 +50,7 @@ class MENU_ITEM():
         if not tag in OBJECT_TYPES:
             raise Exception("unexpected type %s"%str(tag))
         if len(label) > MAX_LABEL_LEN:
-            sys.stdout.write('WARNING! label "%s" too long!\n'%label)
+            raise Exception('WARNING! label "%s" too long!\n'%label)
         self.__tag = tag
         self.__cname = cname
         self.__label = label

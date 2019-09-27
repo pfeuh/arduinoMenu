@@ -32,6 +32,8 @@
 
 #define MENU_DISPLAY_CHAR_CR '\r'
 #define MENU_DISPLAY_CHAR_LF '\n'
+#define MENU_DISPLAY_CHAR_ARROW_UP 1
+#define MENU_DISPLAY_CHAR_ARROW_DOWN 2
 
 class MENU_DISPLAY
 {
@@ -45,7 +47,7 @@ class MENU_DISPLAY
         void showPostFunctionScreen(byte err_num);
         void printVariable(char* str_var);
         void write(char car);
-        void gotoXY(byte x, byte y);
+        void gotoXY(byte _x, byte _y);
         void clearScreen();
         void setBlinking(bool flag);
 

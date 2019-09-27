@@ -90,6 +90,26 @@ char* integer2str(signed long int value, bool is_signed)
 // functions used by arduinoMenu
 #include "sharedFunctions.h"
 
+void editChannelIn(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+    {
+        if(channelIn < 16)
+        channelIn +=1;
+    }
+    else 
+        if(direction == MENU_BROWSER_DATA_DECREASE)
+        {
+            if(channelIn)
+            channelIn -=1;
+        }
+    if(channelIn)
+        menu.printVariable(integer2str(channelIn, false));
+    else
+        menu.printVariable("Mode omni");
+}
+
+
 void setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);

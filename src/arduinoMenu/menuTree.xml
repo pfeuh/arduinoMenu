@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menuTree>
     <rootTitle label="TEST MENU UNIT TESTS"/>
-    <menu cname="globalEdit" label="GLOBAL EDIT">
+    <menu cname="globalEdit" label="GLOBAL CONFIG.">
 	    <variable cname="channelIn" label="Input channel" />
 	    <variable cname="channelOut" label="Output channel" />
 	    <variable cname="programNumber" label="Program number" />
@@ -19,7 +19,7 @@
         <function cname="loadGlobal" label="Load global par." />
         <function cname="saveGlobal" label="Save global par." />
     </menu>
-    <menu cname="sequenceEdit" label="SEQUENCE EDIT">
+    <menu cname="sequenceEdit" label="SEQUENCE CONFIG.">
 	    <variable cname="groove" label="Groove" />
 	    <variable cname="gateMode" label="Gate duration" />
 	    <variable cname="lastStep" label="Last step" />
