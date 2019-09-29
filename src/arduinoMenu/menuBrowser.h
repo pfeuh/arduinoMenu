@@ -55,8 +55,8 @@ class MENU_BROWSER
         byte getNext(byte index);
         byte getPrevious(byte index);
         byte getEntryType(byte index);
-        const char* getLabel(byte index);
-        const char* getRootLabel();
+        const char* getLabelAddress(byte index);
+        const char* getRootLabelAddress();
         void gotoChild();
         void gotoParent();
         void gotoNext();
@@ -82,7 +82,7 @@ class MENU_BROWSER
         void (*editCallback)() = NULL;
         void (*preFunctionCallback)() = NULL;
         void (*postFunctionCallback)(byte err_num) = NULL;
-        char buffer[MENU_BROWSER_BUFFER_SIZE];
+        //~ char buffer[MENU_BROWSER_BUFFER_SIZE];
 
 };
 

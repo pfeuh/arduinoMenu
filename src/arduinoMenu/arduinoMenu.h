@@ -21,32 +21,64 @@
  */
 
 #include <Arduino.h>
+#include <Print.h>
 #include "menuBrowser.h"
 #include "menuInput.h"
-#include "menuDisplay.h"
 
 #define ARDUINO_MENU_VERSION "1.00"
 
-class ARDUINO_MENU
+#define ARDUINO_MENU_NB_ROWS 4
+#define ARDUINO_MENU_NB_DISPLAYED_ITEMS (ARDUINO_MENU_NB_ROWS - 1)
+#define ARDUINO_MENU_NB_COLS 20
+#define ARDUINO_MENU_LAST_COL (ARDUINO_MENU_NB_COLS - 1)
+
+#define ARDUINO_MENU_CHAR_ARROW_UP 1
+#define ARDUINO_MENU_CHAR_ARROW_DOWN 2
+#define ARDUINO_MENU_CHAR_CR '\r'
+#define ARDUINO_MENU_CHAR_LF '\n'
+#define ARDUINO_MENU_CHAR_SPACE ' '
+#define ARDUINO_MENU_CHAR_GREATER_THAN '>'
+#define ARDUINO_MENU_CHAR_LESS_THAN '<'
+
+class ARDUINO_MENU : public Print
 {
     public:
         ARDUINO_MENU();
-        //~ void begin(MENU_BROWSER* _browser, MENU_DISPLAY* _display, MENU_INPUT* _input);
         void begin();
         void sequencer();
-        void printVariable(char* str_var);
-        void write(char car);
-        void print(char* text);
+        size_t write(uint8_t car);
         void gotoXY(byte x, byte y);
         void clearScreen();
         void setState(menuBrowserState _state);
+        void setBlinking(bool flag);
+    
+        void printTitle(byte index);
+        void printSelectedLabel(byte index);
+        void printEntriesList(byte index);
+
+        void refreshBrowserScreen();
+        void showEditVariableScreen();
+        void showPreFunctionScreen();
+        void showPostFunctionScreen(byte err_num);
+    
+        void print_P(const char* str_ptr);
 
     private:
         MENU_BROWSER* browser;
-        MENU_DISPLAY* display;
         MENU_INPUT*   input;
+    
+        byte x;
+        byte y;
+
 
     };
+
+// static functions as workaround for class' methods as callbacks
+extern      ARDUINO_MENU* ARDUINO_MENU_SINGLETON;
+extern void ARDUINO_MENU_refreshBrowserScreen();
+extern void ARDUINO_MENU_showEditVariableScreen();
+extern void ARDUINO_MENU_showPreFunctionScreen();
+extern void ARDUINO_MENU_showPostFunctionScreen(byte err_num);
 
 #endif
 

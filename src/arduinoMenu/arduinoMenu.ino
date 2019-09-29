@@ -25,6 +25,8 @@
 // menu containing browser, display and input objects
 ARDUINO_MENU menu = ARDUINO_MENU();
 
+const char modeOmniMessage[] PROGMEM = "Mode omni";
+
 // menu driven variables
 byte channelIn = 1;
 byte channelOut = 16;
@@ -42,52 +44,6 @@ byte lastStep = 15;
 byte ccNum = 20;
 byte appVersion = 101;
 
-char printBuffer[MENU_DISPLAY_NB_COLS];
-char stack[MENU_DISPLAY_NB_COLS];
-byte sp;
-
-char* integer2str(signed long int value, bool is_signed)
-{
-    bool is_negative = false;
-    sp = 0;
-
-    if(is_signed)
-        if(value & 0x80000000)
-        {
-            value = 0 - value;
-            is_negative = true;
-        }
-
-    // let's push digits in the stack
-    while(value)
-    {
-        stack[sp++] = value % 10;
-        value = value / 10;
-    }
-    
-    // with previous algorithm value zero has no digit... Let's give it one.
-    if(!sp)
-        stack[sp++] = 0;
-    
-    // let's prepare the returned string
-    char* target = printBuffer;
-    
-    // a negative number must be preceded by a minus
-    if(is_negative)
-        *target++ = '-';
-    
-    // let's pop digits from the stack
-    while(sp)
-        *target++ = stack[--sp] + '0';
-    
-    // don't forget the string terminator
-    *target = '\0';
-    
-    return printBuffer;
-}
-
-// this include binds the menu and the
-// functions used by arduinoMenu
 #include "sharedFunctions.h"
 
 void editChannelIn(byte direction)
@@ -104,9 +60,9 @@ void editChannelIn(byte direction)
             channelIn -=1;
         }
     if(channelIn)
-        menu.printVariable(integer2str(channelIn, false));
+        menu.print(channelIn);
     else
-        menu.printVariable("Mode omni");
+        menu.print_P(modeOmniMessage);
 }
 
 byte test1()

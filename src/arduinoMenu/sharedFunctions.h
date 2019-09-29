@@ -1,7 +1,7 @@
 /*
  * file : sharedFunctions.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/28 12:44:11
+ * creation date : 2019/09/29 05:03:10
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,8 @@ void editChannelOut(byte direction)
         channelOut +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         channelOut -=1;
-    menu.printVariable(integer2str(channelOut, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)channelOut);
 }
 
 void editProgramNumber(byte direction)
@@ -42,7 +43,8 @@ void editProgramNumber(byte direction)
         programNumber +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         programNumber -=1;
-    menu.printVariable(integer2str(programNumber, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)programNumber);
 }
 
 void editArpeggiator(byte direction)
@@ -51,7 +53,8 @@ void editArpeggiator(byte direction)
         arpeggiator +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         arpeggiator -=1;
-    menu.printVariable(integer2str(arpeggiator, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)arpeggiator);
 }
 
 void editClockIn(byte direction)
@@ -60,7 +63,8 @@ void editClockIn(byte direction)
         clockIn +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         clockIn -=1;
-    menu.printVariable(integer2str(clockIn, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)clockIn);
 }
 
 void editClockOut(byte direction)
@@ -69,7 +73,8 @@ void editClockOut(byte direction)
         clockOut +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         clockOut -=1;
-    menu.printVariable(integer2str(clockOut, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)clockOut);
 }
 
 void editKeyClick(byte direction)
@@ -78,7 +83,8 @@ void editKeyClick(byte direction)
         keyClick +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         keyClick -=1;
-    menu.printVariable(integer2str(keyClick, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)keyClick);
 }
 
 void editAudioBeat(byte direction)
@@ -87,7 +93,8 @@ void editAudioBeat(byte direction)
         audioBeat +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         audioBeat -=1;
-    menu.printVariable(integer2str(audioBeat, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)audioBeat);
 }
 
 void editSysEx(byte direction)
@@ -96,7 +103,8 @@ void editSysEx(byte direction)
         sysEx +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         sysEx -=1;
-    menu.printVariable(integer2str(sysEx, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)sysEx);
 }
 
 void editTransposition(byte direction)
@@ -105,7 +113,8 @@ void editTransposition(byte direction)
         transposition +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         transposition -=1;
-    menu.printVariable(integer2str(transposition, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)transposition);
 }
 
 void editGroove(byte direction)
@@ -114,7 +123,8 @@ void editGroove(byte direction)
         groove +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         groove -=1;
-    menu.printVariable(integer2str(groove, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)groove);
 }
 
 void editGateMode(byte direction)
@@ -123,7 +133,8 @@ void editGateMode(byte direction)
         gateMode +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         gateMode -=1;
-    menu.printVariable(integer2str(gateMode, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)gateMode);
 }
 
 void editLastStep(byte direction)
@@ -132,7 +143,8 @@ void editLastStep(byte direction)
         lastStep +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         lastStep -=1;
-    menu.printVariable(integer2str(lastStep, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)lastStep);
 }
 
 void editCcNum(byte direction)
@@ -141,7 +153,8 @@ void editCcNum(byte direction)
         ccNum +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         ccNum -=1;
-    menu.printVariable(integer2str(ccNum, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)ccNum);
 }
 
 void editAppVersion(byte direction)
@@ -150,7 +163,8 @@ void editAppVersion(byte direction)
         appVersion +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         appVersion -=1;
-    menu.printVariable(integer2str(appVersion, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)appVersion);
 }
 
 byte dumpAll()

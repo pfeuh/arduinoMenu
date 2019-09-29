@@ -4,6 +4,7 @@ void #funcname#(byte direction)
         #varname# +=1;
     else if(direction == MENU_BROWSER_DATA_DECREASE)
         #varname# -=1;
-    menu.printVariable(integer2str(#varname#, false));
+    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
+    menu.print((int)#varname#);
 }
 

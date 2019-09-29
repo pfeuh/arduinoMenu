@@ -20,6 +20,9 @@
 #include "menuBrowser.h"
 #include "menuData.h"
 
+#define peek pgm_read_byte
+#define wpeek pgm_read_word
+
 /*******************/
 /* Private methods */
 /*******************/
@@ -50,40 +53,41 @@ byte MENU_BROWSER::getCurrentEntry()
 
 byte MENU_BROWSER::getParent(byte index)
 {
-    return pgm_read_byte(parentTable + index);
+    return peek(parentTable + index);
 }
 
 byte MENU_BROWSER::getChild(byte index)
 {
-    return pgm_read_byte(childTable + index);
+    return peek(childTable + index);
 }
 
 byte MENU_BROWSER::getNext(byte index)
 {
-    return pgm_read_byte(nextTable + index);
+    return peek(nextTable + index);
 }
 
 byte MENU_BROWSER::getPrevious(byte index)
 {
-    return pgm_read_byte(previousTable + index);
+    return peek(previousTable + index);
 }
 
 byte MENU_BROWSER::getEntryType(byte index)
 {
-    return pgm_read_byte(itemTypeTable + index);
+    return peek(itemTypeTable + index);
 }
 
-const char* MENU_BROWSER::getLabel(byte index)
+const char* MENU_BROWSER::getLabelAddress(byte index)
 {
-    // got from https://www.arduino.cc/reference/en/language/variables/utilities/progmem/
-    strcpy_P(buffer, (char *)pgm_read_word(&(labelsTable[index])));
-    return buffer;
+    // TODO: to earn 700 bytes, use peek in 2 times instead of wpeek
+    return wpeek(labelsTable + index);
+    
+    //~ word ret_val = peek(labelsTable + index * 2 + 1) * 256 + peek(labelsTable + index * 2 + 1);
+    //~ return (const char*)ret_val;    
 }
 
-const char* MENU_BROWSER::getRootLabel()
+const char* MENU_BROWSER::getRootLabelAddress()
 {
-    strcpy_P(buffer, MENU_BROWSER_ROOT_LABEL);
-    return buffer;
+    return MENU_BROWSER_ROOT_LABEL;
 }
 
 void MENU_BROWSER::gotoChild()
@@ -200,7 +204,7 @@ byte MENU_BROWSER::getVariableIndex(byte index)
 MENU_BROWSER_EDIT_PTR MENU_BROWSER::getVariableEditFunction(byte index)
 {
     byte var_index = getVariableIndex(index);
-    return pgm_read_word(editFunctionsTable + var_index);
+    return wpeek(editFunctionsTable + var_index);
 }
 
 byte MENU_BROWSER::getFunctionIndex(byte index)
@@ -219,6 +223,6 @@ byte MENU_BROWSER::getFunctionIndex(byte index)
 MENU_BROWSER_FUNCTION_PTR MENU_BROWSER::getFunction(byte index)
 {
     byte func_index = getFunctionIndex(index);
-    return pgm_read_word(execFunctionsTable + func_index);
+    return wpeek(execFunctionsTable + func_index);
 }
 
