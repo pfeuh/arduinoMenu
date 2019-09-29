@@ -1,7 +1,7 @@
 /*
  * file : sharedFunctions.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/27 11:10:19
+ * creation date : 2019/09/28 12:44:11
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -25,14 +25,7 @@
 /*         by the next generation!           */
 /*********************************************/
 
-//~ void editChannelIn(byte direction)
-//~ {
-    //~ if(direction == MENU_BROWSER_DATA_INCREASE)
-        //~ channelIn +=1;
-    //~ else if(direction == MENU_BROWSER_DATA_DECREASE)
-        //~ channelIn -=1;
-    //~ menu.printVariable(integer2str(channelIn, false));
-//~ }
+// Function editChannelIn is black listed.
 
 void editChannelOut(byte direction)
 {
@@ -250,18 +243,9 @@ byte displayVersions()
     return 0;
 }
 
-byte test1()
-{
-    return 1;
-}
+// Function test1 is black listed.
 
-byte test2()
-{
-    return 2;
-}
+// Function test2 is black listed.
 
-byte test3()
-{
-    return 3;
-}
+// Function test3 is black listed.
 

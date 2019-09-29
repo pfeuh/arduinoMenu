@@ -26,7 +26,10 @@ LiquidCrystal_I2C lcd(0x27, MENU_DISPLAY_NB_COLS, MENU_DISPLAY_NB_ROWS);  // set
 // lookup table for digits from base 2 to 16
 const char PROGMEM MENU_DISPLAY_hexLut[] = "0123456789ABCDEF";
 
-// lookup table of lines' first character location
+const char MENU_DISPLAY_horizontalLine[] PROGMEM = "--------------------\n";
+const char MENU_DISPLAY_emptyLine[]      PROGMEM = "                    \n";
+
+// lookup table of lines' first character location in lcd ram
 #define MENU_DISPLAY_SECOND_LINE_OFFSET 0x40
 const byte LCD_20X4_IIC_lineOffset[] PROGMEM =
 {
@@ -237,8 +240,8 @@ void MENU_DISPLAY::showEditVariableScreen()
 {
     byte index = browser->getCurrentEntry();
     printTitle(index);
+    print(MENU_DISPLAY_horizontalLine);
     printObjectLabel(index);
-    print(F("edit variable\n"));
     browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_JUST_DISPLAY);
 }
 
@@ -246,32 +249,30 @@ void MENU_DISPLAY::showPreFunctionScreen()
 {
     byte index = browser->getCurrentEntry();
     printTitle(index);
+    print(MENU_DISPLAY_horizontalLine);
     printObjectLabel(index);
-    lcd.print(F("Execute or abort"));
-    lcd.write('\n');
-    lcd.write('\n');
+    print(F("Execute or abort"));
 }
 
 void MENU_DISPLAY::showPostFunctionScreen(byte err_num)
 {
     byte index = browser->getCurrentEntry();
     printTitle(index);
+    print(MENU_DISPLAY_horizontalLine);
     printObjectLabel(index);
-    lcd.write('\n');
     if(err_num)
     {
-        lcd.print(F("Error #"));
-        lcd.print(err_num);
+        print(F("Error #"));
+        print((int)err_num, DEC);
     }
     else
-        lcd.print(F("Function executed"));
-    lcd.write('\n');
+        lcd.print(F("Successful"));
 }
 
 void MENU_DISPLAY::printVariable(char* str_var)
 {
     gotoXY(0, 3);
-    print(F("                    "));
+    print(MENU_DISPLAY_emptyLine);
     gotoXY(0, 3);
     print(str_var);
 }

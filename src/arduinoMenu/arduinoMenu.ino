@@ -109,6 +109,21 @@ void editChannelIn(byte direction)
         menu.printVariable("Mode omni");
 }
 
+byte test1()
+{
+    return 1;
+}
+
+byte test2()
+{
+    return 2;
+}
+
+byte test3()
+{
+    return 3;
+}
+
 
 void setup()
 {

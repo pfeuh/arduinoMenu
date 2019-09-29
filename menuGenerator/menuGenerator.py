@@ -71,15 +71,18 @@ def getDeclareFunctionsCode(menu):
     text += LF
     return text
 
-def getFunctionsCode(menu, fname):
+def getFunctionsCode(menu, fname, black_list):
     text = EMPTY
     with open(fname) as fp:
         pattern = fp.read(-1)
     for function in menu.getFunctions():
         funcname = function.getCname()
-        current_pattern = pattern[:]
-        current_pattern = current_pattern.replace("#funcname#", funcname)
-        text += current_pattern
+        if not funcname in black_list:
+            current_pattern = pattern[:]
+            current_pattern = current_pattern.replace("#funcname#", funcname)
+            text += current_pattern
+        else:
+            text += "// Function %s is black listed.\n\n"%funcname
     return text
 
 def getDeclareVariablesCode(menu):
@@ -95,17 +98,20 @@ def getRootLabelCode(menu):
     addStatLine("%s root's title", title_len)
     return text
     
-def getVariablesCode(menu, fname):
+def getVariablesCode(menu, fname, black_list):
     text = EMPTY
     with open(fname) as fp:
         pattern = fp.read(-1)
     for variable in menu.getVariables():
         varname = variable.getCname()
         funcname = "edit" + pascalize(varname)
-        current_pattern = pattern[:]
-        current_pattern = current_pattern.replace("#funcname#", funcname)
-        current_pattern = current_pattern.replace("#varname#", varname)
-        text += current_pattern
+        if not funcname in black_list:
+            current_pattern = pattern[:]
+            current_pattern = current_pattern.replace("#funcname#", funcname)
+            current_pattern = current_pattern.replace("#varname#", varname)
+            text += current_pattern
+        else:
+            text += "// Function %s is black listed.\n\n"%funcname            
     return text
 
 def getFamilyTable(menu, hook, label):
@@ -234,7 +240,14 @@ def getLabels(menu):
         text += "%3u %s %-08s %-08s %-08s %-08s\n"%(index, label, parent, child, next, previous)
     return text
 
-def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_template, function_template, debug_fname, empty_functions_fname=None):
+def getBlackListedFunctionsTable(blacklist_fname):
+    with open(blacklist_fname) as fp:
+        lines = [line.strip() for line in fp.readlines()]
+    lines = [line for line in lines if line != EMPTY and not line.startswith("#")]
+    return lines
+
+def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_template,\
+        function_template, debug_fname, blacklist_fname, empty_functions_fname=None):
     global statText, statValue
     statText = EMPTY
     statValue = 0
@@ -264,10 +277,15 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_templat
         fp.write(body)
 
     # file emptyFunctions.h
+    if blacklist_fname == None:
+        black_list = []
+    else:
+        black_list = getBlackListedFunctionsTable(blacklist_fname)
+
     if empty_functions_fname != None:
         text = getSplash(empty_functions_fname, user_name, mail_address)
-        text += getVariablesCode(menu, edit_function_template)
-        text += getFunctionsCode(menu, function_template)
+        text += getVariablesCode(menu, edit_function_template, black_list)
+        text += getFunctionsCode(menu, function_template, black_list)
         with open(empty_functions_fname, "w") as fp:
             fp.write(text)
 
@@ -277,7 +295,7 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_templat
         text += getLabels(menu)
         with open(debug_fname, "w") as fp:
             fp.write(text)
-
+            
 def getParams():
     conf_name = os.path.splitext(sys.argv[0])[0] + ".cfg"
     if len(sys.argv) > 1:
@@ -290,6 +308,7 @@ def getParams():
     userName = None
     userMail = None
     emptyFunctionsFname = None
+    blackListedFunctionsFname = None
     templateEditFname = "./defaultTEF.txt"
     templateFname = "./defaultTF.txt"
     debug_flag = False
@@ -316,6 +335,8 @@ def getParams():
             templateFname = line[len("-tf "):].replace("\\", "/")
         elif line == "-d":
             debug_flag = True
+        elif line.startswith("-b "):
+            blackListedFunctionsFname = line[len("-b "):].replace("\\", "/")
             
     if projectPath == None:
         raise Exception("The project path is missing!\n")
@@ -338,7 +359,6 @@ def getParams():
     if debug_flag:
         debugFname = os.path.join(projectPath, "menuDebug.txt").replace("\\", "/")
     
-    
     sys.stdout.write("projectPath         %s\n"%str(projectPath))
     sys.stdout.write("xmlFname            %s\n"%str(xmlFname))
     sys.stdout.write("menuDataFname       %s\n"%str(menuDataFname))
@@ -348,23 +368,28 @@ def getParams():
         sys.stdout.write("debugFname          %s\n"%str(debugFname))
     sys.stdout.write("templateEditFname   %s\n"%str(templateEditFname))
     sys.stdout.write("templateFname       %s\n"%str(templateFname))
+    if blackListedFunctionsFname != None:
+        sys.stdout.write("BlackListedFname    %s\n"%str(blackListedFunctionsFname))
     sys.stdout.write("userName            %s\n"%str(userName))
     sys.stdout.write("userMail            %s\n"%str(userMail))
     
-    return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname, templateFname, debugFname
+    return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname,\
+        templateFname, debugFname, blackListedFunctionsFname
 
 if __name__ == "__main__":
     
     import time
     start = time.time()
     
-    projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname, templateFname, debugFname = getParams()
+    projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname,\
+        templateFname, debugFname, blackListedFunctionsFname = getParams()
 
     statText = EMPTY
     statValue = 0
     menu = menuParser.PARSER_MENU(xmlFname)
     
-    makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, templateFname, debugFname, emptyFunctionsFname)
+    makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, templateFname,
+        debugFname, blackListedFunctionsFname, emptyFunctionsFname)
     
     stop = time.time()
     sys.stdout.write("Job done in %.3f second(s)!\n"%(stop-start))

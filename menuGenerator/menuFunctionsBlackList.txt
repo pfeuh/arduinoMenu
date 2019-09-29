@@ -1,0 +1,7 @@
+#fonctions with name listed here will not be generated
+test3
+test2
+test1
+editChannelIn
+
+
