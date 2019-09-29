@@ -18,11 +18,9 @@
  */
 
 #include "menuInput.h"
+#include "menuInputDevice.h"
 
-/*******************/
-/* Private methods */
-/*******************/
-
+#if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
 
 /******************/
 /* Public methods */
@@ -145,5 +143,5 @@ void MENU_INPUT::sequencer()
     }
 }
 
-
+#endif
 

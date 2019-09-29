@@ -21,6 +21,7 @@
 #include "menuData.h"
 
 #define peek pgm_read_byte
+// TODO: to earn 700 bytes, use peek in 2 times instead of wpeek
 #define wpeek pgm_read_word
 
 /*******************/
@@ -78,11 +79,7 @@ byte MENU_BROWSER::getEntryType(byte index)
 
 const char* MENU_BROWSER::getLabelAddress(byte index)
 {
-    // TODO: to earn 700 bytes, use peek in 2 times instead of wpeek
     return wpeek(labelsTable + index);
-    
-    //~ word ret_val = peek(labelsTable + index * 2 + 1) * 256 + peek(labelsTable + index * 2 + 1);
-    //~ return (const char*)ret_val;    
 }
 
 const char* MENU_BROWSER::getRootLabelAddress()

@@ -24,14 +24,17 @@
 
 LiquidCrystal_I2C display(0x27, ARDUINO_MENU_NB_COLS, ARDUINO_MENU_NB_ROWS);  // set the LCD address to 0x27 for a 20 chars and 4 lines display
 
+#define peek pgm_read_byte
+
 // lookup table for digits from base 2 to 16
 const char ARDUINO_MENU_hexLut[] PROGMEM = "0123456789ABCDEF";
 
 // some menu's messages
 const char ARDUINO_MENU_horizontalLine[] PROGMEM = "--------------------\n";
-const char ARDUINO_MENU_execMessage[] PROGMEM = "Execute or abort\n";
-const char ARDUINO_MENU_errorMessage[] PROGMEM = "Error #";
-const char ARDUINO_MENU_successMessage[] PROGMEM = "Successful";
+const char ARDUINO_MENU_execMessage[] PROGMEM = " Abort:" ARDUINO_MENU_STR_ARROW_LEFT "  Execute:" ARDUINO_MENU_STR_ARROW_RIGHT"\n";
+const char ARDUINO_MENU_errorMessage1[] PROGMEM = "Error #";
+const char ARDUINO_MENU_errorMessage2[] PROGMEM =  " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
+const char ARDUINO_MENU_successMessage[] PROGMEM = "Successful Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
 
 // lookup table of lines' first character location in lcd ram
 #define ARDUINO_MENU_SECOND_LINE_OFFSET 0x40
@@ -45,6 +48,14 @@ const byte LCD_20X4_IIC_lineOffset[] PROGMEM =
 
 // custom characters
 #define ARDUINO_MENU_CHAR_HEIGHT 8
+const char lcdCustomFont[] PROGMEM =
+    {
+        B11111,B11111,B11111,B11111,B11111,B11111,B11111,B11111, // fulll black
+        B00000,B00100,B01110,B11111,B00100,B00100,B00000,B00000, // arrow up 
+        B00000,B00000,B00100,B00100,B11111,B01110,B00100,B00000, // arrow down
+        B00000,B00100,B00110,B11111,B00110,B00100,B00000,B00000, // arrow right
+        B00000,B00100,B01100,B11111,B01100,B00100,B00000,B00000, // arrow left
+    };    
 
 // browser object creation
 MENU_BROWSER menuBrowser = MENU_BROWSER();
@@ -98,16 +109,15 @@ void ARDUINO_MENU::begin()
     browser = &menuBrowser;
     input   = &menuInput;
     
-    // TODO: pass these 16 bytes in ROM
-    byte glypheArrowUp[] = {B00000,B00100,B01110,B11111,B00100,B00100,B00000,B00000};
-    byte glypheArrowDown[] = {B00000,B00000,B00100,B00100,B11111,B01110,B00100,B00000};
-    
     display.init();
     display.backlight();
     display.clear();
     display.display();
-    display.createChar(ARDUINO_MENU_CHAR_ARROW_UP, glypheArrowUp);
-    display.createChar(ARDUINO_MENU_CHAR_ARROW_DOWN, glypheArrowDown);
+    // custom characters loading
+    const char* char_ptr = lcdCustomFont;
+    display.command(LCD_SETCGRAMADDR);
+    for(x=0; x<(sizeof(lcdCustomFont)); x++)
+        display.write(peek(char_ptr++));
    
     input->addBrowser(browser);
 
@@ -117,7 +127,7 @@ void ARDUINO_MENU::begin()
     browser->setPostFunctionCallback(ARDUINO_MENU_showPostFunctionScreen);
 
     browser->setState(browserStateBrowsing);
-    // deady to call sequencer periodically
+    // ready to call sequencer periodically
 }
 
 void ARDUINO_MENU::sequencer()
@@ -202,8 +212,9 @@ void ARDUINO_MENU::showPostFunctionScreen(byte err_num)
     printSelectedLabel(index);
     if(err_num)
     {
-        print_P(ARDUINO_MENU_errorMessage);
+        print_P(ARDUINO_MENU_errorMessage1);
         print(err_num);
+        print_P(ARDUINO_MENU_errorMessage2);
     }
     else
         print_P(ARDUINO_MENU_successMessage);

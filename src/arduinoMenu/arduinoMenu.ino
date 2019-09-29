@@ -51,13 +51,13 @@ void editChannelIn(byte direction)
     if(direction == MENU_BROWSER_DATA_INCREASE)
     {
         if(channelIn < 16)
-        channelIn +=1;
+            channelIn +=1;
     }
     else 
         if(direction == MENU_BROWSER_DATA_DECREASE)
         {
             if(channelIn)
-            channelIn -=1;
+                channelIn -=1;
         }
     if(channelIn)
         menu.print(channelIn);

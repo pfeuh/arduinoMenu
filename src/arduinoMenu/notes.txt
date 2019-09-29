@@ -10,12 +10,42 @@ nice to have: something to check the xmlfile
 
 <arduinoMenu>
 
-continue to work on missing functions (clear, gotoXY, userPrint) of menuDislay
+continue to work on printVariable
 
 implement the real path in title instead of just parent's label
 
-implement a real joystick and a 4x20 lcd.
+implement a real joystick
 
 <documentation>
 
 add a word on camelcase
+
+adapt to the existing system : 3 modules instead of 4, no more callbacks
+
+<menu parameters>
+
+sortie : adresse I2C
+
+Entree:
+    joystick:
+        up
+        down
+        left
+        right
+        ok
+    clavier 4*4:
+        4 lignes
+        4 colonnes
+        up
+        down
+        left
+        right
+        ok
+    serial:
+        up      z
+        down    s
+        left    q
+        right   d
+        ok      enter
+
+
