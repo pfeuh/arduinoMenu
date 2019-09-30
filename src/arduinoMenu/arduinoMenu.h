@@ -74,8 +74,6 @@ class ARDUINO_MENU : public Print
     
         byte x;
         byte y;
-
-
     };
 
 // static functions as workaround for class' methods as callbacks

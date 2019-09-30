@@ -85,9 +85,9 @@ void setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
 
-    Serial.begin(9600);
-    Serial.println(F("Test of menuBrowser v" MENU_BROWSER_VERSION));
-    Serial.println(F("Compilation : " __DATE__ " " __TIME__));
+    //~ Serial.begin(9600);
+    //~ Serial.println(F("Test of menuBrowser v" MENU_BROWSER_VERSION));
+    //~ Serial.println(F("Compilation : " __DATE__ " " __TIME__));
 
     menu.begin();
 }

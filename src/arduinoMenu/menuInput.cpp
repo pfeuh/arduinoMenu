@@ -20,7 +20,19 @@
 #include "menuInput.h"
 #include "menuInputDevice.h"
 
-#if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
+#if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
+#include <matrixKeyboard.h>
+//~ // my "Nano" config
+//~ int rows[] = {3, 4, 5, 6};
+//~ int columns[] = {7, 8, 9, 2};
+//~ // my "Mega" config
+int  columns[] = {26, 24, 22, 36};
+int  rows[]    = {34, 32, 30, 28};
+// you definitely want a match between your charset and column number / row number
+// <<< this table MUST be in RAM! >>>
+char codes[] = {'1', '2', '3', 'u', '4', '5', '6', 'r', '7', '8', '9', 'l', '*', '0', '#', 'd'};
+MATRIX_KEYBOARD keyboard = MATRIX_KEYBOARD(columns, sizeof(columns) / sizeof(int), rows, sizeof(rows) / sizeof(int), codes);
+#endif
 
 /******************/
 /* Public methods */
@@ -28,16 +40,27 @@
 
 MENU_INPUT::MENU_INPUT()
 {
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
+    keyboard.begin();
+    #endif
 }
 
 byte MENU_INPUT::available()
 {
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
+    return keyboard.available();
+    #else
     return Serial.available();
+    #endif
 }
 
 byte MENU_INPUT::read()
 {
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
+    return keyboard.read();
+    #else
     return Serial.read();
+    #endif
 }
 
 void MENU_INPUT::addBrowser(MENU_BROWSER* _browser)
@@ -118,7 +141,12 @@ void MENU_INPUT::postFunctionSequencer(char car)
 
 void MENU_INPUT::sequencer()
 {
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
+    keyboard.sequencer();
+    if(keyboard.available())
+    #else
     if(available())
+    #endif
     {
         byte car = read();
 
@@ -142,6 +170,3 @@ void MENU_INPUT::sequencer()
         }
     }
 }
-
-#endif
-
