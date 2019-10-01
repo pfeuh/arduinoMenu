@@ -140,6 +140,8 @@ void MENU_INPUT::preFunctionSequencer(char car)
     switch(car)
     {
         case MENU_INPUT_CHAR_CMD_LEFT:
+        case MENU_INPUT_CHAR_CMD_UP:
+        case MENU_INPUT_CHAR_CMD_DOWN:
             browser->setState(browserStateBrowsing);
             break;
         case MENU_INPUT_CHAR_CMD_RIGHT:
@@ -154,6 +156,9 @@ void MENU_INPUT::postFunctionSequencer(char car)
 {
     switch(car)
     {
+        case MENU_INPUT_CHAR_CMD_UP:
+        case MENU_INPUT_CHAR_CMD_DOWN:
+        case MENU_INPUT_CHAR_CMD_LEFT:
         case MENU_INPUT_CHAR_CMD_RIGHT:
             browser->setState(browserStateBrowsing);
             break;

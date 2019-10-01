@@ -32,22 +32,30 @@
 #define ARDUINO_MENU_NB_COLS 20
 #define ARDUINO_MENU_LAST_COL (ARDUINO_MENU_NB_COLS - 1)
 
+// to user as characters
 #define ARDUINO_MENU_CHAR_ARROW_BIG_BLACK 0
 #define ARDUINO_MENU_CHAR_ARROW_UP        1
 #define ARDUINO_MENU_CHAR_ARROW_DOWN      2
+#define ARDUINO_MENU_CHAR_ARROW_RIGHT     3
+#define ARDUINO_MENU_CHAR_ARROW_LEFT      4
+#define ARDUINO_MENU_CHAR_LOCKER          5
+#define ARDUINO_MENU_CHAR_CR              '\r'
+#define ARDUINO_MENU_CHAR_LF              '\n'
+#define ARDUINO_MENU_CHAR_SPACE           ' '
+#define ARDUINO_MENU_CHAR_GREATER_THAN    '>'
+#define ARDUINO_MENU_CHAR_LESS_THAN       '<'
+
+// to use as strings
 #define ARDUINO_MENU_STR_ARROW_UP         "\001"
 #define ARDUINO_MENU_STR_ARROW_DOWN       "\002"
 #define ARDUINO_MENU_STR_ARROW_RIGHT      "\003"
 #define ARDUINO_MENU_STR_ARROW_LEFT       "\004"
 #define ARDUINO_MENU_STR_LOCKER           "\005"
-#define ARDUINO_MENU_CHAR_CR              '\r'
-#define ARDUINO_MENU_CHAR_LF              '\n'
 #define ARDUINO_MENU_STR_CR               "\r"
 #define ARDUINO_MENU_STR_LF               "\n"
-#define ARDUINO_MENU_CHAR_SPACE           ' '
 #define ARDUINO_MENU_STR_SPACE            " "
-#define ARDUINO_MENU_CHAR_GREATER_THAN    '>'
-#define ARDUINO_MENU_CHAR_LESS_THAN       '<'
+#define ARDUINO_MENU_STR_GREATER_THAN     ">"
+#define ARDUINO_MENU_STR_LESS_THAN        "<"
 
 class ARDUINO_MENU : public Print
 {

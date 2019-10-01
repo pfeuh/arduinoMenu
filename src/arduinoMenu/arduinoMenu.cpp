@@ -30,11 +30,10 @@ LiquidCrystal_I2C display(0x27, ARDUINO_MENU_NB_COLS, ARDUINO_MENU_NB_ROWS);  //
 const char ARDUINO_MENU_hexLut[] PROGMEM = "0123456789ABCDEF";
 
 // some menu's messages
-const char ARDUINO_MENU_horizontalLine[] PROGMEM = "--------------------" ARDUINO_MENU_STR_LF;
-const char ARDUINO_MENU_execMessage[] PROGMEM = " Abort:" ARDUINO_MENU_STR_ARROW_LEFT "  Execute:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_LF;
+const char ARDUINO_MENU_execMessage[] PROGMEM = "Execute:" ARDUINO_MENU_STR_ARROW_RIGHT " Abort:" ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ;
 const char ARDUINO_MENU_errorMessage1[] PROGMEM = "Error #";
-const char ARDUINO_MENU_errorMessage2[] PROGMEM =  " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
-const char ARDUINO_MENU_successMessage[] PROGMEM = "Successful Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
+const char ARDUINO_MENU_errorMessage2[] PROGMEM =  " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ARDUINO_MENU_STR_LF;
+const char ARDUINO_MENU_successMessage[] PROGMEM = "Successful. Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ARDUINO_MENU_STR_LF;
 const char ARDUINO_MENU_readOnlyMessage[] PROGMEM = ARDUINO_MENU_STR_LOCKER " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ARDUINO_MENU_STR_LF;
 const char ARDUINO_MENU_editMessage[] PROGMEM = "Edit:" ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_LF;
 
@@ -151,14 +150,17 @@ size_t ARDUINO_MENU::write(uint8_t car)
             break;
         default:
             if(x <= ARDUINO_MENU_LAST_COL)
+            {
                 display.write(car);
+                x++;
+            }
     }
     return 1; // success
 }
 
 void ARDUINO_MENU::gotoXY(byte _x, byte _y)
 {
-    display.command(LCD_SETDDRAMADDR | (_x + pgm_read_byte(LCD_20X4_IIC_lineOffset + _y)));
+    display.command(LCD_SETDDRAMADDR | (_x + peek(LCD_20X4_IIC_lineOffset + _y)));
     x = _x;
     y = _y;
 }
@@ -205,8 +207,8 @@ void ARDUINO_MENU::showPreFunctionScreen()
 {
     byte index = browser->getCurrentEntry();
     printTitle(index);
-    print_P(ARDUINO_MENU_horizontalLine);
     printSelectedLabel(index);
+    write(ARDUINO_MENU_CHAR_LF);
     print_P(ARDUINO_MENU_execMessage);
 }
 
@@ -214,8 +216,8 @@ void ARDUINO_MENU::showPostFunctionScreen(byte err_num)
 {
     byte index = browser->getCurrentEntry();
     printTitle(index);
-    print_P(ARDUINO_MENU_horizontalLine);
     printSelectedLabel(index);
+    write(ARDUINO_MENU_CHAR_LF);
     if(err_num)
     {
         print_P(ARDUINO_MENU_errorMessage1);
@@ -306,6 +308,6 @@ void ARDUINO_MENU::printEntriesList(byte index)
 
 void ARDUINO_MENU::print_P(const char* str_ptr)
 {
-    while(pgm_read_byte(str_ptr))
-        write(pgm_read_byte(str_ptr++));
+    while(peek(str_ptr))
+        write(peek(str_ptr++));
 }
