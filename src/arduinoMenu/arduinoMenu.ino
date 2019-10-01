@@ -64,6 +64,12 @@ void editChannelIn(byte direction)
         menu.print_P(modeOmniMessage);
 }
 
+void editChannelOut(byte direction)
+{
+    if(direction){};// avoiding compiler warning "unused parameter"
+    menu.println(F("1\t2\t3\t4\t5\t6\t7\t8"));
+}
+
 void editAppVersion(byte direction)
 {
     if(direction){};// avoiding compiler warning "unused parameter"

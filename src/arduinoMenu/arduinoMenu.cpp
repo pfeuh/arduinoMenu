@@ -32,10 +32,10 @@ const char ARDUINO_MENU_hexLut[] PROGMEM = "0123456789ABCDEF";
 // some menu's messages
 const char ARDUINO_MENU_execMessage[] PROGMEM = "Execute:" ARDUINO_MENU_STR_ARROW_RIGHT " Abort:" ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ;
 const char ARDUINO_MENU_errorMessage1[] PROGMEM = "Error #";
-const char ARDUINO_MENU_errorMessage2[] PROGMEM =  " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ARDUINO_MENU_STR_LF;
-const char ARDUINO_MENU_successMessage[] PROGMEM = "Successful. Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ARDUINO_MENU_STR_LF;
-const char ARDUINO_MENU_readOnlyMessage[] PROGMEM = ARDUINO_MENU_STR_LOCKER " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ARDUINO_MENU_STR_LF;
-const char ARDUINO_MENU_editMessage[] PROGMEM = "Edit:" ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_LF;
+const char ARDUINO_MENU_errorMessage2[] PROGMEM =  " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
+const char ARDUINO_MENU_successMessage[] PROGMEM = "Done. Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
+const char ARDUINO_MENU_readOnlyMessage[] PROGMEM = ARDUINO_MENU_STR_LOCKER " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
+const char ARDUINO_MENU_editMessage[] PROGMEM = "Edit:" ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT;
 
 // lookup table of lines' first character location in lcd ram
 #define ARDUINO_MENU_SECOND_LINE_OFFSET 0x40
@@ -148,6 +148,10 @@ size_t ARDUINO_MENU::write(uint8_t car)
         case ARDUINO_MENU_CHAR_LF:
             gotoXY(0,(y + 1) % ARDUINO_MENU_NB_ROWS);
             break;
+        case ARDUINO_MENU_CHAR_TAB:
+            x = ((x + ARDUINO_MENU_TAB_SIZE) / ARDUINO_MENU_TAB_SIZE) * ARDUINO_MENU_TAB_SIZE;
+            gotoXY(x, y);
+            break;
         default:
             if(x <= ARDUINO_MENU_LAST_COL)
             {
@@ -197,9 +201,9 @@ void ARDUINO_MENU::showEditVariableScreen()
     printTitle(index);
     printSelectedLabel(index);
     if(browser->getReadOnly(index))
-        print_P(ARDUINO_MENU_readOnlyMessage);
+        println_P(ARDUINO_MENU_readOnlyMessage);
     else
-        print_P(ARDUINO_MENU_editMessage);
+        println_P(ARDUINO_MENU_editMessage);
     browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_JUST_DISPLAY);
 }
 
@@ -222,10 +226,10 @@ void ARDUINO_MENU::showPostFunctionScreen(byte err_num)
     {
         print_P(ARDUINO_MENU_errorMessage1);
         print(err_num);
-        print_P(ARDUINO_MENU_errorMessage2);
+        println_P(ARDUINO_MENU_errorMessage2);
     }
     else
-        print_P(ARDUINO_MENU_successMessage);
+        println_P(ARDUINO_MENU_successMessage);
 }
 
 void ARDUINO_MENU::printTitle(byte index)
@@ -234,10 +238,9 @@ void ARDUINO_MENU::printTitle(byte index)
     
     index = browser->getParent(index);
     if(index != MENU_BROWSER_NO_ENTRY)
-        print_P(browser->getLabelAddress(index));
+        println_P(browser->getLabelAddress(index));
     else
-        print_P(browser->getRootLabelAddress());        
-    write(ARDUINO_MENU_CHAR_LF);
+        println_P(browser->getRootLabelAddress());        
 }
 
 void ARDUINO_MENU::printSelectedLabel(byte index)
@@ -310,4 +313,10 @@ void ARDUINO_MENU::print_P(const char* str_ptr)
 {
     while(peek(str_ptr))
         write(peek(str_ptr++));
+}
+
+void ARDUINO_MENU::println_P(const char* str_ptr)
+{
+    print_P(str_ptr);
+        write(ARDUINO_MENU_CHAR_LF);
 }

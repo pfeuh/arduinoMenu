@@ -4,7 +4,7 @@
 /*
  * file : menuData.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/30 20:22:07
+ * creation date : 2019/10/01 09:35:22
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -406,7 +406,7 @@ const byte itemTypeTable[41] PROGMEM =
 {
    /* 000 */ menuTypeMenu,
    /* 001 */ menuTypeVariable,
-   /* 002 */ menuTypeVariable,
+   /* 002 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
    /* 003 */ menuTypeVariable,
    /* 004 */ menuTypeVariable,
    /* 005 */ menuTypeVariable,

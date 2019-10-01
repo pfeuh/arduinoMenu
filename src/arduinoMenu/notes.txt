@@ -1,7 +1,4 @@
 
-bug on user print data types, as always...
-
-
 <menuGenerator.py>
 
 add a function to add all modules (.cpp and .h) to the sketch folder

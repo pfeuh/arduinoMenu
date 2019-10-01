@@ -28,9 +28,7 @@
 // my "Mega" config
 int  columns[] = {26, 24, 22, 36};
 int  rows[]    = {34, 32, 30, 28};
-// you definitely want a match between your charset and column number / row number
-// <<< this table MUST be in RAM! >>>
-char codes[] =
+const char codes[] PROGMEM =
 {
     '1', '2', '3', MENU_INPUT_CHAR_CMD_UP,
     '4', '5', '6', MENU_INPUT_CHAR_CMD_RIGHT,

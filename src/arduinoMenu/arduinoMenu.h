@@ -41,6 +41,7 @@
 #define ARDUINO_MENU_CHAR_LOCKER          5
 #define ARDUINO_MENU_CHAR_CR              '\r'
 #define ARDUINO_MENU_CHAR_LF              '\n'
+#define ARDUINO_MENU_CHAR_TAB             '\t'
 #define ARDUINO_MENU_CHAR_SPACE           ' '
 #define ARDUINO_MENU_CHAR_GREATER_THAN    '>'
 #define ARDUINO_MENU_CHAR_LESS_THAN       '<'
@@ -53,9 +54,12 @@
 #define ARDUINO_MENU_STR_LOCKER           "\005"
 #define ARDUINO_MENU_STR_CR               "\r"
 #define ARDUINO_MENU_STR_LF               "\n"
+#define ARDUINO_MENU_STR_TAB              "\t"
 #define ARDUINO_MENU_STR_SPACE            " "
 #define ARDUINO_MENU_STR_GREATER_THAN     ">"
 #define ARDUINO_MENU_STR_LESS_THAN        "<"
+
+#define ARDUINO_MENU_TAB_SIZE 4
 
 class ARDUINO_MENU : public Print
 {
@@ -79,6 +83,7 @@ class ARDUINO_MENU : public Print
         void showPostFunctionScreen(byte err_num);
     
         void print_P(const char* str_ptr);
+        void println_P(const char* str_ptr);
 
     private:
         MENU_BROWSER* browser;

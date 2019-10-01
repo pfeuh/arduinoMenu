@@ -1,7 +1,7 @@
 /*
  * file : sharedFunctions.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/30 20:22:07
+ * creation date : 2019/10/01 09:35:22
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -27,15 +27,7 @@
 
 // Function editChannelIn is black listed.
 
-void editChannelOut(byte direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        channelOut +=1;
-    else if(direction == MENU_BROWSER_DATA_DECREASE)
-        channelOut -=1;
-    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
-    menu.print((int)channelOut);
-}
+// Function editChannelOut is black listed.
 
 void editProgramNumber(byte direction)
 {

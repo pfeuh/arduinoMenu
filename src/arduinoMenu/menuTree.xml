@@ -3,7 +3,7 @@
     <rootTitle label="TEST MENU UNIT TESTS"/>
     <menu cname="globalEdit" label="GLOBAL CONFIG.">
 	    <variable cname="channelIn" label="Input channel" />
-	    <variable cname="channelOut" label="Output channel" />
+	    <variable cname="channelOut" label="Output channel" readonly="1" />
 	    <variable cname="programNumber" label="Program number" />
 	    <variable cname="arpeggiator" label="Arpeggiator" />
         <variable cname="clockIn" label="Midi clock in" />
