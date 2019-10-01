@@ -18,7 +18,6 @@
  */
 
 #include "arduinoMenu.h"
-#include "menuInputDevice.h"
 
 // menu containing browser, display and input objects
 ARDUINO_MENU menu = ARDUINO_MENU();
@@ -97,17 +96,22 @@ byte test3()
     return 3;
 }
 
-
 void setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
 
-    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL || MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)
         Serial.begin(9600);
-        Serial.println(F("Test of menuBrowser v" MENU_BROWSER_VERSION));
-        Serial.println(F("Compilation : " __DATE__ " " __TIME__));
     #endif
 
+    #if(MENU_OUTPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
+        Serial.println(F("Test of menuBrowser v" MENU_BROWSER_VERSION));
+        Serial.println(F("Compilation : " __DATE__ " " __TIME__));
+        Serial.println(F("input:"));
+        Serial.print(MENU_INPUT_DEVICE);
+        Serial.print(F(" output:"));
+        Serial.println(MENU_OUTPUT_DEVICE);
+    #endif
     menu.begin();
 }
 

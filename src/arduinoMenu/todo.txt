@@ -1,28 +1,25 @@
 
-<menuGenerator.py>
-
-add a function to add all modules (.cpp and .h) to the sketch folder
-
-nice to have: something to check the xmlfile
-
 <arduinoMenu>
 
-continue to work on printVariable
-
+printVariable! printVariable! printVariable! 
+mismatch in input/output devices
+mismatch in tabulations
 implement the real path in title instead of just parent's label
-
 implement a real joystick
+
+<menuGenerator.py>
+
+add a function to install all modules (.cpp and .h) to the sketch folder
+nice to have: something to check the xmlfile
 
 <documentation>
 
-add a word on camelcase
-
+add a word on why camelcase
 adapt to the existing system : 3 modules instead of 4, no more callbacks
 
 <menu parameters>
 
 sortie : adresse I2C
-
 Entree:
     joystick:
         up

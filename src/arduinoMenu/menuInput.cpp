@@ -18,7 +18,6 @@
  */
 
 #include "menuInput.h"
-#include "menuInputDevice.h"
 
 #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
 #include <matrixKeyboard.h>

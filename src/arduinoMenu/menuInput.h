@@ -21,9 +21,10 @@
  */
 
 #include <Arduino.h>
+#include "menuDevices.h"
+#include "menuBrowser.h"
 
 #define MENU_INPUT_VERSION "1.00"
-#include "menuBrowser.h"
 
 #define MENU_INPUT_CHAR_CMD_UP    'u'
 #define MENU_INPUT_CHAR_CMD_DOWN  'd'

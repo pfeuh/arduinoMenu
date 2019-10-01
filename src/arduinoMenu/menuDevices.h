@@ -1,8 +1,8 @@
-#ifndef menuInputDevice_h
-#define menuInputDevice_h
+#ifndef menuDevices_h
+#define menuDevices_h
 
 /*
- * file : menuInputDevice.h
+ * file : menuDevices.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail>
  * All rights reserved.
  * 
@@ -22,11 +22,28 @@
 
 #include <Arduino.h>
 
+/*****************/
+/* Input devices */
+/*****************/
+
+#define MENU_INPUT_DEVICE_NONE     0
 #define MENU_INPUT_DEVICE_SERIAL   1
 #define MENU_INPUT_DEVICE_JOYSTICK 2
 #define MENU_INPUT_DEVICE_KEYB16   3
 
+// let's select an input device from list above
 #define  MENU_INPUT_DEVICE MENU_INPUT_DEVICE_SERIAL
+
+/******************/
+/* Output devices */
+/******************/
+
+#define MENU_OUTPUT_DEVICE_NONE     0
+#define MENU_OUTPUT_DEVICE_SERIAL   1
+#define MENU_OUTPUT_DEVICE_LCD_4x2  2
+
+// let's select an output device from list above
+#define  MENU_OUTPUT_DEVICE MENU_OUTPUT_DEVICE_LCD_4x2
 
 #endif
 
