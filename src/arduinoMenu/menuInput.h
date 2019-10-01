@@ -25,6 +25,11 @@
 #define MENU_INPUT_VERSION "1.00"
 #include "menuBrowser.h"
 
+#define MENU_INPUT_CHAR_CMD_UP    'u'
+#define MENU_INPUT_CHAR_CMD_DOWN  'd'
+#define MENU_INPUT_CHAR_CMD_RIGHT 'r'
+#define MENU_INPUT_CHAR_CMD_LEFT  'l'
+
 class MENU_INPUT
 {
     public:

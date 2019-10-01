@@ -39,6 +39,7 @@ SIZE_OF_CHAR_POINTER = 2
 FUNCTION_PTR = "MENU_BROWSER_FUNCTION_PTR"
 EDIT_PTR = "MENU_BROWSER_EDIT_PTR"
 ROOT_LABEL = "MENU_BROWSER_ROOT_LABEL"
+RO_LABEL = "MENU_BROWSER_RO_MASK"
 
 def pascalize(text):
     return text[0].upper() + text[1:]
@@ -56,10 +57,13 @@ def addStatLine(text, value):
     statValue += value
 
 def getItemTypeTable(menu):
-    text = "const enum menuOptionType itemTypeTable[%u] PROGMEM = \n{\n"%(len(menu.getObjects()))
+    text = "const byte itemTypeTable[%u] PROGMEM = \n{\n"%(len(menu.getObjects()))
     for item in menu.getObjects():
         itype = ITEM_TYPE_TABLE[item.getTag()]
-        text += "   /* %03u */ %s,\n"%(item.getIndex(), itype)
+        attrib = EMPTY
+        if item.getReadonly():
+            attrib = " | %s"%RO_LABEL
+        text += "   /* %03u */ %s%s,\n"%(item.getIndex(), itype, attrib)
     text += "};\n\n"
     addStatLine("types", len(menu.getObjects()))
     return text

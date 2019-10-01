@@ -41,6 +41,9 @@ typedef void (*MENU_BROWSER_EDIT_PTR)(byte direction);
 #define MENU_BROWSER_DATA_DECREASE 1
 #define MENU_BROWSER_DATA_JUST_DISPLAY 2
 
+#define MENU_BROWSER_TYPE_MASK 0x3
+#define MENU_BROWSER_RO_MASK 0x4  
+
 class MENU_BROWSER
 {
     public:
@@ -51,6 +54,7 @@ class MENU_BROWSER
         byte getNext(byte index);
         byte getPrevious(byte index);
         byte getEntryType(byte index);
+        bool getReadOnly(byte index);
         const char* getLabelAddress(byte index);
         const char* getRootLabelAddress();
         void gotoChild();

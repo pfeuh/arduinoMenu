@@ -41,7 +41,7 @@
             <variable cname="test1" label="test 1" />
             <variable cname="test2" label="test 2" />
             <variable cname="test3" label="test 3" />
-            <variable cname="appVersion" label="Version number" />
+            <variable cname="appVersion" label="Version number" readonly="1" />
         </menu>
     </menu>
 </menuTree>

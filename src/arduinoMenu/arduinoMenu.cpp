@@ -30,11 +30,13 @@ LiquidCrystal_I2C display(0x27, ARDUINO_MENU_NB_COLS, ARDUINO_MENU_NB_ROWS);  //
 const char ARDUINO_MENU_hexLut[] PROGMEM = "0123456789ABCDEF";
 
 // some menu's messages
-const char ARDUINO_MENU_horizontalLine[] PROGMEM = "--------------------\n";
-const char ARDUINO_MENU_execMessage[] PROGMEM = " Abort:" ARDUINO_MENU_STR_ARROW_LEFT "  Execute:" ARDUINO_MENU_STR_ARROW_RIGHT"\n";
+const char ARDUINO_MENU_horizontalLine[] PROGMEM = "--------------------" ARDUINO_MENU_STR_LF;
+const char ARDUINO_MENU_execMessage[] PROGMEM = " Abort:" ARDUINO_MENU_STR_ARROW_LEFT "  Execute:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_LF;
 const char ARDUINO_MENU_errorMessage1[] PROGMEM = "Error #";
 const char ARDUINO_MENU_errorMessage2[] PROGMEM =  " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
 const char ARDUINO_MENU_successMessage[] PROGMEM = "Successful Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
+const char ARDUINO_MENU_readOnlyMessage[] PROGMEM = ARDUINO_MENU_STR_LOCKER " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ARDUINO_MENU_STR_LF;
+const char ARDUINO_MENU_editMessage[] PROGMEM = "Edit:" ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_LF;
 
 // lookup table of lines' first character location in lcd ram
 #define ARDUINO_MENU_SECOND_LINE_OFFSET 0x40
@@ -49,13 +51,14 @@ const byte LCD_20X4_IIC_lineOffset[] PROGMEM =
 // custom characters
 #define ARDUINO_MENU_CHAR_HEIGHT 8
 const char lcdCustomFont[] PROGMEM =
-    {
-        B11111,B11111,B11111,B11111,B11111,B11111,B11111,B11111, // fulll black
-        B00000,B00100,B01110,B11111,B00100,B00100,B00000,B00000, // arrow up 
-        B00000,B00000,B00100,B00100,B11111,B01110,B00100,B00000, // arrow down
-        B00000,B00100,B00110,B11111,B00110,B00100,B00000,B00000, // arrow right
-        B00000,B00100,B01100,B11111,B01100,B00100,B00000,B00000, // arrow left
-    };    
+{
+    B11111,B11111,B11111,B11111,B11111,B11111,B11111,B11111, // fulll black
+    B00000,B00100,B01110,B11111,B00100,B00100,B00000,B00000, // arrow up 
+    B00000,B00000,B00100,B00100,B11111,B01110,B00100,B00000, // arrow down
+    B00000,B00100,B00110,B11111,B00110,B00100,B00000,B00000, // arrow right
+    B00000,B00100,B01100,B11111,B01100,B00100,B00000,B00000, // arrow left
+    B00000,B01110,B10001,B10001,B11111,B11011,B11011,B11111, // locker
+};    
 
 // browser object creation
 MENU_BROWSER menuBrowser = MENU_BROWSER();
@@ -190,8 +193,11 @@ void ARDUINO_MENU::showEditVariableScreen()
 {
     byte index = browser->getCurrentEntry();
     printTitle(index);
-    print_P(ARDUINO_MENU_horizontalLine);
     printSelectedLabel(index);
+    if(browser->getReadOnly(index))
+        print_P(ARDUINO_MENU_readOnlyMessage);
+    else
+        print_P(ARDUINO_MENU_editMessage);
     browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_JUST_DISPLAY);
 }
 

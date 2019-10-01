@@ -1,11 +1,11 @@
 Arduino menu
 
-Works fine at the moment with a USB terminal as
-Arduino IDE's one. To test it:
+- Menu generated from an XML file
 
-'u' + newLine : up
-'d' + newLine :down
-'l' + newLine :left
-'r' + newLine :right
+- Inputs:
+    - Serial (keys 'u' 'd' 'r' 'l')
+    - Matrix Keyboard 4x4
 
-
+- Outputs
+    - Serial
+    - I2C LCD 20x4

@@ -22,15 +22,21 @@
 
 #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
 #include <matrixKeyboard.h>
-//~ // my "Nano" config
+//~ // my "Nano/Uno" config
 //~ int rows[] = {3, 4, 5, 6};
 //~ int columns[] = {7, 8, 9, 2};
-//~ // my "Mega" config
+// my "Mega" config
 int  columns[] = {26, 24, 22, 36};
 int  rows[]    = {34, 32, 30, 28};
 // you definitely want a match between your charset and column number / row number
 // <<< this table MUST be in RAM! >>>
-char codes[] = {'1', '2', '3', 'u', '4', '5', '6', 'r', '7', '8', '9', 'l', '*', '0', '#', 'd'};
+char codes[] =
+{
+    '1', '2', '3', MENU_INPUT_CHAR_CMD_UP,
+    '4', '5', '6', MENU_INPUT_CHAR_CMD_RIGHT,
+    '7', '8', '9', MENU_INPUT_CHAR_CMD_LEFT,
+    '*', '0', '#', MENU_INPUT_CHAR_CMD_DOWN,
+};
 MATRIX_KEYBOARD keyboard = MATRIX_KEYBOARD(columns, sizeof(columns) / sizeof(int), rows, sizeof(rows) / sizeof(int), codes);
 #endif
 
@@ -72,16 +78,16 @@ void MENU_INPUT::browsingSequencer(char car)
 {
     switch(car)
     {
-        case 'u': // up
+        case MENU_INPUT_CHAR_CMD_UP: // up
             browser->gotoPrevious();
             break;
-        case 'd': // down
+        case MENU_INPUT_CHAR_CMD_DOWN: // down
             browser->gotoNext();
             break;
-        case 'r': // right (entering a submenu)
+        case MENU_INPUT_CHAR_CMD_RIGHT: // right (entering a submenu)
             browser->gotoChild();
             break;
-        case 'l': // left (leaving a submenu)
+        case MENU_INPUT_CHAR_CMD_LEFT: // left (leaving a submenu)
             browser->gotoParent();
             break;
         default:
@@ -93,20 +99,39 @@ void MENU_INPUT::editingSequencer(char car)
 {
     byte index = browser->getCurrentEntry();
     
-    switch(car)
+    if(browser->getReadOnly(index))
     {
-        case 'u':
-            browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_INCREASE);
-            break;
-        case 'd':
-            browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_DECREASE);
-            break;
-        case 'l':
-        case 'r':
-            browser->setState(browserStateBrowsing);
-            break;
-        default:
-            break;
+        switch(car)
+        {
+            // is variable is readonly,
+            // all values can return to browsing
+            case MENU_INPUT_CHAR_CMD_UP:
+            case MENU_INPUT_CHAR_CMD_DOWN:
+            case MENU_INPUT_CHAR_CMD_LEFT:
+            case MENU_INPUT_CHAR_CMD_RIGHT:
+                browser->setState(browserStateBrowsing);
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        switch(car)
+        {
+            case MENU_INPUT_CHAR_CMD_UP:
+                browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_INCREASE);
+                break;
+            case MENU_INPUT_CHAR_CMD_DOWN:
+                browser->getVariableEditFunction(index)(MENU_BROWSER_DATA_DECREASE);
+                break;
+            case MENU_INPUT_CHAR_CMD_LEFT:
+            case MENU_INPUT_CHAR_CMD_RIGHT:
+                browser->setState(browserStateBrowsing);
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -114,10 +139,10 @@ void MENU_INPUT::preFunctionSequencer(char car)
 {
     switch(car)
     {
-        case 'l':
+        case MENU_INPUT_CHAR_CMD_LEFT:
             browser->setState(browserStateBrowsing);
             break;
-        case 'r':
+        case MENU_INPUT_CHAR_CMD_RIGHT:
             browser->setState(browserStatePostfunction);
             break;
         default:
@@ -127,11 +152,9 @@ void MENU_INPUT::preFunctionSequencer(char car)
 
 void MENU_INPUT::postFunctionSequencer(char car)
 {
-    // byte index = browser->getCurrentEntry();
-    
     switch(car)
     {
-        case 'r':
+        case MENU_INPUT_CHAR_CMD_RIGHT:
             browser->setState(browserStateBrowsing);
             break;
         default:

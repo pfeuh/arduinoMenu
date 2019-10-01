@@ -10,7 +10,7 @@
         <variable cname="clockOut" label="Midi clock out" />
         <variable cname="keyClick" label="Keyboard echo" />
         <variable cname="audioBeat" label="Metronome" />
-        <variable cname="sysEx" label="systemExclusive" />
+        <variable cname="sysEx" label="accept sysEx" />
         <variable cname="transposition" label="Transposition" />
         <function cname="dumpAll" label="Dump all" />
         <function cname="loadAll" label="Load all" />
@@ -42,7 +42,8 @@
             <function cname="test1" label="test 1" />
             <function cname="test2" label="test 2" />
             <function cname="test3" label="test 3" />
-            <variable cname="appVersion" label="Version number" />
+            <variable cname="appVersion" label="Version number" readonly="1"/>
+            <variable cname="compilationTimestamp" label="Comp. timestamp" readonly="1"/>
         </menu>
     </menu>
 </menuTree>

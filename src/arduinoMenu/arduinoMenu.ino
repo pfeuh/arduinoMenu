@@ -17,9 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This program shows only the menu browser using Serial interface.
-// OK to switch to a joystick, a set of buttons or something else.
-
 #include "arduinoMenu.h"
 
 // menu containing browser, display and input objects
@@ -42,7 +39,8 @@ byte groove = 2;
 byte gateMode = 1;
 byte lastStep = 15;
 byte ccNum = 20;
-byte appVersion = 101;
+const char appVersion[] PROGMEM = "YAMM " ARDUINO_MENU_VERSION;
+const char compilationTimestamp[] PROGMEM = __DATE__ " " __TIME__;
 
 #include "sharedFunctions.h"
 
@@ -63,6 +61,18 @@ void editChannelIn(byte direction)
         menu.print(channelIn);
     else
         menu.print_P(modeOmniMessage);
+}
+
+void editAppVersion(byte direction)
+{
+    if(direction){};// avoiding compiler warning "unused parameter"
+    menu.print_P(appVersion);
+}
+
+void editCompilationTimestamp(byte direction)
+{
+    if(direction){};// avoiding compiler warning "unused parameter"
+    menu.print_P(compilationTimestamp);
 }
 
 byte test1()

@@ -1,7 +1,7 @@
 /*
  * file : menuDebug.txt
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/29 05:03:10
+ * creation date : 2019/09/30 20:22:07
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -27,43 +27,44 @@
 
 IDX LABEL                   PARENT   CHILD    NEXT    PREVIOUS
 --------------------------------------------------------------
-  0     GLOBAL CONFIG.          ---      1        17       ---     
-  1         Input channel       0        ---      2        ---     
-  2         Output channel      0        ---      3        1       
-  3         Program number      0        ---      4        2       
-  4         Arpeggiator         0        ---      5        3       
-  5         Midi clock in       0        ---      6        4       
-  6         Midi clock out      0        ---      7        5       
-  7         Keyboard echo       0        ---      8        6       
-  8         Metronome           0        ---      9        7       
-  9         systemExclusive     0        ---      10       8       
- 10         Transposition       0        ---      11       9       
- 11         Dump all            0        ---      12       10      
- 12         Load all            0        ---      13       11      
- 13         Save all            0        ---      14       12      
- 14         Dump global par.    0        ---      15       13      
- 15         Load global par.    0        ---      16       14      
- 16         Save global par.    0        ---      ---      15      
- 17     SEQUENCE CONFIG.        ---      18       29       0       
- 18         Groove              17       ---      19       ---     
- 19         Gate duration       17       ---      20       18      
- 20         Last step           17       ---      21       19      
- 21         Ctrl chg number     17       ---      22       20      
- 22         initialize seq.     17       ---      23       21      
- 23         Swap sequences      17       ---      24       22      
- 24         copy sequence       17       ---      25       23      
- 25         Load factory seq    17       ---      26       24      
- 26         Dump sequence       17       ---      27       25      
- 27         Load sequence       17       ---      28       26      
- 28         Save sequence       17       ---      ---      27      
- 29     MAINTENANCE             ---      30       ---      17      
- 30         Factory settings    29       ---      31       ---     
- 31         Test step leds      29       ---      32       30      
- 32         Test ind. leds      29       ---      33       31      
- 33         Test Beeper         29       ---      34       32      
- 34         Versions            29       ---      35       33      
- 35         TESTS               29       36       ---      34      
- 36             test 1          35       ---      37       ---     
- 37             test 2          35       ---      38       36      
- 38             test 3          35       ---      39       37      
- 39             Version number  35       ---      ---      38      
+  0     GLOBAL CONFIG.           ---      1        17       ---     
+  1         Input channel        0        ---      2        ---     
+  2         Output channel       0        ---      3        1       
+  3         Program number       0        ---      4        2       
+  4         Arpeggiator          0        ---      5        3       
+  5         Midi clock in        0        ---      6        4       
+  6         Midi clock out       0        ---      7        5       
+  7         Keyboard echo        0        ---      8        6       
+  8         Metronome            0        ---      9        7       
+  9         accept sysEx         0        ---      10       8       
+ 10         Transposition        0        ---      11       9       
+ 11         Dump all             0        ---      12       10      
+ 12         Load all             0        ---      13       11      
+ 13         Save all             0        ---      14       12      
+ 14         Dump global par.     0        ---      15       13      
+ 15         Load global par.     0        ---      16       14      
+ 16         Save global par.     0        ---      ---      15      
+ 17     SEQUENCE CONFIG.         ---      18       29       0       
+ 18         Groove               17       ---      19       ---     
+ 19         Gate duration        17       ---      20       18      
+ 20         Last step            17       ---      21       19      
+ 21         Ctrl chg number      17       ---      22       20      
+ 22         initialize seq.      17       ---      23       21      
+ 23         Swap sequences       17       ---      24       22      
+ 24         copy sequence        17       ---      25       23      
+ 25         Load factory seq     17       ---      26       24      
+ 26         Dump sequence        17       ---      27       25      
+ 27         Load sequence        17       ---      28       26      
+ 28         Save sequence        17       ---      ---      27      
+ 29     MAINTENANCE              ---      30       ---      17      
+ 30         Factory settings     29       ---      31       ---     
+ 31         Test step leds       29       ---      32       30      
+ 32         Test ind. leds       29       ---      33       31      
+ 33         Test Beeper          29       ---      34       32      
+ 34         Versions             29       ---      35       33      
+ 35         TESTS                29       36       ---      34      
+ 36             test 1           35       ---      37       ---     
+ 37             test 2           35       ---      38       36      
+ 38             test 3           35       ---      39       37      
+ 39             Version number   35       ---      40       38      
+ 40             Comp. timestamp  35       ---      ---      39      

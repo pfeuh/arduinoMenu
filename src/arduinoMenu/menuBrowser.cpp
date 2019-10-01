@@ -74,7 +74,12 @@ byte MENU_BROWSER::getPrevious(byte index)
 
 byte MENU_BROWSER::getEntryType(byte index)
 {
-    return peek(itemTypeTable + index);
+    return peek(itemTypeTable + index)& MENU_BROWSER_TYPE_MASK;
+}
+
+bool MENU_BROWSER::getReadOnly(byte index)
+{
+    return (peek(itemTypeTable + index)& MENU_BROWSER_RO_MASK) == MENU_BROWSER_RO_MASK;
 }
 
 const char* MENU_BROWSER::getLabelAddress(byte index)

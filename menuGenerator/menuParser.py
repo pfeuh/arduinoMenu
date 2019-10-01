@@ -36,6 +36,7 @@ TAG_FUNCTION   = "function"
 
 ATTRIBUTE_CNAME     = "cname"
 ATTRIBUTE_LABEL     = "label"
+ATTRIBUTE_RO        = "readonly"
 
 OBJECT_TYPES = [TAG_VARIABLE, TAG_FUNCTION, TAG_MENU]
 MAX_LABEL_LEN = 17
@@ -46,7 +47,7 @@ class MENU_ITEM():
     INDEX_FUNCTION = 0
     INDEX_OBJECT = 0
 
-    def __init__(self, tag, cname, label, path):
+    def __init__(self, tag, cname, label, path, readonly):
         if not tag in OBJECT_TYPES:
             raise Exception("unexpected type %s"%str(tag))
         if len(label) > MAX_LABEL_LEN:
@@ -55,6 +56,8 @@ class MENU_ITEM():
         self.__cname = cname
         self.__label = label
         self.__path = path
+        self.__readonly = readonly
+        # will be set later
         self.__parent = None
         self.__next = None
         self.__previous = None
@@ -86,7 +89,12 @@ class MENU_ITEM():
         next = self.formatIndex(self.__next)
         previous = self.formatIndex(self.__previous)
         txt = '%-08s %3u %3u parent=%s child=%s next=%s previous=%s cname="%s" label="%s" path="%s"'%(self.__tag, self.__index, self.__id, parent, child, next, previous, self.__cname, self.__label, self.__path)
+        if self.__readonly:
+            txt += " ro=True"
         return txt
+
+    def getReadonly(self):
+        return self.__readonly
 
     def getId(self):
         return self.__id
@@ -191,9 +199,13 @@ class PARSER_MENU():
             path = self.pushPath(element.get(ATTRIBUTE_CNAME))
             tag = element.tag
             if tag in (TAG_MENU, TAG_VARIABLE, TAG_FUNCTION):
+                readonly = False
                 cname = element.get(ATTRIBUTE_CNAME)
                 label = element.get(ATTRIBUTE_LABEL)
-                temp_obj = MENU_ITEM(tag, cname, label, path)
+                if tag == TAG_VARIABLE:
+                    if element.get(ATTRIBUTE_RO) != None:
+                        readonly = eval(element.get(ATTRIBUTE_RO))
+                temp_obj = MENU_ITEM(tag, cname, label, path, readonly)
                 self.__objects.append(temp_obj)
             elif tag == TAG_ROOT_TITLE:
                 self.__rootLabel = element.get(ATTRIBUTE_LABEL)

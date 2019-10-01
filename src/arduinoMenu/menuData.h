@@ -4,7 +4,7 @@
 /*
  * file : menuData.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/29 05:03:10
+ * creation date : 2019/09/30 20:22:07
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -29,22 +29,22 @@
 /*********************************************/
 
 // Table of %s root's title     00021
-// Table of parent              00040
-// Table of child               00040
-// Table of next                00040
-// Table of previous            00040
-// Table of labels              00522
-// Table of pointers to labels  00080
-// Table of function callbacks  00080
-// Table of edit callbacks      00080
-// Table of types               00040
+// Table of parent              00041
+// Table of child               00041
+// Table of next                00041
+// Table of previous            00041
+// Table of labels              00535
+// Table of pointers to labels  00082
+// Table of function callbacks  00082
+// Table of edit callbacks      00082
+// Table of types               00041
 // ----------------------------------
-// TOTAL                        00983
+// TOTAL                        01007
 
 #include <Arduino.h>
 
-#define MENU_BROWSER_NB_ENTRIES 40
-#define MENU_BROWSER_NB_VARIABLES 15
+#define MENU_BROWSER_NB_ENTRIES 41
+#define MENU_BROWSER_NB_VARIABLES 16
 #define MENU_BROWSER_NB_FUNCTIONS 21
 
 const char MENU_BROWSER_ROOT_LABEL[21] PROGMEM = "TEST MENU UNIT TESTS";
@@ -88,6 +88,7 @@ extern void editGateMode(byte direction);
 extern void editLastStep(byte direction);
 extern void editCcNum(byte direction);
 extern void editAppVersion(byte direction);
+extern void editCompilationTimestamp(byte direction);
 
 const byte parentTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
@@ -131,6 +132,7 @@ const byte parentTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 037 */ 35,
    /* 038 */ 35,
    /* 039 */ 35,
+   /* 040 */ 35,
 };
 
 const byte childTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
@@ -175,6 +177,7 @@ const byte childTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 037 */ MENU_BROWSER_NO_ENTRY,
    /* 038 */ MENU_BROWSER_NO_ENTRY,
    /* 039 */ MENU_BROWSER_NO_ENTRY,
+   /* 040 */ MENU_BROWSER_NO_ENTRY,
 };
 
 const byte nextTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
@@ -218,7 +221,8 @@ const byte nextTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 036 */ 37,
    /* 037 */ 38,
    /* 038 */ 39,
-   /* 039 */ MENU_BROWSER_NO_ENTRY,
+   /* 039 */ 40,
+   /* 040 */ MENU_BROWSER_NO_ENTRY,
 };
 
 const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
@@ -263,6 +267,7 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 037 */ 36,
    /* 038 */ 37,
    /* 039 */ 38,
+   /* 040 */ 39,
 };
 
 /*   0 */ const char labelGlobalEdit[] PROGMEM = "GLOBAL CONFIG.";
@@ -274,7 +279,7 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
 /*   6 */ const char labelClockOut[] PROGMEM = "Midi clock out";
 /*   7 */ const char labelKeyClick[] PROGMEM = "Keyboard echo";
 /*   8 */ const char labelAudioBeat[] PROGMEM = "Metronome";
-/*   9 */ const char labelSysEx[] PROGMEM = "systemExclusive";
+/*   9 */ const char labelSysEx[] PROGMEM = "accept sysEx";
 /*  10 */ const char labelTransposition[] PROGMEM = "Transposition";
 /*  11 */ const char labelDumpAll[] PROGMEM = "Dump all";
 /*  12 */ const char labelLoadAll[] PROGMEM = "Load all";
@@ -305,6 +310,7 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
 /*  37 */ const char labelTest2[] PROGMEM = "test 2";
 /*  38 */ const char labelTest3[] PROGMEM = "test 3";
 /*  39 */ const char labelAppVersion[] PROGMEM = "Version number";
+/*  40 */ const char labelCompilationTimestamp[] PROGMEM = "Comp. timestamp";
 
 const char *const labelsTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
 {
@@ -348,6 +354,7 @@ const char *const labelsTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
     /*  37 */ labelTest2,
     /*  38 */ labelTest3,
     /*  39 */ labelAppVersion,
+    /*  40 */ labelCompilationTimestamp,
 };
 
 const PROGMEM MENU_BROWSER_FUNCTION_PTR execFunctionsTable[21] = 
@@ -375,7 +382,7 @@ const PROGMEM MENU_BROWSER_FUNCTION_PTR execFunctionsTable[21] =
     /*  38  20 */ &test3,
 };
 
-const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[15] = 
+const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[16] = 
 {
     /*   1   0 */ &editChannelIn,
     /*   2   1 */ &editChannelOut,
@@ -392,9 +399,10 @@ const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[15] =
     /*  20  12 */ &editLastStep,
     /*  21  13 */ &editCcNum,
     /*  39  14 */ &editAppVersion,
+    /*  40  15 */ &editCompilationTimestamp,
 };
 
-const enum menuOptionType itemTypeTable[40] PROGMEM = 
+const byte itemTypeTable[41] PROGMEM = 
 {
    /* 000 */ menuTypeMenu,
    /* 001 */ menuTypeVariable,
@@ -435,7 +443,8 @@ const enum menuOptionType itemTypeTable[40] PROGMEM =
    /* 036 */ menuTypeFunction,
    /* 037 */ menuTypeFunction,
    /* 038 */ menuTypeFunction,
-   /* 039 */ menuTypeVariable,
+   /* 039 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
+   /* 040 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * file : sharedFunctions.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/09/29 05:03:10
+ * creation date : 2019/09/30 20:22:07
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -157,15 +157,9 @@ void editCcNum(byte direction)
     menu.print((int)ccNum);
 }
 
-void editAppVersion(byte direction)
-{
-    if(direction == MENU_BROWSER_DATA_INCREASE)
-        appVersion +=1;
-    else if(direction == MENU_BROWSER_DATA_DECREASE)
-        appVersion -=1;
-    menu.gotoXY(0,ARDUINO_MENU_NB_ROWS - 1);
-    menu.print((int)appVersion);
-}
+// Function editAppVersion is black listed.
+
+// Function editCompilationTimestamp is black listed.
 
 byte dumpAll()
 {
