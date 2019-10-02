@@ -30,17 +30,18 @@
 #define MENU_INPUT_DEVICE_SERIAL   1
 #define MENU_INPUT_DEVICE_JOYSTICK 2
 #define MENU_INPUT_DEVICE_KEYB16   3
+#define MENU_INPUT_DEVICE_ENCODER  4
 
 // let's select an input device from list above
-#define  MENU_INPUT_DEVICE MENU_INPUT_DEVICE_SERIAL
+#define  MENU_INPUT_DEVICE MENU_INPUT_DEVICE_ENCODER
 
 /******************/
 /* Output devices */
 /******************/
 
-#define MENU_OUTPUT_DEVICE_NONE     0
-#define MENU_OUTPUT_DEVICE_SERIAL   1
-#define MENU_OUTPUT_DEVICE_LCD_4x2  2
+#define MENU_OUTPUT_DEVICE_NONE    0
+#define MENU_OUTPUT_DEVICE_SERIAL  1
+#define MENU_OUTPUT_DEVICE_LCD_4x2 2
 
 // let's select an output device from list above
 #define  MENU_OUTPUT_DEVICE MENU_OUTPUT_DEVICE_LCD_4x2

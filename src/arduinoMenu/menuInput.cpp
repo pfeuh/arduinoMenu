@@ -37,6 +37,11 @@ const char codes[] PROGMEM =
 MATRIX_KEYBOARD keyboard = MATRIX_KEYBOARD(columns, sizeof(columns) / sizeof(int), rows, sizeof(rows) / sizeof(int), codes);
 #endif
 
+#if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
+#include "incrementalEncoder.h"
+INCREMENTAL_ENCODER encoder = INCREMENTAL_ENCODER(4, 3, 2);
+#endif
+
 /******************/
 /* Public methods */
 /******************/
@@ -45,6 +50,9 @@ MENU_INPUT::MENU_INPUT()
 {
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
     keyboard.begin();
+    #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
+    encoder.begin();
     #endif
 }
 
@@ -75,10 +83,20 @@ void MENU_INPUT::browsingSequencer(char car)
 {
     switch(car)
     {
-        case MENU_INPUT_CHAR_CMD_UP: // up
+        #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
+            // when encoder increases, meu has to go down 
+            case MENU_INPUT_CHAR_CMD_DOWN: 
+        #else
+        case MENU_INPUT_CHAR_CMD_UP:
+        #endif
             browser->gotoPrevious();
             break;
-        case MENU_INPUT_CHAR_CMD_DOWN: // down
+        #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
+            // when encoder decreases, meu has to go up 
+            case MENU_INPUT_CHAR_CMD_UP:
+        #else
+            case MENU_INPUT_CHAR_CMD_DOWN:
+        #endif
             browser->gotoNext();
             break;
         case MENU_INPUT_CHAR_CMD_RIGHT: // right (entering a submenu)
@@ -169,11 +187,20 @@ void MENU_INPUT::sequencer()
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
     keyboard.sequencer();
     if(keyboard.available())
-    #else
-    if(available())
+    {
+        byte car = keyboard.read();
     #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
+    if(available())
     {
         byte car = read();
+    #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
+    encoder.sequencer();
+    if(encoder.available())
+    {
+        byte car = encoder.read();
+    #endif
 
         switch(browser->getState())
         {
