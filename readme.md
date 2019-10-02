@@ -2,9 +2,10 @@ Arduino menu
 
 - Menu generated from an XML file
 
-- Inputs:
-    - Serial (keys 'u' 'd' 'r' 'l')
+- Inputs (keys 'u' 'd' 'r' 'l' by available/read):
+    - Serial
     - Matrix Keyboard 4x4
+    - Incremental encoder
 
 - Outputs
     - Serial
