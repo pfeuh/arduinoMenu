@@ -42,6 +42,11 @@ MATRIX_KEYBOARD keyboard = MATRIX_KEYBOARD(columns, sizeof(columns) / sizeof(int
 INCREMENTAL_ENCODER encoder = INCREMENTAL_ENCODER(4, 3, 2);
 #endif
 
+#if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_JOYSTICK)
+#include "menuJoystick.h"
+MENU_JOYSTICK joystick = MENU_JOYSTICK(52, 50, 48, 46);
+#endif
+
 /******************/
 /* Public methods */
 /******************/
@@ -54,13 +59,20 @@ MENU_INPUT::MENU_INPUT()
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
     encoder.begin();
     #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_JOYSTICK)
+    joystick.begin();
+    #endif
 }
 
 byte MENU_INPUT::available()
 {
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
     return keyboard.available();
-    #else
+    #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_JOYSTICK)
+    return joystick.available();
+    #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
     return Serial.available();
     #endif
 }
@@ -69,7 +81,11 @@ byte MENU_INPUT::read()
 {
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
     return keyboard.read();
-    #else
+    #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_JOYSTICK)
+    return joystick.read();
+    #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
     return Serial.read();
     #endif
 }
@@ -118,8 +134,8 @@ void MENU_INPUT::editingSequencer(char car)
     {
         switch(car)
         {
-            // is variable is readonly,
-            // all values can return to browsing
+            // if variable is readonly,
+            // all values return to browsing
             case MENU_INPUT_CHAR_CMD_UP:
             case MENU_INPUT_CHAR_CMD_DOWN:
             case MENU_INPUT_CHAR_CMD_LEFT:
@@ -184,6 +200,12 @@ void MENU_INPUT::postFunctionSequencer(char car)
 
 void MENU_INPUT::sequencer()
 {
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_JOYSTICK)
+    joystick.sequencer();
+    if(joystick.available())
+    {
+        byte car = joystick.read();
+    #endif
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_KEYB16)
     keyboard.sequencer();
     if(keyboard.available())
