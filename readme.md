@@ -6,6 +6,7 @@ Arduino menu
     - Serial
     - Matrix Keyboard 4x4
     - Incremental encoder
+    - Joystick
 
 - Outputs
     - Serial
