@@ -33,7 +33,7 @@
 #define MENU_INPUT_DEVICE_ENCODER  4
 
 // let's select an input device from list above
-#define  MENU_INPUT_DEVICE MENU_INPUT_DEVICE_JOYSTICK
+#define  MENU_INPUT_DEVICE MENU_INPUT_DEVICE_ENCODER
 
 /******************/
 /* Output devices */

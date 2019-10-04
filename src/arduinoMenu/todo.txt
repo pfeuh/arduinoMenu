@@ -2,10 +2,7 @@
 <arduinoMenu>
 
 printVariable! printVariable! printVariable! 
-mismatch in input/output devices
-mismatch in tabulations
 implement the real path in title instead of just parent's label
-implement a real joystick
 
 <menuGenerator.py>
 

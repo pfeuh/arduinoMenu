@@ -38,8 +38,8 @@ MATRIX_KEYBOARD keyboard = MATRIX_KEYBOARD(columns, sizeof(columns) / sizeof(int
 #endif
 
 #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
-#include "incrementalEncoder.h"
-INCREMENTAL_ENCODER encoder = INCREMENTAL_ENCODER(4, 3, 2);
+#include "menuEncoder.h"
+MENU_ENCODER encoder = MENU_ENCODER(4, 3, 2);
 #endif
 
 #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_JOYSTICK)
@@ -75,6 +75,9 @@ byte MENU_INPUT::available()
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
     return Serial.available();
     #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
+    return encoder.available();
+    #endif
 }
 
 byte MENU_INPUT::read()
@@ -88,6 +91,9 @@ byte MENU_INPUT::read()
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
     return Serial.read();
     #endif
+    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
+    return encoder.read();
+    #endif
 }
 
 void MENU_INPUT::addBrowser(MENU_BROWSER* _browser)
@@ -100,7 +106,7 @@ void MENU_INPUT::browsingSequencer(char car)
     switch(car)
     {
         #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
-            // when encoder increases, meu has to go down 
+            // when encoder increases, menu has to go down 
             case MENU_INPUT_CHAR_CMD_DOWN: 
         #else
         case MENU_INPUT_CHAR_CMD_UP:
@@ -108,7 +114,7 @@ void MENU_INPUT::browsingSequencer(char car)
             browser->gotoPrevious();
             break;
         #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_ENCODER)
-            // when encoder decreases, meu has to go up 
+            // when encoder decreases, menu has to go up 
             case MENU_INPUT_CHAR_CMD_UP:
         #else
             case MENU_INPUT_CHAR_CMD_DOWN:
