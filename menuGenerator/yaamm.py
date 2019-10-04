@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # 
-# file : menuGenerator.h
+# file : yaamm.h
+# Y A A M M -> Yet Another Arduino Menu Maker!
 # Copyright (c) pfeuh <ze.pfeuh@gmail>
 # All rights reserved.
 # 
@@ -25,7 +26,8 @@ from menuParser import EMPTY, LF, SPACE, PATH_SEP
 import sys
 import os
 
-sys.stdout.write(sys.version + "\n")
+sys.stdout.write("Python %s\n"%sys.version)
+sys.stdout.write("YAAMM -> Yet Another Arduino Menu Maker\n")
 
 NO_ENTRY = "MENU_BROWSER_NO_ENTRY"
 NB_ENTRIES = "MENU_BROWSER_NB_ENTRIES"
@@ -40,6 +42,7 @@ FUNCTION_PTR = "MENU_BROWSER_FUNCTION_PTR"
 EDIT_PTR = "MENU_BROWSER_EDIT_PTR"
 ROOT_LABEL = "MENU_BROWSER_ROOT_LABEL"
 RO_LABEL = "MENU_BROWSER_RO_MASK"
+LIVING_LABEL = "MENU_BROWSER_LIVING_MASK"
 
 def pascalize(text):
     return text[0].upper() + text[1:]
@@ -63,6 +66,8 @@ def getItemTypeTable(menu):
         attrib = EMPTY
         if item.getReadonly():
             attrib = " | %s"%RO_LABEL
+        if item.getLiving():
+            attrib += " | %s"%LIVING_LABEL
         text += "   /* %03u */ %s%s,\n"%(item.getIndex(), itype, attrib)
     text += "};\n\n"
     addStatLine("types", len(menu.getObjects()))
@@ -102,14 +107,20 @@ def getRootLabelCode(menu):
     addStatLine("%s root's title", title_len)
     return text
     
-def getVariablesCode(menu, fname, black_list):
+def getVariablesCode(menu, fname_std, fname_live, black_list):
     text = EMPTY
-    with open(fname) as fp:
-        pattern = fp.read(-1)
+    with open(fname_std) as fp:
+        pattern_std = fp.read(-1)
+    with open(fname_live) as fp:
+        pattern_live = fp.read(-1)
     for variable in menu.getVariables():
         varname = variable.getCname()
         funcname = "edit" + pascalize(varname)
         if not funcname in black_list:
+            if variable.getLiving():
+                pattern = pattern_live[:]
+            else:
+                pattern = pattern_std[:]
             current_pattern = pattern[:]
             current_pattern = current_pattern.replace("#funcname#", funcname)
             current_pattern = current_pattern.replace("#varname#", varname)
@@ -251,8 +262,10 @@ def getBlackListedFunctionsTable(blacklist_fname):
     return lines
 
 def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_template,\
-        function_template, debug_fname, blacklist_fname, empty_functions_fname=None):
+        function_template, edit_function_living_template, debug_fname, blacklist_fname, empty_functions_fname=None):
+
     global statText, statValue
+            
     statText = EMPTY
     statValue = 0
     # file menuData.h
@@ -288,7 +301,7 @@ def makeMenuDataFile(menu, fname, user_name, mail_address, edit_function_templat
 
     if empty_functions_fname != None:
         text = getSplash(empty_functions_fname, user_name, mail_address)
-        text += getVariablesCode(menu, edit_function_template, black_list)
+        text += getVariablesCode(menu, edit_function_template, edit_function_living_template, black_list)
         text += getFunctionsCode(menu, function_template, black_list)
         with open(empty_functions_fname, "w") as fp:
             fp.write(text)
@@ -304,7 +317,7 @@ def getParams():
     conf_name = os.path.splitext(sys.argv[0])[0] + ".cfg"
     if len(sys.argv) > 1:
         conf_name = sys.argv[1]
-    sys.stdout.write("configuration file %s\n"%conf_name)
+    sys.stdout.write("configuration file  %s\n"%conf_name)
     
     projectPath = None
     xmlFname = None
@@ -314,6 +327,7 @@ def getParams():
     emptyFunctionsFname = None
     blackListedFunctionsFname = None
     templateEditFname = "./defaultTEF.txt"
+    templateLivingFname = "./defaultTEFlive.txt"
     templateFname = "./defaultTF.txt"
     debug_flag = False
     debugFname = None
@@ -335,6 +349,8 @@ def getParams():
             userMail = line[len("-mail "):]
         elif line.startswith("-tef "):
             templateEditFname = line[len("-tef "):].replace("\\", "/")
+        elif line.startswith("-tef "):
+            templateLivingFname = line[len("-tefl "):].replace("\\", "/")
         elif line.startswith("-tf "):
             templateFname = line[len("-tf "):].replace("\\", "/")
         elif line == "-d":
@@ -356,6 +372,9 @@ def getParams():
     if templateFname != None:
         if not os.path.isfile(templateFname):
             raise Exception("%s not found!\n"%str(templateFname))
+    if templateLivingFname != None:
+        if not os.path.isfile(templateLivingFname):
+            raise Exception("%s not found!\n"%str(templateLivingFname))
     
     menuDataFname = os.path.join(projectPath, "menuData.h").replace("\\", "/")
     if create_empty_function:
@@ -372,13 +391,14 @@ def getParams():
         sys.stdout.write("debugFname          %s\n"%str(debugFname))
     sys.stdout.write("templateEditFname   %s\n"%str(templateEditFname))
     sys.stdout.write("templateFname       %s\n"%str(templateFname))
+    sys.stdout.write("templateLivingFname %s\n"%str(templateLivingFname))
     if blackListedFunctionsFname != None:
         sys.stdout.write("BlackListedFname    %s\n"%str(blackListedFunctionsFname))
     sys.stdout.write("userName            %s\n"%str(userName))
     sys.stdout.write("userMail            %s\n"%str(userMail))
-    
+
     return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname,\
-        templateFname, debugFname, blackListedFunctionsFname
+        templateFname, templateLivingFname, debugFname, blackListedFunctionsFname
 
 if __name__ == "__main__":
     
@@ -386,14 +406,14 @@ if __name__ == "__main__":
     start = time.time()
     
     projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname,\
-        templateFname, debugFname, blackListedFunctionsFname = getParams()
+        templateFname, templateLivingFname, debugFname, blackListedFunctionsFname = getParams()
 
     statText = EMPTY
     statValue = 0
     menu = menuParser.PARSER_MENU(xmlFname)
     
     makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, templateFname,
-        debugFname, blackListedFunctionsFname, emptyFunctionsFname)
-    
+        templateLivingFname, debugFname, blackListedFunctionsFname, emptyFunctionsFname)
+
     stop = time.time()
     sys.stdout.write("Job done in %.3f second(s)!\n"%(stop-start))
