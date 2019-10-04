@@ -82,6 +82,11 @@ bool MENU_BROWSER::getReadOnly(byte index)
     return (peek(itemTypeTable + index)& MENU_BROWSER_RO_MASK) == MENU_BROWSER_RO_MASK;
 }
 
+bool MENU_BROWSER::getLiving(byte index)
+{
+    return (peek(itemTypeTable + index)& MENU_BROWSER_LIVING_MASK) == MENU_BROWSER_LIVING_MASK;
+}
+
 const char* MENU_BROWSER::getLabelAddress(byte index)
 {
     return wpeek(labelsTable + index);
@@ -162,6 +167,10 @@ void MENU_BROWSER::setState(menuBrowserState _state)
 {
     byte err_num;
     state = _state;
+    
+    if(state != browserStateEditing)
+        livingIsRunning = false;
+    
     switch(state)
     {
         case browserStateBrowsing:
@@ -169,6 +178,11 @@ void MENU_BROWSER::setState(menuBrowserState _state)
                 refreshCallback();
             break;
         case browserStateEditing:
+            if(getLiving(currentEntry))
+            {
+                livingIsRunning = true;
+                livingMilestone = millis() + MENU_BROWSER_LIVING_PERIOD_MSEC;
+            }
             if(editCallback)
                 editCallback();
             break;
@@ -226,5 +240,17 @@ MENU_BROWSER_FUNCTION_PTR MENU_BROWSER::getFunction(byte index)
 {
     byte func_index = getFunctionIndex(index);
     return wpeek(execFunctionsTable + func_index);
+}
+
+bool MENU_BROWSER::itIsShowTime()
+{
+    bool flag = false;
+    if(livingIsRunning)
+        if(millis() >= livingMilestone)
+        {
+            flag = true;
+            livingMilestone += MENU_BROWSER_LIVING_PERIOD_MSEC;
+        }
+    return flag;
 }
 

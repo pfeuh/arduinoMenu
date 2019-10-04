@@ -41,10 +41,13 @@ typedef void (*MENU_BROWSER_EDIT_PTR)(byte direction);
 #define MENU_BROWSER_DATA_DECREASE 1
 #define MENU_BROWSER_DATA_JUST_DISPLAY 2
 
-#define MENU_BROWSER_TYPE_MASK 0x3
-#define MENU_BROWSER_RO_MASK 0x4  
+#define MENU_BROWSER_TYPE_MASK   0x3
+#define MENU_BROWSER_RO_MASK     0x4  
+#define MENU_BROWSER_LIVING_MASK 0x08
 
-class MENU_BROWSER
+#define MENU_BROWSER_LIVING_PERIOD_MSEC 500
+
+    class MENU_BROWSER
 {
     public:
         MENU_BROWSER();
@@ -55,6 +58,7 @@ class MENU_BROWSER
         byte getPrevious(byte index);
         byte getEntryType(byte index);
         bool getReadOnly(byte index);
+        bool getLiving(byte index);
         const char* getLabelAddress(byte index);
         const char* getRootLabelAddress();
         void gotoChild();
@@ -73,6 +77,7 @@ class MENU_BROWSER
         MENU_BROWSER_EDIT_PTR getVariableEditFunction(byte index);
         MENU_BROWSER_FUNCTION_PTR getFunction(byte index);
         byte getFunctionIndex(byte index);
+        bool itIsShowTime();
 
     private:
         menuBrowserState state = browserStateBrowsing;
@@ -83,7 +88,10 @@ class MENU_BROWSER
         void (*preFunctionCallback)() = NULL;
         void (*postFunctionCallback)(byte err_num) = NULL;
 
-};
+        bool livingIsRunning;
+        unsigned long livingMilestone;
+
+    };
 
 #endif
 

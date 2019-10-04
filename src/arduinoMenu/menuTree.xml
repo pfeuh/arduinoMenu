@@ -34,8 +34,8 @@
         <function cname="saveSeq" label="Save sequence" />
     </menu>
     <menu cname="maintenance" label="MAINTENANCE">
-        <variable cname="livingValue1" label="Positive Value" />
-        <variable cname="livingValue2" label="Negative Value" />
+        <variable cname="livingValue1" label="Positive Value" living="1" />
+        <variable cname="livingValue2" label="Negative Value" living="1"  />
         <function cname="factorySettings" label="Factory settings" />
         <function cname="testStepLeds" label="Test step leds" />
         <function cname="testIndLeds" label="Test ind. leds" />

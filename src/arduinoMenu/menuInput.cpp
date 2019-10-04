@@ -136,12 +136,12 @@ void MENU_INPUT::editingSequencer(char car)
 {
     byte index = browser->getCurrentEntry();
     
-    if(browser->getReadOnly(index))
+    if(browser->getReadOnly(index) || browser->getLiving(index))
     {
         switch(car)
         {
-            // if variable is readonly,
-            // all values return to browsing
+            // if variable is readonly or living value,
+            // all keys return to browsing
             case MENU_INPUT_CHAR_CMD_UP:
             case MENU_INPUT_CHAR_CMD_DOWN:
             case MENU_INPUT_CHAR_CMD_LEFT:

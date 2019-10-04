@@ -117,9 +117,7 @@ byte test3()
 }
 
 void setup()
-{
-    //~ Serial.begin(9600);
-    
+{    
     pinMode(LED_BUILTIN, OUTPUT);
 
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL || MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)

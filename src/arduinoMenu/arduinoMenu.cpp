@@ -144,8 +144,10 @@ void ARDUINO_MENU::begin()
 void ARDUINO_MENU::sequencer()
 {
     input->sequencer();
+        if(browser->itIsShowTime())
+            browser->getVariableEditFunction(browser->getCurrentEntry())(MENU_BROWSER_DATA_JUST_DISPLAY);
 }
-
+    
 size_t ARDUINO_MENU::write(uint8_t car)
 {
     // here is the most important method, each print(something) method uses it
@@ -242,7 +244,7 @@ void ARDUINO_MENU::showEditVariableScreen()
     byte index = browser->getCurrentEntry();
     printTitle(index);
     printSelectedLabel(index);
-    if(browser->getReadOnly(index))
+    if(browser->getReadOnly(index) || browser->getLiving(index))
         println_P(ARDUINO_MENU_readOnlyMessage);
     else
         println_P(ARDUINO_MENU_editMessage);
