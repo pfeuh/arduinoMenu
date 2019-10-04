@@ -27,6 +27,7 @@ const char modeOmniMessage[] PROGMEM = "Mode omni";
 // menu driven variables
 byte channelIn = 1;
 byte channelOut = 16;
+float tempo = 120.0;
 byte programNumber = 0;
 byte arpeggiator = 0;
 byte clockIn = 0;
@@ -41,11 +42,15 @@ byte lastStep = 15;
 byte ccNum = 20;
 const char appVersion[] PROGMEM = "YAMM " ARDUINO_MENU_VERSION;
 const char compilationTimestamp[] PROGMEM = __DATE__ " " __TIME__;
+unsigned long livingValue1 = 0;
+signed long livingValue2 = 0;
 
 #include "sharedFunctions.h"
 
 void editChannelIn(byte direction)
 {
+    const char message[] = "Mode is Omni";
+    //~ message[4] = 'X';
     if(direction == MENU_BROWSER_DATA_INCREASE)
     {
         if(channelIn < 16)
@@ -58,27 +63,42 @@ void editChannelIn(byte direction)
                 channelIn -=1;
         }
     if(channelIn)
-        menu.print(channelIn);
+        menu.printVariable(channelIn);
     else
-        menu.print_P(modeOmniMessage);
+        //~ menu.printVariable_P(modeOmniMessage);
+        menu.printVariable(message);
 }
 
 void editChannelOut(byte direction)
 {
-    if(direction){};// avoiding compiler warning "unused parameter"
-    menu.println(F("1\t2\t3\t4\t5\t6\t7\t8"));
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+            channelOut +=1;
+    else 
+        if(direction == MENU_BROWSER_DATA_DECREASE)
+                channelOut -=1;
+    menu.printVariable(channelOut);
+}
+
+void editTempo(byte direction)
+{
+    if(direction == MENU_BROWSER_DATA_INCREASE)
+        tempo +=0.5;
+    else if(direction == MENU_BROWSER_DATA_DECREASE)
+        tempo -=0.5;
+    menu.printVariable(tempo, 5);
 }
 
 void editAppVersion(byte direction)
 {
     if(direction){};// avoiding compiler warning "unused parameter"
-    menu.print_P(appVersion);
+    //~ menu.printVariable_P(appVersion);
+    menu.printVariable(F("YAAMM 1.01"));
 }
 
 void editCompilationTimestamp(byte direction)
 {
     if(direction){};// avoiding compiler warning "unused parameter"
-    menu.print_P(compilationTimestamp);
+    menu.printVariable_P(compilationTimestamp);
 }
 
 byte test1()
@@ -98,6 +118,8 @@ byte test3()
 
 void setup()
 {
+    //~ Serial.begin(9600);
+    
     pinMode(LED_BUILTIN, OUTPUT);
 
     #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL || MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)
@@ -119,6 +141,9 @@ void loop()
 {
     menu.sequencer();
 
+    livingValue1++;
+    livingValue2--;
+    
     // let's blink status led
     if(millis() & 0x200)
         digitalWrite(LED_BUILTIN, 0);

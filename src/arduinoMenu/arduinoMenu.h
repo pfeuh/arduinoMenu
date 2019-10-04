@@ -28,6 +28,7 @@
 #define ARDUINO_MENU_VERSION "1.00"
 
 #define ARDUINO_MENU_NB_ROWS 4
+#define ARDUINO_MENU_LAST_ROW (ARDUINO_MENU_NB_ROWS - 1)
 #define ARDUINO_MENU_NB_DISPLAYED_ITEMS (ARDUINO_MENU_NB_ROWS - 1)
 #define ARDUINO_MENU_NB_COLS 20
 #define ARDUINO_MENU_LAST_COL (ARDUINO_MENU_NB_COLS - 1)
@@ -102,6 +103,14 @@ class ARDUINO_MENU : public Print
     
         void print_P(const char* str_ptr);
         void println_P(const char* str_ptr);
+    
+        void printVariable(int value, int base = DEC);
+        void printVariable(float value, int dad = 2);
+        void printVariable(const __FlashStringHelper* str_ptr);
+        void printVariable(const char str_ptr[]);
+        void printVariable(unsigned long value);
+        void printVariable(signed long value);
+        void printVariable_P(const char* str_ptr);
 
     private:
         MENU_BROWSER* browser;
@@ -109,6 +118,8 @@ class ARDUINO_MENU : public Print
     
         byte x;
         byte y;
+    
+        void preparePrintVariable();
     };
 
 // static functions as workaround for class' methods as callbacks

@@ -3,7 +3,8 @@
     <rootTitle label="TEST MENU UNIT TESTS"/>
     <menu cname="globalEdit" label="GLOBAL CONFIG.">
 	    <variable cname="channelIn" label="Input channel" />
-	    <variable cname="channelOut" label="Output channel" readonly="1" />
+	    <variable cname="channelOut" label="Output channel" />
+	    <variable cname="tempo" label="Tempo" />
 	    <variable cname="programNumber" label="Program number" />
 	    <variable cname="arpeggiator" label="Arpeggiator" />
         <variable cname="clockIn" label="Midi clock in" />
@@ -33,15 +34,16 @@
         <function cname="saveSeq" label="Save sequence" />
     </menu>
     <menu cname="maintenance" label="MAINTENANCE">
+        <variable cname="livingValue1" label="Positive Value" />
+        <variable cname="livingValue2" label="Negative Value" />
         <function cname="factorySettings" label="Factory settings" />
         <function cname="testStepLeds" label="Test step leds" />
         <function cname="testIndLeds" label="Test ind. leds" />
-        <function cname="testBeeper" label="Test Beeper" />
         <function cname="displayVersions" label="Versions" />
         <menu cname="submenu" label="TESTS">
-            <function cname="test1" label="test 1" />
-            <function cname="test2" label="test 2" />
-            <function cname="test3" label="test 3" />
+            <function cname="test1" label="Function 1" />
+            <function cname="test2" label="Function 2" />
+            <function cname="test3" label="Function 3" />
             <variable cname="appVersion" label="Version number" readonly="1"/>
             <variable cname="compilationTimestamp" label="Comp. timestamp" readonly="1"/>
         </menu>

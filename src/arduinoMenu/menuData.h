@@ -4,7 +4,7 @@
 /*
  * file : menuData.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/10/01 09:35:22
+ * creation date : 2019/10/04 11:35:36
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -29,23 +29,23 @@
 /*********************************************/
 
 // Table of %s root's title     00021
-// Table of parent              00041
-// Table of child               00041
-// Table of next                00041
-// Table of previous            00041
-// Table of labels              00535
-// Table of pointers to labels  00082
-// Table of function callbacks  00082
-// Table of edit callbacks      00082
-// Table of types               00041
+// Table of parent              00043
+// Table of child               00043
+// Table of next                00043
+// Table of previous            00043
+// Table of labels              00571
+// Table of pointers to labels  00086
+// Table of function callbacks  00086
+// Table of edit callbacks      00086
+// Table of types               00043
 // ----------------------------------
-// TOTAL                        01007
+// TOTAL                        01065
 
 #include <Arduino.h>
 
-#define MENU_BROWSER_NB_ENTRIES 41
-#define MENU_BROWSER_NB_VARIABLES 16
-#define MENU_BROWSER_NB_FUNCTIONS 21
+#define MENU_BROWSER_NB_ENTRIES 43
+#define MENU_BROWSER_NB_VARIABLES 19
+#define MENU_BROWSER_NB_FUNCTIONS 20
 
 const char MENU_BROWSER_ROOT_LABEL[21] PROGMEM = "TEST MENU UNIT TESTS";
 
@@ -66,7 +66,6 @@ extern byte saveSeq();
 extern byte factorySettings();
 extern byte testStepLeds();
 extern byte testIndLeds();
-extern byte testBeeper();
 extern byte displayVersions();
 extern byte test1();
 extern byte test2();
@@ -75,6 +74,7 @@ extern byte test3();
 // edit/display variables' functions
 extern void editChannelIn(byte direction);
 extern void editChannelOut(byte direction);
+extern void editTempo(byte direction);
 extern void editProgramNumber(byte direction);
 extern void editArpeggiator(byte direction);
 extern void editClockIn(byte direction);
@@ -87,6 +87,8 @@ extern void editGroove(byte direction);
 extern void editGateMode(byte direction);
 extern void editLastStep(byte direction);
 extern void editCcNum(byte direction);
+extern void editLivingValue1(byte direction);
+extern void editLivingValue2(byte direction);
 extern void editAppVersion(byte direction);
 extern void editCompilationTimestamp(byte direction);
 
@@ -109,30 +111,32 @@ const byte parentTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 014 */ 0,
    /* 015 */ 0,
    /* 016 */ 0,
-   /* 017 */ MENU_BROWSER_NO_ENTRY,
-   /* 018 */ 17,
-   /* 019 */ 17,
-   /* 020 */ 17,
-   /* 021 */ 17,
-   /* 022 */ 17,
-   /* 023 */ 17,
-   /* 024 */ 17,
-   /* 025 */ 17,
-   /* 026 */ 17,
-   /* 027 */ 17,
-   /* 028 */ 17,
-   /* 029 */ MENU_BROWSER_NO_ENTRY,
-   /* 030 */ 29,
-   /* 031 */ 29,
-   /* 032 */ 29,
-   /* 033 */ 29,
-   /* 034 */ 29,
-   /* 035 */ 29,
-   /* 036 */ 35,
-   /* 037 */ 35,
-   /* 038 */ 35,
-   /* 039 */ 35,
-   /* 040 */ 35,
+   /* 017 */ 0,
+   /* 018 */ MENU_BROWSER_NO_ENTRY,
+   /* 019 */ 18,
+   /* 020 */ 18,
+   /* 021 */ 18,
+   /* 022 */ 18,
+   /* 023 */ 18,
+   /* 024 */ 18,
+   /* 025 */ 18,
+   /* 026 */ 18,
+   /* 027 */ 18,
+   /* 028 */ 18,
+   /* 029 */ 18,
+   /* 030 */ MENU_BROWSER_NO_ENTRY,
+   /* 031 */ 30,
+   /* 032 */ 30,
+   /* 033 */ 30,
+   /* 034 */ 30,
+   /* 035 */ 30,
+   /* 036 */ 30,
+   /* 037 */ 30,
+   /* 038 */ 37,
+   /* 039 */ 37,
+   /* 040 */ 37,
+   /* 041 */ 37,
+   /* 042 */ 37,
 };
 
 const byte childTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
@@ -154,8 +158,8 @@ const byte childTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 014 */ MENU_BROWSER_NO_ENTRY,
    /* 015 */ MENU_BROWSER_NO_ENTRY,
    /* 016 */ MENU_BROWSER_NO_ENTRY,
-   /* 017 */ 18,
-   /* 018 */ MENU_BROWSER_NO_ENTRY,
+   /* 017 */ MENU_BROWSER_NO_ENTRY,
+   /* 018 */ 19,
    /* 019 */ MENU_BROWSER_NO_ENTRY,
    /* 020 */ MENU_BROWSER_NO_ENTRY,
    /* 021 */ MENU_BROWSER_NO_ENTRY,
@@ -166,23 +170,25 @@ const byte childTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 026 */ MENU_BROWSER_NO_ENTRY,
    /* 027 */ MENU_BROWSER_NO_ENTRY,
    /* 028 */ MENU_BROWSER_NO_ENTRY,
-   /* 029 */ 30,
-   /* 030 */ MENU_BROWSER_NO_ENTRY,
+   /* 029 */ MENU_BROWSER_NO_ENTRY,
+   /* 030 */ 31,
    /* 031 */ MENU_BROWSER_NO_ENTRY,
    /* 032 */ MENU_BROWSER_NO_ENTRY,
    /* 033 */ MENU_BROWSER_NO_ENTRY,
    /* 034 */ MENU_BROWSER_NO_ENTRY,
-   /* 035 */ 36,
+   /* 035 */ MENU_BROWSER_NO_ENTRY,
    /* 036 */ MENU_BROWSER_NO_ENTRY,
-   /* 037 */ MENU_BROWSER_NO_ENTRY,
+   /* 037 */ 38,
    /* 038 */ MENU_BROWSER_NO_ENTRY,
    /* 039 */ MENU_BROWSER_NO_ENTRY,
    /* 040 */ MENU_BROWSER_NO_ENTRY,
+   /* 041 */ MENU_BROWSER_NO_ENTRY,
+   /* 042 */ MENU_BROWSER_NO_ENTRY,
 };
 
 const byte nextTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
 {
-   /* 000 */ 17,
+   /* 000 */ 18,
    /* 001 */ 2,
    /* 002 */ 3,
    /* 003 */ 4,
@@ -198,9 +204,9 @@ const byte nextTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 013 */ 14,
    /* 014 */ 15,
    /* 015 */ 16,
-   /* 016 */ MENU_BROWSER_NO_ENTRY,
-   /* 017 */ 29,
-   /* 018 */ 19,
+   /* 016 */ 17,
+   /* 017 */ MENU_BROWSER_NO_ENTRY,
+   /* 018 */ 30,
    /* 019 */ 20,
    /* 020 */ 21,
    /* 021 */ 22,
@@ -210,19 +216,21 @@ const byte nextTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 025 */ 26,
    /* 026 */ 27,
    /* 027 */ 28,
-   /* 028 */ MENU_BROWSER_NO_ENTRY,
+   /* 028 */ 29,
    /* 029 */ MENU_BROWSER_NO_ENTRY,
-   /* 030 */ 31,
+   /* 030 */ MENU_BROWSER_NO_ENTRY,
    /* 031 */ 32,
    /* 032 */ 33,
    /* 033 */ 34,
    /* 034 */ 35,
-   /* 035 */ MENU_BROWSER_NO_ENTRY,
+   /* 035 */ 36,
    /* 036 */ 37,
-   /* 037 */ 38,
+   /* 037 */ MENU_BROWSER_NO_ENTRY,
    /* 038 */ 39,
    /* 039 */ 40,
-   /* 040 */ MENU_BROWSER_NO_ENTRY,
+   /* 040 */ 41,
+   /* 041 */ 42,
+   /* 042 */ MENU_BROWSER_NO_ENTRY,
 };
 
 const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM = 
@@ -244,9 +252,9 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 014 */ 13,
    /* 015 */ 14,
    /* 016 */ 15,
-   /* 017 */ 0,
-   /* 018 */ MENU_BROWSER_NO_ENTRY,
-   /* 019 */ 18,
+   /* 017 */ 16,
+   /* 018 */ 0,
+   /* 019 */ MENU_BROWSER_NO_ENTRY,
    /* 020 */ 19,
    /* 021 */ 20,
    /* 022 */ 21,
@@ -256,157 +264,165 @@ const byte previousTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
    /* 026 */ 25,
    /* 027 */ 26,
    /* 028 */ 27,
-   /* 029 */ 17,
-   /* 030 */ MENU_BROWSER_NO_ENTRY,
-   /* 031 */ 30,
+   /* 029 */ 28,
+   /* 030 */ 18,
+   /* 031 */ MENU_BROWSER_NO_ENTRY,
    /* 032 */ 31,
    /* 033 */ 32,
    /* 034 */ 33,
    /* 035 */ 34,
-   /* 036 */ MENU_BROWSER_NO_ENTRY,
+   /* 036 */ 35,
    /* 037 */ 36,
-   /* 038 */ 37,
+   /* 038 */ MENU_BROWSER_NO_ENTRY,
    /* 039 */ 38,
    /* 040 */ 39,
+   /* 041 */ 40,
+   /* 042 */ 41,
 };
 
 /*   0 */ const char labelGlobalEdit[] PROGMEM = "GLOBAL CONFIG.";
 /*   1 */ const char labelChannelIn[] PROGMEM = "Input channel";
 /*   2 */ const char labelChannelOut[] PROGMEM = "Output channel";
-/*   3 */ const char labelProgramNumber[] PROGMEM = "Program number";
-/*   4 */ const char labelArpeggiator[] PROGMEM = "Arpeggiator";
-/*   5 */ const char labelClockIn[] PROGMEM = "Midi clock in";
-/*   6 */ const char labelClockOut[] PROGMEM = "Midi clock out";
-/*   7 */ const char labelKeyClick[] PROGMEM = "Keyboard echo";
-/*   8 */ const char labelAudioBeat[] PROGMEM = "Metronome";
-/*   9 */ const char labelSysEx[] PROGMEM = "accept sysEx";
-/*  10 */ const char labelTransposition[] PROGMEM = "Transposition";
-/*  11 */ const char labelDumpAll[] PROGMEM = "Dump all";
-/*  12 */ const char labelLoadAll[] PROGMEM = "Load all";
-/*  13 */ const char labelSaveAll[] PROGMEM = "Save all";
-/*  14 */ const char labelDumpGlobal[] PROGMEM = "Dump global par.";
-/*  15 */ const char labelLoadGlobal[] PROGMEM = "Load global par.";
-/*  16 */ const char labelSaveGlobal[] PROGMEM = "Save global par.";
-/*  17 */ const char labelSequenceEdit[] PROGMEM = "SEQUENCE CONFIG.";
-/*  18 */ const char labelGroove[] PROGMEM = "Groove";
-/*  19 */ const char labelGateMode[] PROGMEM = "Gate duration";
-/*  20 */ const char labelLastStep[] PROGMEM = "Last step";
-/*  21 */ const char labelCcNum[] PROGMEM = "Ctrl chg number";
-/*  22 */ const char labelInitSeq[] PROGMEM = "initialize seq.";
-/*  23 */ const char labelSwapSeq[] PROGMEM = "Swap sequences";
-/*  24 */ const char labelCopySeq[] PROGMEM = "copy sequence";
-/*  25 */ const char labelLoadFactory[] PROGMEM = "Load factory seq";
-/*  26 */ const char labelDumpSeq[] PROGMEM = "Dump sequence";
-/*  27 */ const char labelLoadSeq[] PROGMEM = "Load sequence";
-/*  28 */ const char labelSaveSeq[] PROGMEM = "Save sequence";
-/*  29 */ const char labelMaintenance[] PROGMEM = "MAINTENANCE";
-/*  30 */ const char labelFactorySettings[] PROGMEM = "Factory settings";
-/*  31 */ const char labelTestStepLeds[] PROGMEM = "Test step leds";
-/*  32 */ const char labelTestIndLeds[] PROGMEM = "Test ind. leds";
-/*  33 */ const char labelTestBeeper[] PROGMEM = "Test Beeper";
-/*  34 */ const char labelDisplayVersions[] PROGMEM = "Versions";
-/*  35 */ const char labelSubmenu[] PROGMEM = "TESTS";
-/*  36 */ const char labelTest1[] PROGMEM = "test 1";
-/*  37 */ const char labelTest2[] PROGMEM = "test 2";
-/*  38 */ const char labelTest3[] PROGMEM = "test 3";
-/*  39 */ const char labelAppVersion[] PROGMEM = "Version number";
-/*  40 */ const char labelCompilationTimestamp[] PROGMEM = "Comp. timestamp";
+/*   3 */ const char labelTempo[] PROGMEM = "Tempo";
+/*   4 */ const char labelProgramNumber[] PROGMEM = "Program number";
+/*   5 */ const char labelArpeggiator[] PROGMEM = "Arpeggiator";
+/*   6 */ const char labelClockIn[] PROGMEM = "Midi clock in";
+/*   7 */ const char labelClockOut[] PROGMEM = "Midi clock out";
+/*   8 */ const char labelKeyClick[] PROGMEM = "Keyboard echo";
+/*   9 */ const char labelAudioBeat[] PROGMEM = "Metronome";
+/*  10 */ const char labelSysEx[] PROGMEM = "accept sysEx";
+/*  11 */ const char labelTransposition[] PROGMEM = "Transposition";
+/*  12 */ const char labelDumpAll[] PROGMEM = "Dump all";
+/*  13 */ const char labelLoadAll[] PROGMEM = "Load all";
+/*  14 */ const char labelSaveAll[] PROGMEM = "Save all";
+/*  15 */ const char labelDumpGlobal[] PROGMEM = "Dump global par.";
+/*  16 */ const char labelLoadGlobal[] PROGMEM = "Load global par.";
+/*  17 */ const char labelSaveGlobal[] PROGMEM = "Save global par.";
+/*  18 */ const char labelSequenceEdit[] PROGMEM = "SEQUENCE CONFIG.";
+/*  19 */ const char labelGroove[] PROGMEM = "Groove";
+/*  20 */ const char labelGateMode[] PROGMEM = "Gate duration";
+/*  21 */ const char labelLastStep[] PROGMEM = "Last step";
+/*  22 */ const char labelCcNum[] PROGMEM = "Ctrl chg number";
+/*  23 */ const char labelInitSeq[] PROGMEM = "initialize seq.";
+/*  24 */ const char labelSwapSeq[] PROGMEM = "Swap sequences";
+/*  25 */ const char labelCopySeq[] PROGMEM = "copy sequence";
+/*  26 */ const char labelLoadFactory[] PROGMEM = "Load factory seq";
+/*  27 */ const char labelDumpSeq[] PROGMEM = "Dump sequence";
+/*  28 */ const char labelLoadSeq[] PROGMEM = "Load sequence";
+/*  29 */ const char labelSaveSeq[] PROGMEM = "Save sequence";
+/*  30 */ const char labelMaintenance[] PROGMEM = "MAINTENANCE";
+/*  31 */ const char labelLivingValue1[] PROGMEM = "Positive Value";
+/*  32 */ const char labelLivingValue2[] PROGMEM = "Negative Value";
+/*  33 */ const char labelFactorySettings[] PROGMEM = "Factory settings";
+/*  34 */ const char labelTestStepLeds[] PROGMEM = "Test step leds";
+/*  35 */ const char labelTestIndLeds[] PROGMEM = "Test ind. leds";
+/*  36 */ const char labelDisplayVersions[] PROGMEM = "Versions";
+/*  37 */ const char labelSubmenu[] PROGMEM = "TESTS";
+/*  38 */ const char labelTest1[] PROGMEM = "Function 1";
+/*  39 */ const char labelTest2[] PROGMEM = "Function 2";
+/*  40 */ const char labelTest3[] PROGMEM = "Function 3";
+/*  41 */ const char labelAppVersion[] PROGMEM = "Version number";
+/*  42 */ const char labelCompilationTimestamp[] PROGMEM = "Comp. timestamp";
 
 const char *const labelsTable[MENU_BROWSER_NB_ENTRIES] PROGMEM =
 {
     /*   0 */ labelGlobalEdit,
     /*   1 */ labelChannelIn,
     /*   2 */ labelChannelOut,
-    /*   3 */ labelProgramNumber,
-    /*   4 */ labelArpeggiator,
-    /*   5 */ labelClockIn,
-    /*   6 */ labelClockOut,
-    /*   7 */ labelKeyClick,
-    /*   8 */ labelAudioBeat,
-    /*   9 */ labelSysEx,
-    /*  10 */ labelTransposition,
-    /*  11 */ labelDumpAll,
-    /*  12 */ labelLoadAll,
-    /*  13 */ labelSaveAll,
-    /*  14 */ labelDumpGlobal,
-    /*  15 */ labelLoadGlobal,
-    /*  16 */ labelSaveGlobal,
-    /*  17 */ labelSequenceEdit,
-    /*  18 */ labelGroove,
-    /*  19 */ labelGateMode,
-    /*  20 */ labelLastStep,
-    /*  21 */ labelCcNum,
-    /*  22 */ labelInitSeq,
-    /*  23 */ labelSwapSeq,
-    /*  24 */ labelCopySeq,
-    /*  25 */ labelLoadFactory,
-    /*  26 */ labelDumpSeq,
-    /*  27 */ labelLoadSeq,
-    /*  28 */ labelSaveSeq,
-    /*  29 */ labelMaintenance,
-    /*  30 */ labelFactorySettings,
-    /*  31 */ labelTestStepLeds,
-    /*  32 */ labelTestIndLeds,
-    /*  33 */ labelTestBeeper,
-    /*  34 */ labelDisplayVersions,
-    /*  35 */ labelSubmenu,
-    /*  36 */ labelTest1,
-    /*  37 */ labelTest2,
-    /*  38 */ labelTest3,
-    /*  39 */ labelAppVersion,
-    /*  40 */ labelCompilationTimestamp,
+    /*   3 */ labelTempo,
+    /*   4 */ labelProgramNumber,
+    /*   5 */ labelArpeggiator,
+    /*   6 */ labelClockIn,
+    /*   7 */ labelClockOut,
+    /*   8 */ labelKeyClick,
+    /*   9 */ labelAudioBeat,
+    /*  10 */ labelSysEx,
+    /*  11 */ labelTransposition,
+    /*  12 */ labelDumpAll,
+    /*  13 */ labelLoadAll,
+    /*  14 */ labelSaveAll,
+    /*  15 */ labelDumpGlobal,
+    /*  16 */ labelLoadGlobal,
+    /*  17 */ labelSaveGlobal,
+    /*  18 */ labelSequenceEdit,
+    /*  19 */ labelGroove,
+    /*  20 */ labelGateMode,
+    /*  21 */ labelLastStep,
+    /*  22 */ labelCcNum,
+    /*  23 */ labelInitSeq,
+    /*  24 */ labelSwapSeq,
+    /*  25 */ labelCopySeq,
+    /*  26 */ labelLoadFactory,
+    /*  27 */ labelDumpSeq,
+    /*  28 */ labelLoadSeq,
+    /*  29 */ labelSaveSeq,
+    /*  30 */ labelMaintenance,
+    /*  31 */ labelLivingValue1,
+    /*  32 */ labelLivingValue2,
+    /*  33 */ labelFactorySettings,
+    /*  34 */ labelTestStepLeds,
+    /*  35 */ labelTestIndLeds,
+    /*  36 */ labelDisplayVersions,
+    /*  37 */ labelSubmenu,
+    /*  38 */ labelTest1,
+    /*  39 */ labelTest2,
+    /*  40 */ labelTest3,
+    /*  41 */ labelAppVersion,
+    /*  42 */ labelCompilationTimestamp,
 };
 
-const PROGMEM MENU_BROWSER_FUNCTION_PTR execFunctionsTable[21] = 
+const PROGMEM MENU_BROWSER_FUNCTION_PTR execFunctionsTable[20] = 
 {
-    /*  11   0 */ &dumpAll,
-    /*  12   1 */ &loadAll,
-    /*  13   2 */ &saveAll,
-    /*  14   3 */ &dumpGlobal,
-    /*  15   4 */ &loadGlobal,
-    /*  16   5 */ &saveGlobal,
-    /*  22   6 */ &initSeq,
-    /*  23   7 */ &swapSeq,
-    /*  24   8 */ &copySeq,
-    /*  25   9 */ &loadFactory,
-    /*  26  10 */ &dumpSeq,
-    /*  27  11 */ &loadSeq,
-    /*  28  12 */ &saveSeq,
-    /*  30  13 */ &factorySettings,
-    /*  31  14 */ &testStepLeds,
-    /*  32  15 */ &testIndLeds,
-    /*  33  16 */ &testBeeper,
-    /*  34  17 */ &displayVersions,
-    /*  36  18 */ &test1,
-    /*  37  19 */ &test2,
-    /*  38  20 */ &test3,
+    /*  12   0 */ &dumpAll,
+    /*  13   1 */ &loadAll,
+    /*  14   2 */ &saveAll,
+    /*  15   3 */ &dumpGlobal,
+    /*  16   4 */ &loadGlobal,
+    /*  17   5 */ &saveGlobal,
+    /*  23   6 */ &initSeq,
+    /*  24   7 */ &swapSeq,
+    /*  25   8 */ &copySeq,
+    /*  26   9 */ &loadFactory,
+    /*  27  10 */ &dumpSeq,
+    /*  28  11 */ &loadSeq,
+    /*  29  12 */ &saveSeq,
+    /*  33  13 */ &factorySettings,
+    /*  34  14 */ &testStepLeds,
+    /*  35  15 */ &testIndLeds,
+    /*  36  16 */ &displayVersions,
+    /*  38  17 */ &test1,
+    /*  39  18 */ &test2,
+    /*  40  19 */ &test3,
 };
 
-const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[16] = 
+const PROGMEM MENU_BROWSER_EDIT_PTR editFunctionsTable[19] = 
 {
     /*   1   0 */ &editChannelIn,
     /*   2   1 */ &editChannelOut,
-    /*   3   2 */ &editProgramNumber,
-    /*   4   3 */ &editArpeggiator,
-    /*   5   4 */ &editClockIn,
-    /*   6   5 */ &editClockOut,
-    /*   7   6 */ &editKeyClick,
-    /*   8   7 */ &editAudioBeat,
-    /*   9   8 */ &editSysEx,
-    /*  10   9 */ &editTransposition,
-    /*  18  10 */ &editGroove,
-    /*  19  11 */ &editGateMode,
-    /*  20  12 */ &editLastStep,
-    /*  21  13 */ &editCcNum,
-    /*  39  14 */ &editAppVersion,
-    /*  40  15 */ &editCompilationTimestamp,
+    /*   3   2 */ &editTempo,
+    /*   4   3 */ &editProgramNumber,
+    /*   5   4 */ &editArpeggiator,
+    /*   6   5 */ &editClockIn,
+    /*   7   6 */ &editClockOut,
+    /*   8   7 */ &editKeyClick,
+    /*   9   8 */ &editAudioBeat,
+    /*  10   9 */ &editSysEx,
+    /*  11  10 */ &editTransposition,
+    /*  19  11 */ &editGroove,
+    /*  20  12 */ &editGateMode,
+    /*  21  13 */ &editLastStep,
+    /*  22  14 */ &editCcNum,
+    /*  31  15 */ &editLivingValue1,
+    /*  32  16 */ &editLivingValue2,
+    /*  41  17 */ &editAppVersion,
+    /*  42  18 */ &editCompilationTimestamp,
 };
 
-const byte itemTypeTable[41] PROGMEM = 
+const byte itemTypeTable[43] PROGMEM = 
 {
    /* 000 */ menuTypeMenu,
    /* 001 */ menuTypeVariable,
-   /* 002 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
+   /* 002 */ menuTypeVariable,
    /* 003 */ menuTypeVariable,
    /* 004 */ menuTypeVariable,
    /* 005 */ menuTypeVariable,
@@ -415,36 +431,38 @@ const byte itemTypeTable[41] PROGMEM =
    /* 008 */ menuTypeVariable,
    /* 009 */ menuTypeVariable,
    /* 010 */ menuTypeVariable,
-   /* 011 */ menuTypeFunction,
+   /* 011 */ menuTypeVariable,
    /* 012 */ menuTypeFunction,
    /* 013 */ menuTypeFunction,
    /* 014 */ menuTypeFunction,
    /* 015 */ menuTypeFunction,
    /* 016 */ menuTypeFunction,
-   /* 017 */ menuTypeMenu,
-   /* 018 */ menuTypeVariable,
+   /* 017 */ menuTypeFunction,
+   /* 018 */ menuTypeMenu,
    /* 019 */ menuTypeVariable,
    /* 020 */ menuTypeVariable,
    /* 021 */ menuTypeVariable,
-   /* 022 */ menuTypeFunction,
+   /* 022 */ menuTypeVariable,
    /* 023 */ menuTypeFunction,
    /* 024 */ menuTypeFunction,
    /* 025 */ menuTypeFunction,
    /* 026 */ menuTypeFunction,
    /* 027 */ menuTypeFunction,
    /* 028 */ menuTypeFunction,
-   /* 029 */ menuTypeMenu,
-   /* 030 */ menuTypeFunction,
-   /* 031 */ menuTypeFunction,
-   /* 032 */ menuTypeFunction,
+   /* 029 */ menuTypeFunction,
+   /* 030 */ menuTypeMenu,
+   /* 031 */ menuTypeVariable,
+   /* 032 */ menuTypeVariable,
    /* 033 */ menuTypeFunction,
    /* 034 */ menuTypeFunction,
-   /* 035 */ menuTypeMenu,
+   /* 035 */ menuTypeFunction,
    /* 036 */ menuTypeFunction,
-   /* 037 */ menuTypeFunction,
+   /* 037 */ menuTypeMenu,
    /* 038 */ menuTypeFunction,
-   /* 039 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
-   /* 040 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
+   /* 039 */ menuTypeFunction,
+   /* 040 */ menuTypeFunction,
+   /* 041 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
+   /* 042 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
 };
 
 #endif

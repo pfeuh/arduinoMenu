@@ -28,6 +28,7 @@
 #define peek pgm_read_byte
 
 // some menu's messages
+const char ARDUINO_MENU_emptyLine[] PROGMEM = "                    ";
 const char ARDUINO_MENU_execMessage[] PROGMEM = "Execute:" ARDUINO_MENU_STR_ARROW_RIGHT " Abort:" ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN ;
 const char ARDUINO_MENU_errorMessage1[] PROGMEM = "Error #";
 const char ARDUINO_MENU_errorMessage2[] PROGMEM =  " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
@@ -94,6 +95,13 @@ void ARDUINO_MENU_showPostFunctionScreen(byte err_num)
 /*******************/
 /* Private methods */
 /*******************/
+
+void ARDUINO_MENU::preparePrintVariable()
+{
+    gotoXY(0, ARDUINO_MENU_LAST_ROW);
+    print_P(ARDUINO_MENU_emptyLine);
+    gotoXY(0, ARDUINO_MENU_LAST_ROW);
+}
 
 /******************/
 /* Public methods */
@@ -170,7 +178,6 @@ size_t ARDUINO_MENU::write(uint8_t car)
     {
         case ARDUINO_MENU_CHAR_CR:
         case ARDUINO_MENU_CHAR_LF:
-            Serial.write(ARDUINO_MENU_CHAR_LF);
             break;
         case ARDUINO_MENU_CHAR_TAB:
             gotoXY(((x + ARDUINO_MENU_TAB_SIZE) / ARDUINO_MENU_TAB_SIZE) * ARDUINO_MENU_TAB_SIZE, y);
@@ -355,3 +362,46 @@ void ARDUINO_MENU::println_P(const char* str_ptr)
     print_P(str_ptr);
         write(ARDUINO_MENU_CHAR_LF);
 }
+
+void ARDUINO_MENU::printVariable(int value, int base)
+{
+    preparePrintVariable();
+    print(value, base);
+}
+
+void ARDUINO_MENU::printVariable(float value, int dad)
+{
+    preparePrintVariable();
+    print(value, dad);
+}
+
+void ARDUINO_MENU::printVariable(const __FlashStringHelper* str_ptr)
+{
+    preparePrintVariable();
+    print_P((const char*)str_ptr);
+}
+
+void ARDUINO_MENU::printVariable(const char str_ptr[])
+{
+    preparePrintVariable();
+    print((char*)str_ptr);
+}
+
+void ARDUINO_MENU::printVariable(unsigned long value)
+{
+    preparePrintVariable();
+    print(value);
+}
+
+void ARDUINO_MENU::printVariable(signed long value)
+{
+    preparePrintVariable();
+    print(value);
+}
+
+void ARDUINO_MENU::printVariable_P(const char* str_ptr)
+{
+    preparePrintVariable();
+    print_P(str_ptr);
+}
+
