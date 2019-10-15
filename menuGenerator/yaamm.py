@@ -49,7 +49,7 @@ def pascalize(text):
 
 def formatIndex(index):
     if index != None:
-        text = "%u"%index
+        text = "%3u"%index
     else:
         text = NO_ENTRY
     return text
@@ -238,21 +238,44 @@ def getMaxLabelSize(menu):
         sizes.append(len(label))
     return max(sizes)
 
+def getMaxLevel(menu):
+    sizes = []
+    for item in menu.getObjects():
+        sizes.append(len(item.getPath().split(PATH_SEP)) - 2)
+    return max(sizes)
+
+def formatFamilyMember(index):
+    if index != None:
+        text = "%3u"%index
+    else:
+        text = "---"
+    return text
+
 def getLabels(menu):
     size = getMaxLabelSize(menu)
+    max_level = getMaxLevel(menu)
+    datasize = (4 * max_level + size)
     text = EMPTY
-    text += "IDX LABEL                   PARENT   CHILD    NEXT    PREVIOUS\n"
-    text += "--------------------------------------------------------------\n"
     for index, item in enumerate(menu.getObjects()):
-        level = len(item.getPath().split(PATH_SEP)) - 1
+        level = len(item.getPath().split(PATH_SEP)) - 2
         label = "%s%s"%(SPACE * (level * 4), item.getLabel())
-        while len(label) < size:
+        while len(label) < datasize:
             label += SPACE
-        parent = item.formatIndex(item.getParent())
-        child = item.formatIndex(item.getChild())
-        next = item.formatIndex(item.getNext())
-        previous = item.formatIndex(item.getPrevious())
-        text += "%3u %s %-08s %-08s %-08s %-08s\n"%(index, label, parent, child, next, previous)
+        parent = formatFamilyMember(item.getParent())
+        child = formatFamilyMember(item.getChild())
+        next = formatFamilyMember(item.getNext())
+        previous = formatFamilyMember(item.getPrevious())
+        text += "%3u %s%3s      %3s      %3s     %3s\n"%(index, label, parent, child, next, previous)
+        
+    header_text  = "IDX "
+    label_area   = "LABEL"
+    while(len(label_area)) < datasize:
+        label_area += SPACE
+    header_text += label_area
+    header_text += "PARENT   CHILD    NEXT    PREVIOUS"
+    header_text += "\n" + "-" * len(header_text) + "\n"
+    text = header_text + text
+        
     return text
 
 def getBlackListedFunctionsTable(blacklist_fname):

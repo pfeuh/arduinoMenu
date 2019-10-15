@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menuTree>
-    <menu cname="globalEdit" label="GLOBAL  EDIT">
+    <rootTitle label="TEST MENU UNIT TESTS"/>
+    <menu cname="globalEdit" label="GLOBAL CONFIG.">
 	    <variable cname="channelIn" label="Input channel" />
 	    <variable cname="channelOut" label="Output channel" />
+	    <variable cname="tempo" label="Tempo" />
 	    <variable cname="programNumber" label="Program number" />
 	    <variable cname="arpeggiator" label="Arpeggiator" />
         <variable cname="clockIn" label="Midi clock in" />
         <variable cname="clockOut" label="Midi clock out" />
         <variable cname="keyClick" label="Keyboard echo" />
         <variable cname="audioBeat" label="Metronome" />
-        <variable cname="sysEx" label="systemExclusive" />
+        <variable cname="sysEx" label="accept sysEx" />
         <variable cname="transposition" label="Transposition" />
         <function cname="dumpAll" label="Dump all" />
         <function cname="loadAll" label="Load all" />
@@ -18,7 +20,7 @@
         <function cname="loadGlobal" label="Load global par." />
         <function cname="saveGlobal" label="Save global par." />
     </menu>
-    <menu cname="sequenceEdit" label="SEQUENCE EDIT">
+    <menu cname="sequenceEdit" label="SEQUENCE CONFIG.">
 	    <variable cname="groove" label="Groove" />
 	    <variable cname="gateMode" label="Gate duration" />
 	    <variable cname="lastStep" label="Last step" />
@@ -32,16 +34,18 @@
         <function cname="saveSeq" label="Save sequence" />
     </menu>
     <menu cname="maintenance" label="MAINTENANCE">
+        <variable cname="livingValue1" label="Positive Value" living="1" />
+        <variable cname="livingValue2" label="Negative Value" living="1"  />
         <function cname="factorySettings" label="Factory settings" />
         <function cname="testStepLeds" label="Test step leds" />
         <function cname="testIndLeds" label="Test ind. leds" />
-        <function cname="testBeeper" label="Test Beeper" />
         <function cname="displayVersions" label="Versions" />
         <menu cname="submenu" label="TESTS">
-            <variable cname="test1" label="test 1" />
-            <variable cname="test2" label="test 2" />
-            <variable cname="test3" label="test 3" />
-            <variable cname="appVersion" label="Version number" readonly="1" />
+            <function cname="test1" label="Function 1" />
+            <function cname="test2" label="Function 2" />
+            <function cname="test3" label="Function 3" />
+            <variable cname="appVersion" label="Version number" readonly="1"/>
+            <variable cname="compilationTimestamp" label="Comp. timestamp" readonly="1"/>
         </menu>
     </menu>
 </menuTree>

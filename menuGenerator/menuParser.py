@@ -52,7 +52,7 @@ class MENU_ITEM():
         if not tag in OBJECT_TYPES:
             raise Exception("unexpected type %s"%str(tag))
         if len(label) > MAX_LABEL_LEN:
-            raise Exception('WARNING! label "%s" too long!\n'%label)
+            raise Exception('Label "%s" too long!\n'%label)
         self.__tag = tag
         self.__cname = cname
         self.__label = label
@@ -80,7 +80,7 @@ class MENU_ITEM():
 
     def formatIndex(self, index):
         if index != None:
-            text = "%-3u"%index
+            text = "%3u"%index
         else:
             text = "---"
         return text
@@ -150,6 +150,7 @@ class PARSER_MENU():
         self.__doc = ET.parse(xml_fname)
         self.__xml_root = self.__doc.getroot()
         self.__objects = []
+        self.__cnames = []
         
         root = self.__xml_root
         self.__currentPath = EMPTY
@@ -216,6 +217,9 @@ class PARSER_MENU():
                     if element.get(ATTRIBUTE_LIVING) != None:
                         living = eval(element.get(ATTRIBUTE_LIVING))
                 temp_obj = MENU_ITEM(tag, cname, label, path, readonly, living)
+                if cname in self.__cnames:
+                    raise Exception("object %s already exists!"%cname)
+                self.__cnames.append(cname)
                 self.__objects.append(temp_obj)
             elif tag == TAG_ROOT_TITLE:
                 self.__rootLabel = element.get(ATTRIBUTE_LABEL)
@@ -275,7 +279,7 @@ class PARSER_MENU():
 
 if __name__ == "__main__":
 
-    menu_fname = "../src/arduinoMenu/menuTree.xml"
+    menu_fname = "menus/yass.xml"
     parsed_menu = PARSER_MENU(menu_fname)
     sys.stdout.write(parsed_menu.getRootLabel() + '\n')
     sys.stdout.write(parsed_menu.tostring())
