@@ -18,6 +18,10 @@
  */
 
 #include "arduinoMenu.h"
+#include "menuData.h"
+
+#define peek pgm_read_byte
+#define wpeek pgm_read_word
 
 // menu containing browser, display and input objects
 ARDUINO_MENU menu = ARDUINO_MENU();
@@ -50,7 +54,6 @@ signed long livingValue2 = 0;
 void editChannelIn(byte direction)
 {
     const char message[] = "Mode is Omni";
-    //~ message[4] = 'X';
     if(direction == MENU_BROWSER_DATA_INCREASE)
     {
         if(channelIn < 16)
@@ -116,6 +119,12 @@ byte test3()
     return 3;
 }
 
+void print_P(word strptr)
+{
+    while(peek(strptr))
+        Serial.write(peek(strptr++));
+}
+
 void setup()
 {    
     pinMode(LED_BUILTIN, OUTPUT);
@@ -125,14 +134,16 @@ void setup()
     #endif
 
     #if(MENU_OUTPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
-        Serial.println(F("Test of menuBrowser v" MENU_BROWSER_VERSION));
+        Serial.println(F("Sample menu demo v" MENU_BROWSER_VERSION));
         Serial.println(F("Compilation : " __DATE__ " " __TIME__));
         Serial.println(F("input:"));
         Serial.print(MENU_INPUT_DEVICE);
         Serial.print(F(" output:"));
         Serial.println(MENU_OUTPUT_DEVICE);
     #endif
-    menu.begin();
+    
+    menu.begin(MENU_BROWSER_NB_ENTRIES, (word*)MENU_DATA_tables);
+    Serial.begin(9600);
 }
 
 void loop()

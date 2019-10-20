@@ -78,6 +78,8 @@ typedef void (*MENU_BROWSER_EDIT_PTR)(byte direction);
         MENU_BROWSER_FUNCTION_PTR getFunction(byte index);
         byte getFunctionIndex(byte index);
         bool itIsShowTime();
+        
+        void begin(byte nb_entries, word* tables);
 
     private:
         menuBrowserState state = browserStateBrowsing;
@@ -87,6 +89,17 @@ typedef void (*MENU_BROWSER_EDIT_PTR)(byte direction);
         void (*editCallback)() = NULL;
         void (*preFunctionCallback)() = NULL;
         void (*postFunctionCallback)(byte err_num) = NULL;
+
+        byte nbEntries;
+        word rootLabel;
+        word parentTable;
+        word childTable;
+        word nextTable;
+        word previousTable;
+        word labelsTable;
+        MENU_BROWSER_FUNCTION_PTR* execFunctionsTable; 
+        word editFunctionsTable;
+        word itemTypeTable;
 
         bool livingIsRunning;
         unsigned long livingMilestone;

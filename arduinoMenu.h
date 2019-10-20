@@ -84,7 +84,7 @@ class ARDUINO_MENU : public Print
 {
     public:
         ARDUINO_MENU();
-        void begin();
+        void begin(byte nb_entries, word* tables);
         void sequencer();
         size_t write(uint8_t car);
         void gotoXY(byte x, byte y);

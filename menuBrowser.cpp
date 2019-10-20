@@ -18,7 +18,7 @@
  */
 
 #include "menuBrowser.h"
-#include "menuData.h"
+//~ #include "menuData.h"
 
 #define peek pgm_read_byte
 // TODO: to earn 700 bytes, use peek in 2 times instead of wpeek
@@ -89,12 +89,16 @@ bool MENU_BROWSER::getLiving(byte index)
 
 const char* MENU_BROWSER::getLabelAddress(byte index)
 {
-    return wpeek(labelsTable + index);
+    //~ return (const char*)(labelsTable + index);
+    
+    // TODO: verify indexes > 127 because of type "byte"
+    return (const char*)wpeek(labelsTable + index * 2);
+
 }
 
 const char* MENU_BROWSER::getRootLabelAddress()
 {
-    return MENU_BROWSER_ROOT_LABEL;
+    return (const char*)rootLabel;
 }
 
 void MENU_BROWSER::gotoChild()
@@ -192,9 +196,9 @@ void MENU_BROWSER::setState(menuBrowserState _state)
             break;
         case browserStatePostfunction:
             err_num = getFunction(getCurrentEntry())();
-                if(postFunctionCallback)
-                    postFunctionCallback(err_num);
-            else
+            if(postFunctionCallback)
+                postFunctionCallback(err_num);
+            //~ else
             break;
         case browserStateUser:
             break;
@@ -207,7 +211,7 @@ void MENU_BROWSER::setState(menuBrowserState _state)
 byte MENU_BROWSER::getVariableIndex(byte index)
 {
     byte var_index = MENU_BROWSER_NO_ENTRY;
-    for(byte x = 0; x < MENU_BROWSER_NB_ENTRIES; x++)
+    for(byte x = 0; x < nbEntries; x++)
     {
         if(getEntryType(x) == menuTypeVariable)
             var_index++;
@@ -220,13 +224,13 @@ byte MENU_BROWSER::getVariableIndex(byte index)
 MENU_BROWSER_EDIT_PTR MENU_BROWSER::getVariableEditFunction(byte index)
 {
     byte var_index = getVariableIndex(index);
-    return wpeek(editFunctionsTable + var_index);
+    return wpeek(editFunctionsTable + var_index * 2);
 }
 
 byte MENU_BROWSER::getFunctionIndex(byte index)
 {
     byte func_index = MENU_BROWSER_NO_ENTRY;
-    for(byte x = 0; x < MENU_BROWSER_NB_ENTRIES; x++)
+    for(byte x = 0; x < nbEntries; x++)
     {
         if(getEntryType(x) == menuTypeFunction)
             func_index++;
@@ -253,4 +257,19 @@ bool MENU_BROWSER::itIsShowTime()
         }
     return flag;
 }
+
+void MENU_BROWSER::begin(byte nb_entries, word* tables)
+{
+    nbEntries = nb_entries;
+    rootLabel = tables[0];
+    parentTable = tables[1];
+    childTable = tables[2];
+    nextTable = tables[3];
+    previousTable = tables[4];
+    labelsTable = tables[5];
+    execFunctionsTable = (MENU_BROWSER_FUNCTION_PTR*)tables[6]; 
+    editFunctionsTable = tables[7];
+    itemTypeTable = tables[8];
+}
+
 

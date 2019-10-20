@@ -60,7 +60,7 @@ def addStatLine(text, value):
     statValue += value
 
 def getItemTypeTable(menu):
-    text = "const byte itemTypeTable[%u] PROGMEM = \n{\n"%(len(menu.getObjects()))
+    text = "const byte MENU_DATA_itemTypeTable[%u] PROGMEM = \n{\n"%(len(menu.getObjects()))
     for item in menu.getObjects():
         itype = ITEM_TYPE_TABLE[item.getTag()]
         attrib = EMPTY
@@ -130,7 +130,7 @@ def getVariablesCode(menu, fname_std, fname_live, black_list):
     return text
 
 def getFamilyTable(menu, hook, label):
-    text = "const byte %sTable[%s] PROGMEM = \n{\n"%(label, NB_ENTRIES)
+    text = "const byte MENU_DATA_%sTable[%s] PROGMEM = \n{\n"%(label, NB_ENTRIES)
     for item in menu.getObjects():
         text += "   /* %03u */ %s,\n"%(item.getIndex(), formatIndex(hook(item)))
     text += "};\n\n"
@@ -158,7 +158,7 @@ def getLabelTableCode(menu):
         text += '/* %3u */ const char %s[] PROGMEM = "%s";\n'%(item.getIndex(), label, item.getLabel())
         total += len(item.getLabel()) + 1
         labels.append(label)
-    text += "\nconst char *const labelsTable[%s] PROGMEM =\n{\n"%NB_ENTRIES
+    text += "\nconst char *const MENU_DATA_labelsTable[%s] PROGMEM =\n{\n"%NB_ENTRIES
     addStatLine("labels", total)
     for index, label in enumerate(labels):
         text += "    /* %3u */ %s,\n"%(index, label)
@@ -167,7 +167,7 @@ def getLabelTableCode(menu):
     return text
 
 def getCallbackTable(objects, table_prefix, function_prefix, ptr_type):
-    text = "const PROGMEM %s %sFunctionsTable[%s] = \n{\n"%(ptr_type, table_prefix, len(objects))
+    text = "const PROGMEM %s MENU_DATA_%sFunctionsTable[%s] = \n{\n"%(ptr_type, table_prefix, len(objects))
     for index, item in enumerate(objects):
         if function_prefix == EMPTY:
             fname = item.getCname()
@@ -340,95 +340,86 @@ def getParams():
     conf_name = os.path.splitext(sys.argv[0])[0] + ".cfg"
     if len(sys.argv) > 1:
         conf_name = sys.argv[1]
+        
     sys.stdout.write("configuration file  %s\n"%conf_name)
-    
-    projectPath = None
-    xmlFname = None
-    create_empty_function = False
+    if not os.path.isfile(conf_name):
+        raise Exception("Configuration file %s not found:"%conf_name)
+    yaammDataPath = os.path.dirname(conf_name).replace("\\", "/")
+
+    create_shared_functions = False
     userName = None
     userMail = None
-    emptyFunctionsFname = None
-    blackListedFunctionsFname = None
-    templateEditFname = "./defaultTEF.txt"
-    templateLivingFname = "./defaultTEFlive.txt"
-    templateFname = "./defaultTF.txt"
-    debug_flag = False
-    debugFname = None
     
     with open(conf_name) as fp:
         lines = [line.strip() for line in fp.readlines()]
     for line in lines:
         if line .startswith("#"):
             continue
-        elif line.startswith("-prj "):
-            projectPath = line[len("-prj "):]
-        elif line.startswith("-xml "):
-            xmlFname = line[len("-xml "):]
-        elif line == "-csf":
-            create_empty_function = True
+        elif line == "-create_shared_functions":
+            create_shared_functions = True
         elif line.startswith("-user "):
             userName = line[len("-user "):]
         elif line.startswith("-mail "):
             userMail = line[len("-mail "):]
-        elif line.startswith("-tef "):
-            templateEditFname = line[len("-tef "):].replace("\\", "/")
-        elif line.startswith("-tef "):
-            templateLivingFname = line[len("-tefl "):].replace("\\", "/")
-        elif line.startswith("-tf "):
-            templateFname = line[len("-tf "):].replace("\\", "/")
-        elif line == "-d":
-            debug_flag = True
-        elif line.startswith("-b "):
-            blackListedFunctionsFname = line[len("-b "):].replace("\\", "/")
-            
-    if projectPath == None:
-        raise Exception("The project path is missing!\n")
-    elif xmlFname == None:
-        xmlFname = os.path.join(projectPath, "menuTree.xml")
-    projectPath = projectPath.replace("\\", "/")
-    xmlFname = xmlFname.replace("\\", "/")
-    if not os.path.exists(xmlFname):
-        raise Exception("%s not found!\n"%str(xmlFname))
-    if templateEditFname != None:
-        if not os.path.isfile(templateEditFname):
-            raise Exception("%s not found!\n"%str(templateEditFname))
-    if templateFname != None:
-        if not os.path.isfile(templateFname):
-            raise Exception("%s not found!\n"%str(templateFname))
-    if templateLivingFname != None:
-        if not os.path.isfile(templateLivingFname):
-            raise Exception("%s not found!\n"%str(templateLivingFname))
     
-    menuDataFname = os.path.join(projectPath, "menuData.h").replace("\\", "/")
-    if create_empty_function:
-        emptyFunctionsFname = os.path.join(projectPath, "sharedFunctions.h").replace("\\", "/")
-    if debug_flag:
-        debugFname = os.path.join(projectPath, "menuDebug.txt").replace("\\", "/")
-    
+    projectPath = os.path.dirname(yaammDataPath).replace("\\", "/")
     sys.stdout.write("projectPath         %s\n"%str(projectPath))
+    if not os.path.isdir(projectPath):
+        raise Exception("Project directory %s not found:"%projectPath)
+
+    xmlFname = os.path.join(yaammDataPath, "menuTree.xml").replace("\\", "/")
     sys.stdout.write("xmlFname            %s\n"%str(xmlFname))
-    sys.stdout.write("menuDataFname       %s\n"%str(menuDataFname))
-    if create_empty_function:
-        sys.stdout.write("emptyFunctionsFname %s\n"%str(emptyFunctionsFname))
-    if debug_flag:
-        sys.stdout.write("debugFname          %s\n"%str(debugFname))
-    sys.stdout.write("templateEditFname   %s\n"%str(templateEditFname))
-    sys.stdout.write("templateFname       %s\n"%str(templateFname))
-    sys.stdout.write("templateLivingFname %s\n"%str(templateLivingFname))
-    if blackListedFunctionsFname != None:
-        sys.stdout.write("BlackListedFname    %s\n"%str(blackListedFunctionsFname))
+    if not os.path.isfile(xmlFname):
+        raise Exception("Menu definition %s not found:"%xmlFname)
+
+    menuDataFname = os.path.join(projectPath, "menuData.h").replace("\\", "/")
+    sys.stdout.write("Menu data           %s\n"%str(menuDataFname))
+
+    debugFname = os.path.join(yaammDataPath, "debug.txt").replace("\\", "/")
+    sys.stdout.write("debug file          %s\n"%str(debugFname))
+
+    if create_shared_functions:
+        sharedFunctionsFname = os.path.join(projectPath, "sharedFunctions.h").replace("\\", "/")
+        sys.stdout.write("Empty functions     %s\n"%str(sharedFunctionsFname))
+            
+        templateFunctionFname = os.path.join(yaammDataPath, "functionTemplate.c").replace("\\", "/")
+        sys.stdout.write("Function template   %s\n"%str(templateFunctionFname))
+        if not os.path.isfile(templateFunctionFname):
+            raise Exception("Function template %s not found:"%templateFunctionFname)
+            
+        templateEditFname = os.path.join(yaammDataPath, "editorTemplate.c").replace("\\", "/")
+        sys.stdout.write("Editor template     %s\n"%str(templateEditFname))
+        if not os.path.isfile(templateEditFname):
+            raise Exception("Editor template %s not found:"%templateEditFname)
+            
+        templateLivingFname = os.path.join(yaammDataPath, "livingTemplate.c").replace("\\", "/")
+        sys.stdout.write("Living value templ. %s\n"%str(templateLivingFname))
+        if not os.path.isfile(templateLivingFname):
+            raise Exception("Living value template %s not found:"%templateLivingFname)
+            
+        blackListedFunctionsFname = os.path.join(yaammDataPath, "functionBlackList.c").replace("\\", "/")
+        sys.stdout.write("Function black list %s\n"%str(blackListedFunctionsFname))
+        if not os.path.isfile(blackListedFunctionsFname):
+            raise Exception("Functions black list %s not found:"%blackListedFunctionsFname)
+    
+    else:
+        sharedFunctionsFname = None
+        blackListedFunctionsFname = None
+        debug_flag = False
+        debugFname = None
+
     sys.stdout.write("userName            %s\n"%str(userName))
     sys.stdout.write("userMail            %s\n"%str(userMail))
 
-    return projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname,\
-        templateFname, templateLivingFname, debugFname, blackListedFunctionsFname
+    return projectPath, xmlFname, sharedFunctionsFname, userName, userMail, menuDataFname, templateEditFname,\
+        templateFunctionFname, templateLivingFname, debugFname, blackListedFunctionsFname
 
 if __name__ == "__main__":
     
     import time
     start = time.time()
     
-    projectPath, xmlFname, emptyFunctionsFname, userName, userMail, menuDataFname, templateEditFname,\
+    projectPath, xmlFname, sharedFunctionsFname, userName, userMail, menuDataFname, templateEditFname,\
         templateFname, templateLivingFname, debugFname, blackListedFunctionsFname = getParams()
 
     statText = EMPTY
@@ -436,7 +427,7 @@ if __name__ == "__main__":
     menu = menuParser.PARSER_MENU(xmlFname)
     
     makeMenuDataFile(menu, menuDataFname, userName, userMail, templateEditFname, templateFname,
-        templateLivingFname, debugFname, blackListedFunctionsFname, emptyFunctionsFname)
+        templateLivingFname, debugFname, blackListedFunctionsFname, sharedFunctionsFname)
 
     stop = time.time()
     sys.stdout.write("Job done in %.3f second(s)!\n"%(stop-start))

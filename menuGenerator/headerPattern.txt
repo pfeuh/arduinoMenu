@@ -2,6 +2,20 @@
 #define #fname#_h
 
 #splash##stats##include <Arduino.h>
+#include <menuBrowser.h>
 
-#body##endif
+#body#const word MENU_DATA_tables[] =
+{
+    (word)MENU_BROWSER_ROOT_LABEL,
+    (word)MENU_DATA_parentTable,
+    (word)MENU_DATA_childTable,
+    (word)MENU_DATA_nextTable,
+    (word)MENU_DATA_previousTable,
+    (word)MENU_DATA_labelsTable,
+    (word)MENU_DATA_execFunctionsTable,
+    (word)MENU_DATA_editFunctionsTable,
+    (word)MENU_DATA_itemTypeTable,
+};
+
+#endif
 

@@ -111,7 +111,7 @@ ARDUINO_MENU::ARDUINO_MENU(): Print()
 {
 }
 
-void ARDUINO_MENU::begin()
+void ARDUINO_MENU::begin(byte nb_entries, word* tables)
 {
     
     ARDUINO_MENU_SINGLETON = this;
@@ -132,6 +132,7 @@ void ARDUINO_MENU::begin()
    
     input->addBrowser(browser);
 
+    browser->begin(nb_entries, tables);
     browser->setRefreshCallback(ARDUINO_MENU_refreshBrowserScreen);
     browser->setEditCallback(ARDUINO_MENU_showEditVariableScreen);
     browser->setPreFunctionCallback(ARDUINO_MENU_showPreFunctionScreen);
@@ -144,8 +145,8 @@ void ARDUINO_MENU::begin()
 void ARDUINO_MENU::sequencer()
 {
     input->sequencer();
-        if(browser->itIsShowTime())
-            browser->getVariableEditFunction(browser->getCurrentEntry())(MENU_BROWSER_DATA_JUST_DISPLAY);
+    if(browser->itIsShowTime())
+        browser->getVariableEditFunction(browser->getCurrentEntry())(MENU_BROWSER_DATA_JUST_DISPLAY);
 }
     
 size_t ARDUINO_MENU::write(uint8_t car)

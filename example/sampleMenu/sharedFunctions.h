@@ -1,7 +1,7 @@
 /*
  * file : sharedFunctions.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/10/04 23:19:16
+ * creation date : 2019/10/20 22:58:00
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
