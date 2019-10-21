@@ -4,7 +4,7 @@
 #splash##stats##include <Arduino.h>
 #include <menuBrowser.h>
 
-#body#const word MENU_DATA_tables[] =
+#body#const word _MENU_DATA_tables[] =
 {
     (word)MENU_BROWSER_ROOT_LABEL,
     (word)MENU_DATA_parentTable,
@@ -16,6 +16,8 @@
     (word)MENU_DATA_editFunctionsTable,
     (word)MENU_DATA_itemTypeTable,
 };
+
+word* MENU_DATA_tables = (word*)&_MENU_DATA_tables;
 
 #endif
 

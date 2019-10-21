@@ -142,7 +142,7 @@ void setup()
         Serial.println(MENU_OUTPUT_DEVICE);
     #endif
     
-    menu.begin(MENU_BROWSER_NB_ENTRIES, (word*)MENU_DATA_tables);
+    menu.begin(MENU_BROWSER_NB_ENTRIES, MENU_DATA_tables);
     Serial.begin(9600);
 }
 

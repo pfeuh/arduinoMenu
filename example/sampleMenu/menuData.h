@@ -4,7 +4,7 @@
 /*
  * file : menuData.h
  * Copyright (c) pfeuh <ze.pfeuh@gmail.com>
- * creation date : 2019/10/20 22:58:00
+ * creation date : 2019/10/21 12:47:19
  * All rights reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -466,7 +466,7 @@ const byte MENU_DATA_itemTypeTable[43] PROGMEM =
    /* 042 */ menuTypeVariable | MENU_BROWSER_RO_MASK,
 };
 
-const word MENU_DATA_tables[] =
+const word _MENU_DATA_tables[] =
 {
     (word)MENU_BROWSER_ROOT_LABEL,
     (word)MENU_DATA_parentTable,
@@ -479,7 +479,7 @@ const word MENU_DATA_tables[] =
     (word)MENU_DATA_itemTypeTable,
 };
 
-
+word* MENU_DATA_tables = (word*)&_MENU_DATA_tables;
 
 #endif
 
