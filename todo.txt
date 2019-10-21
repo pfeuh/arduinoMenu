@@ -1,18 +1,22 @@
 
 <arduinoMenu>
 
+test functions which index is greater than 127
+due to index * 2 in getFunctionIndex()
+
 printVariable! printVariable! printVariable! 
 implement the real path in title instead of just parent's label
+Nice to have : add a scrolling on this title
 
-<menuGenerator.py>
+<yaamm.py>
 
-add a function to install all modules (.cpp and .h) to the sketch folder
 nice to have: something to check the xmlfile
 
 <documentation>
 
 add a word on why camelcase
 adapt to the existing system : 3 modules instead of 4, no more callbacks
+and fully separte folders for application and library
 
 <menu parameters>
 
