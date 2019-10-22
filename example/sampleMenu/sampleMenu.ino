@@ -23,6 +23,11 @@
 #define peek pgm_read_byte
 #define wpeek pgm_read_word
 
+// lcd for menu and user
+// set the LCD address to 0x27 for a 20 chars and 4 lines display
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C display(0x27, 20, 4);
+
 // menu containing browser, display and input objects
 ARDUINO_MENU menu = ARDUINO_MENU();
 
@@ -142,7 +147,7 @@ void setup()
         Serial.println(MENU_OUTPUT_DEVICE);
     #endif
     
-    menu.begin(MENU_BROWSER_NB_ENTRIES, MENU_DATA_tables);
+    menu.begin(MENU_BROWSER_NB_ENTRIES, MENU_DATA_tables, &display);
     Serial.begin(9600);
 }
 

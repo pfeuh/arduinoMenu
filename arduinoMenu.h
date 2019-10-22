@@ -21,6 +21,7 @@
  */
 
 #include <Arduino.h>
+#include <LiquidCrystal_I2C.h>
 #include <Print.h>
 #include "menuInput.h"
 #include "menuBrowser.h"
@@ -36,19 +37,11 @@
 // to user as characters
 #define ARDUINO_MENU_CHAR_ARROW_BIG_BLACK 0
 
-#if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)
-    #define ARDUINO_MENU_CHAR_ARROW_UP        '^'
-    #define ARDUINO_MENU_CHAR_ARROW_DOWN      'v'
-    #define ARDUINO_MENU_CHAR_ARROW_RIGHT     '>'
-    #define ARDUINO_MENU_CHAR_ARROW_LEFT      '<'
-    #define ARDUINO_MENU_CHAR_LOCKER          'X'
-#else
-    #define ARDUINO_MENU_CHAR_ARROW_UP        1
-    #define ARDUINO_MENU_CHAR_ARROW_DOWN      2
-    #define ARDUINO_MENU_CHAR_ARROW_RIGHT     3
-    #define ARDUINO_MENU_CHAR_ARROW_LEFT      4
-    #define ARDUINO_MENU_CHAR_LOCKER          5
-#endif
+#define ARDUINO_MENU_CHAR_ARROW_UP        1
+#define ARDUINO_MENU_CHAR_ARROW_DOWN      2
+#define ARDUINO_MENU_CHAR_ARROW_RIGHT     3
+#define ARDUINO_MENU_CHAR_ARROW_LEFT      4
+#define ARDUINO_MENU_CHAR_LOCKER          5
 
 #define ARDUINO_MENU_CHAR_CR              '\r'
 #define ARDUINO_MENU_CHAR_LF              '\n'
@@ -58,19 +51,12 @@
 #define ARDUINO_MENU_CHAR_LESS_THAN       '<'
 
 // to use as strings
-#if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)
-    #define ARDUINO_MENU_STR_ARROW_UP         "^"
-    #define ARDUINO_MENU_STR_ARROW_DOWN       "v"
-    #define ARDUINO_MENU_STR_ARROW_RIGHT      ">"
-    #define ARDUINO_MENU_STR_ARROW_LEFT       "<"
-    #define ARDUINO_MENU_STR_LOCKER           "X"
-#else
-    #define ARDUINO_MENU_STR_ARROW_UP         "\001"
-    #define ARDUINO_MENU_STR_ARROW_DOWN       "\002"
-    #define ARDUINO_MENU_STR_ARROW_RIGHT      "\003"
-    #define ARDUINO_MENU_STR_ARROW_LEFT       "\004"
-    #define ARDUINO_MENU_STR_LOCKER           "\005"
-#endif
+#define ARDUINO_MENU_STR_ARROW_UP         "\001"
+#define ARDUINO_MENU_STR_ARROW_DOWN       "\002"
+#define ARDUINO_MENU_STR_ARROW_RIGHT      "\003"
+#define ARDUINO_MENU_STR_ARROW_LEFT       "\004"
+#define ARDUINO_MENU_STR_LOCKER           "\005"
+
 #define ARDUINO_MENU_STR_CR               "\r"
 #define ARDUINO_MENU_STR_LF               "\n"
 #define ARDUINO_MENU_STR_TAB              "\t"
@@ -84,7 +70,7 @@ class ARDUINO_MENU : public Print
 {
     public:
         ARDUINO_MENU();
-        void begin(byte nb_entries, word* tables);
+        void begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _display);
         void sequencer();
         size_t write(uint8_t car);
         void gotoXY(byte x, byte y);
@@ -115,6 +101,7 @@ class ARDUINO_MENU : public Print
     private:
         MENU_BROWSER* browser;
         MENU_INPUT*   input;
+        LiquidCrystal_I2C* display;
     
         byte x;
         byte y;

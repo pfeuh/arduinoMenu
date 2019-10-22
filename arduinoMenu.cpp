@@ -20,11 +20,6 @@
 
 #include "arduinoMenu.h"
 
-#if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_LCD_4x2)
-    #include "LiquidCrystal_I2C.h"
-    LiquidCrystal_I2C display(0x27, ARDUINO_MENU_NB_COLS, ARDUINO_MENU_NB_ROWS);  // set the LCD address to 0x27 for a 20 chars and 4 lines display
-#endif
-
 #define peek pgm_read_byte
 
 // some menu's messages
@@ -36,28 +31,26 @@ const char ARDUINO_MENU_successMessage[] PROGMEM = "Done. Quit:" ARDUINO_MENU_ST
 const char ARDUINO_MENU_readOnlyMessage[] PROGMEM = ARDUINO_MENU_STR_LOCKER " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN;
 const char ARDUINO_MENU_editMessage[] PROGMEM = "Edit:" ARDUINO_MENU_STR_ARROW_UP ARDUINO_MENU_STR_ARROW_DOWN " Quit:" ARDUINO_MENU_STR_ARROW_RIGHT ARDUINO_MENU_STR_ARROW_LEFT;
 
-#if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_LCD_4x2)
-    // lookup table of lines' first character location in lcd ram
-    #define ARDUINO_MENU_SECOND_LINE_OFFSET 0x40
-    const byte LCD_20X4_IIC_lineOffset[] PROGMEM =
-    {
-        0x00,
-        ARDUINO_MENU_SECOND_LINE_OFFSET,
-        ARDUINO_MENU_NB_COLS,
-        ARDUINO_MENU_SECOND_LINE_OFFSET + ARDUINO_MENU_NB_COLS
-    };
-    // custom characters
-    #define ARDUINO_MENU_CHAR_HEIGHT 8
-    const char lcdCustomFont[] PROGMEM =
-    {
-        B11111,B11111,B11111,B11111,B11111,B11111,B11111,B11111, // fulll black
-        B00000,B00100,B01110,B11111,B00100,B00100,B00000,B00000, // arrow up 
-        B00000,B00000,B00100,B00100,B11111,B01110,B00100,B00000, // arrow down
-        B00000,B00100,B00110,B11111,B00110,B00100,B00000,B00000, // arrow right
-        B00000,B00100,B01100,B11111,B01100,B00100,B00000,B00000, // arrow left
-        B00000,B01110,B10001,B10001,B11111,B11011,B11011,B11111, // locker
-    };    
-#endif
+// lookup table of lines' first character location in lcd ram
+#define ARDUINO_MENU_SECOND_LINE_OFFSET 0x40
+const byte LCD_20X4_IIC_lineOffset[] PROGMEM =
+{
+    0x00,
+    ARDUINO_MENU_SECOND_LINE_OFFSET,
+    ARDUINO_MENU_NB_COLS,
+    ARDUINO_MENU_SECOND_LINE_OFFSET + ARDUINO_MENU_NB_COLS
+};
+// custom characters
+#define ARDUINO_MENU_CHAR_HEIGHT 8
+const char lcdCustomFont[] PROGMEM =
+{
+    B11111,B11111,B11111,B11111,B11111,B11111,B11111,B11111, // fulll black
+    B00000,B00100,B01110,B11111,B00100,B00100,B00000,B00000, // arrow up 
+    B00000,B00000,B00100,B00100,B11111,B01110,B00100,B00000, // arrow down
+    B00000,B00100,B00110,B11111,B00110,B00100,B00000,B00000, // arrow right
+    B00000,B00100,B01100,B11111,B01100,B00100,B00000,B00000, // arrow left
+    B00000,B01110,B10001,B10001,B11111,B11011,B11011,B11111, // locker
+};    
 
 // browser object creation
 MENU_BROWSER menuBrowser = MENU_BROWSER();
@@ -111,24 +104,23 @@ ARDUINO_MENU::ARDUINO_MENU(): Print()
 {
 }
 
-void ARDUINO_MENU::begin(byte nb_entries, word* tables)
+void ARDUINO_MENU::begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _display)
 {
     
     ARDUINO_MENU_SINGLETON = this;
     browser = &menuBrowser;
     input   = &menuInput;
+    display = _display;
     
-    #if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_LCD_4x2)
-        display.init();
-        display.backlight();
-        display.clear();
-        display.display();
-        // custom characters loading
-        const char* char_ptr = lcdCustomFont;
-        display.command(LCD_SETCGRAMADDR);
-        for(x=0; x<(sizeof(lcdCustomFont)); x++)
-            display.write(peek(char_ptr++));
-    #endif
+    display->init();
+    display->backlight();
+    display->clear();
+    display->display();
+    // custom characters loading
+    const char* char_ptr = lcdCustomFont;
+    display->command(LCD_SETCGRAMADDR);
+    for(x=0; x<(sizeof(lcdCustomFont)); x++)
+        display->write(peek(char_ptr++));
    
     input->addBrowser(browser);
 
@@ -153,7 +145,6 @@ size_t ARDUINO_MENU::write(uint8_t car)
 {
     // here is the most important method, each print(something) method uses it
     
-    #if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_LCD_4x2)
     switch(car)
     {
         case ARDUINO_MENU_CHAR_CR:
@@ -169,55 +160,27 @@ size_t ARDUINO_MENU::write(uint8_t car)
         default:
             if(x <= ARDUINO_MENU_LAST_COL)
             {
-                display.write(car);
+                display->write(car);
                 x++;
             }
             break;
     }
-    #endif
-    
-    #if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)
-    switch(car)
-    {
-        case ARDUINO_MENU_CHAR_CR:
-        case ARDUINO_MENU_CHAR_LF:
-            break;
-        case ARDUINO_MENU_CHAR_TAB:
-            gotoXY(((x + ARDUINO_MENU_TAB_SIZE) / ARDUINO_MENU_TAB_SIZE) * ARDUINO_MENU_TAB_SIZE, y);
-            break;
-        default:
-            if(x <= ARDUINO_MENU_LAST_COL)
-                Serial.write(car);
-    }
-    #endif
     
     return 1; // success
 }
 
 void ARDUINO_MENU::gotoXY(byte _x, byte _y)
 {
-    #if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_LCD_4x2)
-    display.command(LCD_SETDDRAMADDR | (_x + peek(LCD_20X4_IIC_lineOffset + _y)));
+    display->command(LCD_SETDDRAMADDR | (_x + peek(LCD_20X4_IIC_lineOffset + _y)));
     x = _x;
-    #endif
-    #if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)
-    while (++x < _x)
-        Serial.write(ARDUINO_MENU_CHAR_SPACE);
-    #endif
     y = _y;
 }
 
 void ARDUINO_MENU::clearScreen()
 {
-    #if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_LCD_4x2)
-    display.clear();
-    display.home();
-    #endif
+    display->clear();
+    display->home();
 
-    #if(MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)
-    Serial.write(ARDUINO_MENU_CHAR_LF);
-    #endif
-    
     x = 0;
     y = 0;
 }

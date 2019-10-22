@@ -39,12 +39,12 @@
 /* Output devices */
 /******************/
 
-#define MENU_OUTPUT_DEVICE_NONE    0
-#define MENU_OUTPUT_DEVICE_SERIAL  1
-#define MENU_OUTPUT_DEVICE_LCD_4x2 2
+//~ #define MENU_OUTPUT_DEVICE_NONE    0
+//~ #define MENU_OUTPUT_DEVICE_SERIAL  1
+//~ #define MENU_OUTPUT_DEVICE_LCD_4x2 2
 
 // let's select an output device from list above
-#define  MENU_OUTPUT_DEVICE MENU_OUTPUT_DEVICE_LCD_4x2
+//~ #define  MENU_OUTPUT_DEVICE MENU_OUTPUT_DEVICE_LCD_4x2
 
 #endif
 
