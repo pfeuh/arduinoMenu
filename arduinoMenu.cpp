@@ -104,7 +104,7 @@ ARDUINO_MENU::ARDUINO_MENU(): Print()
 {
 }
 
-void ARDUINO_MENU::begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _display)
+void ARDUINO_MENU::begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _display, MENU_ENCODER* _encoder)
 {
     
     ARDUINO_MENU_SINGLETON = this;
@@ -123,6 +123,7 @@ void ARDUINO_MENU::begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _disp
         display->write(peek(char_ptr++));
    
     input->addBrowser(browser);
+    input->begin(_encoder);
 
     browser->begin(nb_entries, tables);
     browser->setRefreshCallback(ARDUINO_MENU_refreshBrowserScreen);

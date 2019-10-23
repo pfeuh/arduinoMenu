@@ -17,15 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "arduinoMenu.h"
+#include <arduinoMenu.h>
 #include "menuData.h"
 
 #define peek pgm_read_byte
 #define wpeek pgm_read_word
 
+// encoder for menu and user
+MENU_ENCODER encoder = MENU_ENCODER(4, 3, 2);
+
 // lcd for menu and user
 // set the LCD address to 0x27 for a 20 chars and 4 lines display
-#include <LiquidCrystal_I2C.h>
+//~ #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C display(0x27, 20, 4);
 
 // menu containing browser, display and input objects
@@ -134,20 +137,11 @@ void setup()
 {    
     pinMode(LED_BUILTIN, OUTPUT);
 
-    #if(MENU_INPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL || MENU_OUTPUT_DEVICE == MENU_OUTPUT_DEVICE_SERIAL)
-        Serial.begin(9600);
-    #endif
-
-    #if(MENU_OUTPUT_DEVICE == MENU_INPUT_DEVICE_SERIAL)
-        Serial.println(F("Sample menu demo v" MENU_BROWSER_VERSION));
-        Serial.println(F("Compilation : " __DATE__ " " __TIME__));
-        Serial.println(F("input:"));
-        Serial.print(MENU_INPUT_DEVICE);
-        Serial.print(F(" output:"));
-        Serial.println(MENU_OUTPUT_DEVICE);
-    #endif
+    Serial.begin(9600);
+    Serial.println(F("Sample menu demo v" MENU_BROWSER_VERSION));
+    Serial.println(F("Compilation : " __DATE__ " " __TIME__));
     
-    menu.begin(MENU_BROWSER_NB_ENTRIES, MENU_DATA_tables, &display);
+    menu.begin(MENU_BROWSER_NB_ENTRIES, MENU_DATA_tables, &display, &encoder);
     Serial.begin(9600);
 }
 

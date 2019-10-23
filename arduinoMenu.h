@@ -22,6 +22,7 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
+#include <menuEncoder.h>
 #include <Print.h>
 #include "menuInput.h"
 #include "menuBrowser.h"
@@ -70,7 +71,7 @@ class ARDUINO_MENU : public Print
 {
     public:
         ARDUINO_MENU();
-        void begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _display);
+        void begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _display, MENU_ENCODER* _encoder);
         void sequencer();
         size_t write(uint8_t car);
         void gotoXY(byte x, byte y);
@@ -101,6 +102,7 @@ class ARDUINO_MENU : public Print
     private:
         MENU_BROWSER* browser;
         MENU_INPUT*   input;
+        //~ MENU_ENCODER* encoder;
         LiquidCrystal_I2C* display;
     
         byte x;
