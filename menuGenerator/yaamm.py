@@ -397,7 +397,7 @@ def getParams():
         if not os.path.isfile(templateLivingFname):
             raise Exception("Living value template %s not found:"%templateLivingFname)
             
-        blackListedFunctionsFname = os.path.join(yaammDataPath, "functionBlackList.c").replace("\\", "/")
+        blackListedFunctionsFname = os.path.join(yaammDataPath, "functionsBlackList.txt").replace("\\", "/")
         sys.stdout.write("Function black list %s\n"%str(blackListedFunctionsFname))
         if not os.path.isfile(blackListedFunctionsFname):
             raise Exception("Functions black list %s not found:"%blackListedFunctionsFname)

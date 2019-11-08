@@ -34,14 +34,37 @@ void MENU_INPUT::begin(MENU_ENCODER* _encoder)
     encoder->begin();
 }
 
+void MENU_INPUT::begin(MENU_KEYBOARD* _keyboard)
+{
+    keyboard = _keyboard;
+    inputType = keyboardType;
+    keyboard->begin();
+}
+
 byte MENU_INPUT::available()
 {
-    return encoder->available();
+    switch(inputType)
+    {
+        case encoderType:
+            return encoder->available();
+        case keyboardType:
+            return keyboard->available();
+        default:
+            return 0;
+    }
 }
 
 byte MENU_INPUT::read()
 {
-    return encoder->read();
+    switch(inputType)
+    {
+        case encoderType:
+            return encoder->read();
+        case keyboardType:
+            return keyboard->read();
+        default:
+            return 0;
+    }
 }
 
 void MENU_INPUT::addBrowser(MENU_BROWSER* _browser)

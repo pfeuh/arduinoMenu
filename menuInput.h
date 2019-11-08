@@ -24,6 +24,7 @@
 #include "menuDevices.h"
 #include "menuBrowser.h"
 #include "menuEncoder.h"
+#include "menuKeyboard.h"
 
 #define MENU_INPUT_VERSION "1.00"
 
@@ -36,10 +37,11 @@
 class MENU_INPUT
 {
     public:
-        enum _inputType {noneType=0, encoderType};
+        enum _inputType {noneType=0, encoderType, keyboardType};
         
         MENU_INPUT();
         void begin(MENU_ENCODER* _encoder);
+        void begin(MENU_KEYBOARD* _keyboard);
         byte available();
         byte read();
         void addBrowser(MENU_BROWSER* _browser);
@@ -52,8 +54,8 @@ class MENU_INPUT
     private:
         MENU_BROWSER* browser;
         MENU_ENCODER* encoder;
+        MENU_KEYBOARD* keyboard;
         _inputType inputType = noneType;
-
 
 };
 

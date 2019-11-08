@@ -23,12 +23,30 @@
 #define peek pgm_read_byte
 #define wpeek pgm_read_word
 
-// encoder for menu and user
+#define ENCODER 1
+#define KEYBOARD 2
+#define INPUT_DEVICE ENCODER
+//~ #define INPUT_DEVICE KEYBOARD
+
+#if(INPUT_DEVICE == ENCODER)
 MENU_ENCODER encoder = MENU_ENCODER(4, 3, 2);
+#endif
+
+#if(MENU_INPUT_DEVICE == KEYBOARD)
+int  columns[] = {26, 24, 22, 36};
+int  rows[]    = {34, 32, 30, 28};
+const char codes[] PROGMEM =
+{
+    '1', '2', '3', MENU_INPUT_CHAR_CMD_UP,
+    '4', '5', '6', MENU_INPUT_CHAR_CMD_RIGHT,
+    '7', '8', '9', MENU_INPUT_CHAR_CMD_LEFT,
+    '*', '0', '#', MENU_INPUT_CHAR_CMD_DOWN,
+};
+MENU_KEYBOARD keyboard = MENU_KEYBOARD(columns, sizeof(columns) / sizeof(int), rows, sizeof(rows) / sizeof(int), codes);
+#endif
 
 // lcd for menu and user
 // set the LCD address to 0x27 for a 20 chars and 4 lines display
-//~ #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C display(0x27, 20, 4);
 
 // menu containing browser, display and input objects
@@ -61,7 +79,6 @@ signed long livingValue2 = 0;
 
 void editChannelIn(byte direction)
 {
-    const char message[] = "Mode is Omni";
     if(direction == MENU_BROWSER_DATA_INCREASE)
     {
         if(channelIn < 16)
@@ -76,8 +93,7 @@ void editChannelIn(byte direction)
     if(channelIn)
         menu.printVariable(channelIn);
     else
-        //~ menu.printVariable_P(modeOmniMessage);
-        menu.printVariable(message);
+        menu.printVariable_P(modeOmniMessage);
 }
 
 void editChannelOut(byte direction)
@@ -140,9 +156,16 @@ void setup()
     Serial.begin(9600);
     Serial.println(F("Sample menu demo v" MENU_BROWSER_VERSION));
     Serial.println(F("Compilation : " __DATE__ " " __TIME__));
+    Serial.print(F("INPUT_DEVICE : "));
+    Serial.println(INPUT_DEVICE);
     
+    #if(INPUT_DEVICE == ENCODER)
     menu.begin(MENU_BROWSER_NB_ENTRIES, MENU_DATA_tables, &display, &encoder);
-    Serial.begin(9600);
+    #endif
+    
+    #if(INPUT_DEVICE == KEYBOARD)
+    menu.begin(MENU_BROWSER_NB_ENTRIES, MENU_DATA_tables, &display, &keyboard);
+    #endif
 }
 
 void loop()

@@ -72,6 +72,9 @@ class ARDUINO_MENU : public Print
     public:
         ARDUINO_MENU();
         void begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _display, MENU_ENCODER* _encoder);
+        void begin(byte nb_entries, word* tables, LiquidCrystal_I2C* _display, MENU_KEYBOARD* _keyboard);
+        void commonInit(byte nb_entries, word* tables, LiquidCrystal_I2C* _display);
+
         void sequencer();
         size_t write(uint8_t car);
         void gotoXY(byte x, byte y);
